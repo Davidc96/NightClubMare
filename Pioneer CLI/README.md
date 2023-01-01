@@ -2,8 +2,8 @@
 This tool is used to control the CDJ devices using the command line. This is compiled using Visual Studio 2019 and .NET Framework 4.7.2
 
 # Dependencies
-- ConsoleTables Install using Nugget
-- ProLinkLib Used on this project
+- **ConsoleTables** Install using Nugget
+- **ProLinkLib** Used on this project
 
 # How to use it
 To open it, compile it or download the binaries in Release section.</br>
