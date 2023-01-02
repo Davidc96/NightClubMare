@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pioneer_CLI
@@ -89,7 +90,7 @@ namespace Pioneer_CLI
                 {
                     Console.WriteLine("Changing the IP Address to: 169.254.45.12");
                     Console.WriteLine("Changing the Broadcast IP Address to: 169.254.255.255");
-                    Utils.SetIP(networkInt.Name, "169.254.45.12", "169.254.255.255");
+                    Utils.SetIP(networkInt.Name, "169.254.45.12", "255.255.0.0");
                     plc.GetVirtualCDJ().IPaddress = IPAddress.Parse("169.254.45.12").GetAddressBytes();
                     plc.GetVirtualCDJ().MacAddress = Utils.GetMacAddress(networkInt.Name).GetAddressBytes();
                     plc.GetVirtualCDJ().BroadcastAddress = "169.254.255.255";
@@ -101,8 +102,10 @@ namespace Pioneer_CLI
                     Console.WriteLine("Invalid Option!");
                 }
             }
-
+            Console.WriteLine("Finishing the setup....");
+            Thread.Sleep(4000);
             Console.WriteLine("All steps done! Please enjoy and be responsible");
+            Console.WriteLine();
         }
     
     }
