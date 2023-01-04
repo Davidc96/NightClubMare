@@ -33,8 +33,8 @@ namespace ProLinkLib
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
             {
                 // Let's filter all the Virtual and VPN network interfaces
-                if(nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && !nic.Description.Contains("Virtual") &&
-                    !nic.Description.Contains("VPN"))
+                if((nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet || nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) 
+                    && !nic.Description.Contains("Virtual") && !nic.Description.Contains("VPN"))
                 {
                     nw_int.Add(id, nic);
                     id = id + 1;
@@ -62,9 +62,9 @@ namespace ProLinkLib
                 StartInfo = new ProcessStartInfo("netsh", $"interface ip set address \"{networkInterfaceName}\" static {ipAddress} {subnetMask}" + (string.IsNullOrWhiteSpace(gateway) ? "" : $"{gateway} 1")) { Verb = "runas" }
             };
             process.Start();
-            var successful = process.ExitCode == 0;
+            //var successful = process.ExitCode == 0;
             process.Dispose();
-            return successful;
+            return true;
         }
 
         public static IPAddress GetBroadcastAddress(IPAddress address, IPAddress subnetMask)
