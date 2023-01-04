@@ -37,11 +37,11 @@ namespace ProLinkLib
         public byte ButtonBrightness = 0x84;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
         public byte JogLCDBrightness = 0x84;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
 
-        public LoadSettingsCommand GetSettingsPacket(byte destination_device)
+        public LoadSettingsCommand GetSettingsPacket(int destination_device)
         {
             LoadSettingsCommand ld_cmd = new LoadSettingsCommand();
             
-            ld_cmd.ChannelDestID = destination_device;
+            ld_cmd.ChannelDestID = (byte)destination_device;
             ld_cmd.OnAirDisplay = OnAirDisplay;
             ld_cmd.LCDBrightness = LCDBrightness;
             ld_cmd.QuantizeMode = QuantizeMode;

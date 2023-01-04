@@ -29,6 +29,7 @@ namespace Pioneer_CLI
             commands.Add("sync", new SyncCommand());
             commands.Add("load", new LoadTrackCommand());
             commands.Add("debug", new DebugModeCommand());
+            commands.Add("settings", new SettingsCommand());
 
         }
 

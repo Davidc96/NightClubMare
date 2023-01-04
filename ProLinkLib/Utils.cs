@@ -207,21 +207,21 @@ namespace ProLinkLib
         {
             switch(acl)
             {
-                case "+-36":
+                case "-36":
                     return 0x80;
-                case "+-42":
+                case "-42":
                     return 0x81;
-                case "+-48":
+                case "-48":
                     return 0x82;
-                case "+-54":
+                case "-54":
                     return 0x83;
-                case "+-60":
+                case "-60":
                     return 0x84;
-                case "+-66":
+                case "-66":
                     return 0x85;
-                case "+-72":
+                case "-72":
                     return 0x86;
-                case "+-78":
+                case "-78":
                     return 0x87;
                 case "memory":
                     return 0x88;
@@ -245,6 +245,89 @@ namespace ProLinkLib
                 default:
                     return 0x83; // Wide
             }
+        }
+
+        public static byte GetVinylSpeedAdjust(string vsa)
+        {
+            switch(vsa)
+            {
+                case "touch_release":
+                    return 0x80;
+                case "touch":
+                    return 0x81;
+                case "release":
+                    return 0x82;
+                default:
+                    return 0x80;
+            }
+        }
+
+        public static byte GetJogLCDContent(string lcd_content)
+        {
+            switch(lcd_content)
+            {
+                case "auto":
+                    return 0x80;
+                case "simple":
+                    return 0x81;
+                case "artwork":
+                    return 0x82;
+                default:
+                    return 0x80;
+            }
+        }
+
+        public static byte GetDiscSlotBrightnessMode(string ds_br)
+        {
+            switch(ds_br)
+            {
+                case "off":
+                    return 0x80;
+                case "min":
+                    return 0x81;
+                case "max":
+                    return 0x82;
+                default:
+                    return 0x80; // Off
+            }
+        }
+        public static string GetAutoCueLevel(byte al)
+        {
+            string[] autocue_level = { "-36", "-42", "-48", "-54", "-60", "-66", "-72", "-78", "MEMORY" };
+            
+            return autocue_level[al - 0x80];
+        }
+
+        public static string GetLanguage(byte lang)
+        {
+            string[] languages = { "English", "French", "German", "Italian", 
+                "Dutch", "Spanish", "Russian", "Korean", "Chinese Simpl.", "Chinese Trad.", 
+                "Japenese", "Portuguese", "Swedish", "Czech", "Magyar", "Danish", "Turkish" };
+            return languages[lang - 0x81];
+        }
+
+        public static string GetDiscSlotBrightnessMode(byte ds_br)
+        {
+            string[] brightness_mode = { "OFF", "Min", "Max" };
+            return brightness_mode[ds_br - 0x80];
+        }
+
+        public static string GetRangeTempo(byte rt)
+        {
+            string[] range_tempo = { "+-6", "+-10", "+-16", "+-16", "WIDE" };
+            return range_tempo[rt - 0x80];
+        }
+
+        public static string GetVinylSpeedAdjust(byte vsa)
+        {
+            string[] vinylspeed_adjust = { "Touch & Release", "Touch", "Release" };
+            return vinylspeed_adjust[vsa - 0x80];
+        }
+
+        public static string GetJogLCDContent(byte lcd_content)
+        {
+            string[] joglcd_content = { "Auto", "Simple", "Artwork" };
+            return joglcd_content[lcd_content - 0x80];
         }
     }
 }

@@ -163,13 +163,13 @@ namespace ProLinkLib
         public void LoadSettingsFromDisk(string path)
         {
 
-            deviceSettings = (DeviceSettings)JsonConvert.DeserializeObject(System.IO.File.ReadAllText(path));
+            deviceSettings = JsonConvert.DeserializeObject<DeviceSettings>(System.IO.File.ReadAllText(path.Replace("\"","")));
         }
 
         public void SaveSettingsToDisk(string file_name)
         {
             string json = JsonConvert.SerializeObject(deviceSettings);
-            System.IO.File.WriteAllText(file_name, json);
+            System.IO.File.WriteAllText(file_name + ".json", json);
         }
     }
 }

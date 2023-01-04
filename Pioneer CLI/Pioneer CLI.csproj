@@ -57,6 +57,7 @@
     <Compile Include="Commands\PauseCommand.cs" />
     <Compile Include="Commands\PlayCommand.cs" />
     <Compile Include="Commands\SelectCommand.cs" />
+    <Compile Include="Commands\SettingsCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Devices\CDJ.cs" />
     <Compile Include="Logger.cs" />
