@@ -37,10 +37,11 @@ namespace ProLinkLib
         public byte ButtonBrightness = 0x84;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
         public byte JogLCDBrightness = 0x84;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
 
-        public LoadSettingsCommand GetSettingsPacket(int destination_device)
+        public LoadSettingsCommand GetSettingsPacket(VirtualCDJ virtual_cdj, int destination_device)
         {
             LoadSettingsCommand ld_cmd = new LoadSettingsCommand();
-            
+            ld_cmd.DeviceName = Utils.NameToBytes(virtual_cdj.DeviceName, 0x14);
+            ld_cmd.ChannelID = virtual_cdj.ChannelID;
             ld_cmd.ChannelDestID = (byte)destination_device;
             ld_cmd.OnAirDisplay = OnAirDisplay;
             ld_cmd.LCDBrightness = LCDBrightness;

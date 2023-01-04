@@ -1,5 +1,6 @@
 ﻿using ConsoleTables;
 using ProLinkLib;
+using ProLinkLib.Network.UDP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,14 +129,33 @@ namespace Pioneer_CLI.Commands
                     Console.WriteLine("Settings exported successfully as " + param1 + ".json");
                     break;
                 case "send":
-                    int device_id = Convert.ToInt32(param1);
+                    int device_id = 0;
+                    //Console.WriteLine(Hex.Dump(PacketBuilder.PACKET_HEADER.Concat(device_settings.GetSettingsPacket(virtual_cdj, 1).ToBytes()).ToArray()));
+                    if (param1 == "")
+                    {
+                        // If we are in a selected device and no param1 is provided get it from it.
+                        if(clc.GetSelectedDevice() != null)
+                        {
+                            device_id = clc.GetSelectedDevice().ChannelID;
+                        }
+                        else
+                        {
+                            Console.WriteLine("ID not provided and no device is selected! Please provide a device ID using the command settings send <device-ID> or select one device!");
+                        }
+                    }
+                    else
+                    {
+                        device_id = Convert.ToInt32(param1);
+                    }
+                    
                     var device_list = plc.GetDevices();
                     if (!device_list.ContainsKey(device_id))
                     {
                         Console.WriteLine("ID not found! Use devices command to see the current devices on network");
                         return;
                     }
-                    virtual_cdj.GetStatusServer().SendPacketToClient(device_list[device_id].IpAddress, device_settings.GetSettingsPacket(device_list[device_id].ChannelID));
+             
+                    virtual_cdj.GetStatusServer().SendPacketToClient(device_list[device_id].IpAddress, device_settings.GetSettingsPacket(virtual_cdj, device_list[device_id].ChannelID));
                     break;
                 case "show":
                     PrintCurrentSettings(device_settings);
@@ -202,14 +222,14 @@ namespace Pioneer_CLI.Commands
             table.AddRow("settings time_display_mode <elapsed|remaining>");
             table.AddRow("settings jog_mode <cdj|vinyl>");
             table.AddRow("settings master_tempo <on|off>");
-            table.AddRow("settings rangetempo_mode [+-6,+-10,+.16,wide]");
+            table.AddRow("settings rangetempo_mode [+-6,+-10,+-16,wide]");
             table.AddRow("settings phasemode_meter <squares|line>");
             table.AddRow("settings vinylspeed_adjust <touch_release|touch|release>");
             table.AddRow("settings joglcd_display <auto|simple|artwork>");
             table.AddRow("settings button_brightness <1-4>");
             table.AddRow("settings joglcd_brightness <1-4>");
             table.AddRow("--------- Other commands -----------");
-            table.AddRow("settings import <path config json>");
+            table.AddRow("settings import <path config json location>");
             table.AddRow("settings export <file_name>");
             table.AddRow("settings show");
             table.AddRow("settings send <Device ID>");

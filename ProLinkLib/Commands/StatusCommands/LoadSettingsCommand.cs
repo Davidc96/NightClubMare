@@ -9,7 +9,7 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class LoadSettingsCommand : ICommand
     {
-        public byte ID;
+        public byte ID = 0x34;
         public byte[] DeviceName = new byte[0x14];
         private byte Unknown1 = 0x02;
         public byte ChannelID;
@@ -46,7 +46,7 @@ namespace ProLinkLib.Commands.StatusCommands
         public byte JogLCDContent;                                                          // 0x80 Auto 0x81 Simple 0x82 Artwork
         public byte ButtonBrightness;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
         public byte JogLCDBrightness;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
-        public byte[] UnknownBytes5 = new byte[0x24];
+        public byte[] UnknownBytes5 = new byte[0x26];
 
         private byte[] rawData;
         public void FromBytes(byte[] packet)
@@ -91,7 +91,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 JogLCDContent = bin.ReadByte();
                 ButtonBrightness = bin.ReadByte();
                 JogLCDBrightness = bin.ReadByte();
-                UnknownBytes5 = bin.ReadBytes(0x24);
+                UnknownBytes5 = bin.ReadBytes(0x26);
             }
         }
 
