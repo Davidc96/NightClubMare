@@ -157,5 +157,94 @@ namespace ProLinkLib
                     return "Unknown";
             }
         }
+
+        public static byte GetLanguage(string language)
+        {
+            switch(language)
+            {
+                case "english":
+                    return 0x81;
+                case "french":
+                    return 0x82;
+                case "german":
+                    return 0x83;
+                case "italian":
+                    return 0x84;
+                case "dutch":
+                    return 0x85;
+                case "spanish":
+                    return 0x86;
+                case "russian":
+                    return 0x87;
+                case "korean":
+                    return 0x88;
+                case "chinese-simp":
+                    return 0x89;
+                case "chinese-trad":
+                    return 0x8A;
+                case "japanese":
+                    return 0x8B;
+                case "portuguese":
+                    return 0x8C;
+                case "swedish":
+                    return 0x8D;
+                case "czech":
+                    return 0x8E;
+                case "magyar":
+                    return 0x8F;
+                case "danish":
+                    return 0x90;
+                case "greek":
+                    return 0x91;
+                case "turkish":
+                    return 0x92;
+                default:
+                    return 0x81; // English
+            }
+        }
+
+        public static byte GetAutoCueLevel(string acl)
+        {
+            switch(acl)
+            {
+                case "+-36":
+                    return 0x80;
+                case "+-42":
+                    return 0x81;
+                case "+-48":
+                    return 0x82;
+                case "+-54":
+                    return 0x83;
+                case "+-60":
+                    return 0x84;
+                case "+-66":
+                    return 0x85;
+                case "+-72":
+                    return 0x86;
+                case "+-78":
+                    return 0x87;
+                case "memory":
+                    return 0x88;
+                default:
+                    return 0x88; // Memory mode
+            }
+        }
+
+        public static byte GetRangeTempo(string rt)
+        {
+            switch(rt)
+            {
+                case "+-6":
+                    return 0x80;
+                case "+-10":
+                    return 0x81;
+                case "+-16":
+                    return 0x82;
+                case "wide":
+                    return 0x83;
+                default:
+                    return 0x83; // Wide
+            }
+        }
     }
 }

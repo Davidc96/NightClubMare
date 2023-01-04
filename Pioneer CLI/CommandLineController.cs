@@ -81,7 +81,15 @@ namespace Pioneer_CLI
                 }
                 else if(commands.ContainsKey(command))
                 {
-                    if (line.Split(' ').Length > 1)
+                    // if there command is like command arg1 arg2 arg3 get all the args
+                    if (line.Split(' ').Length > 2)
+                    {
+                        for (int i = 1; i < line.Split(' ').Length; i++)
+                        {
+                            args += line.Split(' ')[i] + " ";
+                        }
+                    }
+                    else if(line.Split(' ').Length > 1) 
                     {
                         args = line.Split(' ')[1];
                     }

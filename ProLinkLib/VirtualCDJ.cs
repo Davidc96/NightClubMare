@@ -1,4 +1,5 @@
-﻿using ProLinkLib.Commands.DiscoverCommands;
+﻿using Newtonsoft.Json;
+using ProLinkLib.Commands.DiscoverCommands;
 using ProLinkLib.Network.UDP;
 using ProLinkLib.Network.UDP.DiscoverServer;
 using ProLinkLib.Network.UDP.StatusServer;
@@ -21,17 +22,19 @@ namespace ProLinkLib
         public byte[] MacAddress = new byte[6];
         public byte[] IPaddress;
         public string BroadcastAddress;
-
+        
 
         private DiscoverServer discoverServer;
         private StatusServer statusServer;
         private SyncServer syncServer;
+        private DeviceSettings deviceSettings;
         public VirtualCDJ()
         {
 
             discoverServer = new DiscoverServer();
             statusServer = new StatusServer();
             syncServer = new SyncServer();
+            deviceSettings = new DeviceSettings();
 
             ChannelID = 25;
         }
@@ -61,6 +64,11 @@ namespace ProLinkLib
         public SyncServer GetSyncServer()
         {
             return syncServer;
+        }
+
+        public DeviceSettings GetDeviceSettings()
+        {
+            return deviceSettings;
         }
 
         // Setup the Virtual CDJ into the Network
@@ -150,6 +158,18 @@ namespace ProLinkLib
                 discoverServer.SendPacketBroadcast(keep_command);
                 await Task.Delay(1500);
             }
+        }
+
+        public void LoadSettingsFromDisk(string path)
+        {
+
+            deviceSettings = (DeviceSettings)JsonConvert.DeserializeObject(System.IO.File.ReadAllText(path));
+        }
+
+        public void SaveSettingsToDisk(string file_name)
+        {
+            string json = JsonConvert.SerializeObject(deviceSettings);
+            System.IO.File.WriteAllText(file_name, json);
         }
     }
 }
