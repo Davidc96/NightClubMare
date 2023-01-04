@@ -18,10 +18,11 @@ namespace ProLinkLib.Network.UDP.StatusServer
         {
             packetCommands = new Dictionary<int, ICommand>();
 
-            // Discover Server
+            // Status Server
             packetCommands.Add(MEDIA_QUERY_COMMAND, new MediaQueryCommand());
             packetCommands.Add(MEDIA_RESPONSE_COMMAND, new MediaResponseCommand());
             packetCommands.Add(CDJ_STATUS_COMMAND, new CDJStatusCommand());
+            packetCommands.Add(LOAD_TRACK_ACK_COMMAND, new LoadTrackAckCommand());
 
 
             //

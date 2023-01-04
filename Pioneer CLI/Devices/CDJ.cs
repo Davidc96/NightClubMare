@@ -65,7 +65,6 @@ namespace Pioneer_CLI.Devices
          */
         public void PrintCDJInfo()
         {
-            // TODO: REDO ALL THE GUI
             Console.WriteLine("  ------------");
             Console.Write(" | |________| |");
             Console.Write("  DeviceName: " + deviceName);
@@ -85,6 +84,13 @@ namespace Pioneer_CLI.Devices
             Console.WriteLine("                  OAir: " + FlagStatus.OnAir + " Play: " + FlagStatus.Play);
             Console.WriteLine("");
             Console.WriteLine("                 IP: " + IpAddress + " MAC: " + MacAddress);
+        }
+
+        public override string ToString()
+        {
+            string device_info = @"";
+
+            return device_info;
         }
     }
 }
