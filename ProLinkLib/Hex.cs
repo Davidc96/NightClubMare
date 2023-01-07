@@ -44,6 +44,7 @@ namespace ProLinkLib
             {
                 WriteHeader();
             }
+            _sb.AppendLine();
             WriteBody();
             return _sb.ToString();
         }
