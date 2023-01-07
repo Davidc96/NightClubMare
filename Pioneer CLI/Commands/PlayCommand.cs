@@ -3,6 +3,7 @@ using ProLinkLib.Commands.SyncCommands;
 using ProLinkLib.Network.UDP;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,34 +15,79 @@ namespace Pioneer_CLI.Commands
         public void BuildCustom(ProLinkController plc, CommandLineController clc, string args)
         {
             VirtualCDJ vcdj = plc.GetVirtualCDJ();
-            CDJControlCommand ctrl_command = new CDJControlCommand();
-            ctrl_command.ChannelID = vcdj.ChannelID;
-            ctrl_command.DeviceName = Utils.NameToBytes(vcdj.DeviceName, 0x14);
-            ctrl_command.Length = 0x4;
-            Console.WriteLine("Payload customization");
-            Console.Write("CDJ ID: 1 Command (PLAY: 0 STOP: 1 DONOTHING: 2): ");
-            byte command1 = Convert.ToByte(Console.ReadLine());
-            Console.Write("CDJ ID: 2 Command (PLAY: 0 STOP: 1 DONOTHING: 2): ");
-            byte command2 = Convert.ToByte(Console.ReadLine());
-            Console.Write("CDJ ID: 3 Command (PLAY: 0 STOP: 1 DONOTHING: 2): ");
-            byte command3 = Convert.ToByte(Console.ReadLine());
-            Console.Write("CDJ ID: 4 Command (PLAY: 0 STOP: 1 DONOTHING: 2): ");
-            byte command4 = Convert.ToByte(Console.ReadLine());
+            CDJControlCommand cd_command = new CDJControlCommand();
 
-            ctrl_command.CommandID1 = command1;
-            ctrl_command.CommandID2 = command2;
-            ctrl_command.CommandID3 = command3;
-            ctrl_command.CommandID4 = command4;
+            string[] args_splitted = args.Split(' ');
+            byte[] file_data;
 
-            Console.WriteLine();
-            Console.WriteLine("Sending custom payload!");
+            if (args_splitted.Length < 2)
+            {
+                Console.WriteLine("Usage play custom <import <path>|export>");
+                return;
+            }
 
-            Logger.WriteMessage(Encoding.UTF8.GetBytes("PAUSE CDJControl PAYLOAD"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
-            Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(ctrl_command.ToBytes()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
-            
-            Console.WriteLine(Hex.Dump(PacketBuilder.PACKET_HEADER.Concat(ctrl_command.ToBytes()).ToArray()));
+            string main_arg = args_splitted[1].ToLower();
+            string param1 = "";
 
-            vcdj.GetSyncServer().SendPacketBroadcast(ctrl_command);
+            if (args_splitted.Length > 2)
+            {
+                param1 = args_splitted[2].ToLower();
+            }
+
+            // This is built in case there is a path which contains folders with whitespaces
+            if (args_splitted.Length > 3)
+            {
+                param1 = "";
+                for (int i = 2; i < args_splitted.Length - 1; i++)
+                {
+                    param1 += args_splitted[i] + " ";
+                }
+                param1 = param1.Remove(param1.Length - 1);
+            }
+
+            // Init command with dummy values
+            cd_command.DeviceName = Utils.NameToBytes("AAAAAAAAAAAAAAAAAAAA", 0x14);
+            cd_command.Length = 0x4;
+            cd_command.ChannelID = 0xF0;
+            cd_command.CommandID1 = 0xF1;
+            cd_command.CommandID2 = 0xF2;
+            cd_command.CommandID3 = 0xF3;
+            cd_command.CommandID4 = 0xF4;
+
+            if (main_arg == "export")
+            {
+                File.WriteAllBytes("command_cmd_template.bin", PacketBuilder.PACKET_HEADER.Concat(cd_command.ToBytes()).ToArray());
+                Console.WriteLine("SYNC Packet template saved as \"command_cmd_template.bin\"!\nEdit the packet with an external tool such as HxD and import the custom packet using \"play custom import <path of customed packet>\"");
+                return;
+            }
+
+            if (main_arg == "import")
+            {
+                FileStream f = new FileStream(param1.Replace("\"", ""), FileMode.Open);
+                BinaryReader bin = new BinaryReader(f);
+                file_data = bin.ReadBytes((int)f.Length);
+                cd_command.FromBytes(file_data);
+                Console.WriteLine("COMMAND Packet imported successfully!");
+                Console.WriteLine("Preview:");
+                Console.WriteLine(Hex.Dump(file_data));
+                Console.WriteLine();
+            }
+
+            Console.Write("Do you want to send it into specific target or broadcast it? [target|broadcast]: ");
+            string option = Console.ReadLine().ToLower();
+            string ip_address = "";
+            if (option == "target")
+            {
+                Console.Write("CDJ IP Address you want to send the packet: ");
+                ip_address = Console.ReadLine();
+                vcdj.GetSyncServer().SendPacketToClient(ip_address, cd_command);
+            }
+            else
+            {
+                vcdj.GetSyncServer().SendPacketBroadcast(cd_command);
+            }
+
+            Console.WriteLine("Custom payload Sent!");
         }
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
