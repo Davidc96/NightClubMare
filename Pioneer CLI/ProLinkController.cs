@@ -4,6 +4,7 @@ using ProLinkLib.Commands;
 using ProLinkLib.Commands.StatusCommands;
 using static ProLinkLib.Commands.DiscoverCommands.Commands;
 using static ProLinkLib.Commands.StatusCommands.Commands;
+using static ProLinkLib.Commands.SyncCommands.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProLinkLib.Commands.DiscoverCommands;
 using ProLinkLib.Network.UDP;
+using ProLinkLib.Commands.SyncCommands;
 
 namespace Pioneer_CLI
 {
@@ -113,6 +115,19 @@ namespace Pioneer_CLI
         {
             Logger.WriteMessage(Encoding.UTF8.GetBytes("RECV FROM SYNC SERVER!!"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
             Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(command.GetRawData()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
+            if (packet_id == CHANNELSONAIR_COMMAND)
+            {
+                ChannelsOnAirCommand ch_command = (ChannelsOnAirCommand)command;
+                byte[] ch_array = { ch_command.Channel1, ch_command.Channel2, ch_command.Channel3, ch_command.Channel4 };
+                
+                for (int i = 0; i < 4; i++) // 4 is the number of max channels
+                {
+                    if (CDJList.ContainsKey(i + 1))
+                    {
+                        CDJList[i + 1].OnAirChannel = ch_array[i] == 0x01;
+                    }
+                }
+            }
             return true;
         }
     

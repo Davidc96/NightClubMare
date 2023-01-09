@@ -40,6 +40,8 @@ namespace Pioneer_CLI.Devices
         private byte trackPhysicallyLocated;                     // 0x00 -> NO TRACK, 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
         private byte trackType;
 
+        private bool onAirChannel = false;
+
         public string DeviceName { get => deviceName; set => deviceName = value; }
         public string IpAddress { get => ipAddress; set => ipAddress = value; }
         public string MacAddress { get => macAddress; set => macAddress = value; }
@@ -52,6 +54,7 @@ namespace Pioneer_CLI.Devices
         public byte TrackDeviceLocatedID { get => trackDeviceLocatedID; set => trackDeviceLocatedID = value; }
         public byte TrackPhysicallyLocated { get => trackPhysicallyLocated; set => trackPhysicallyLocated = value; }
         public byte TrackType { get => trackType; set => trackType = value; }
+        public bool OnAirChannel { get => onAirChannel; set => onAirChannel = value; }
 
         /*
          *  ------------
@@ -68,7 +71,8 @@ namespace Pioneer_CLI.Devices
             Console.WriteLine("  ------------");
             Console.Write(" | |________| |");
             Console.Write("  DeviceName: " + deviceName);
-            Console.WriteLine("     DeviceID: " + channelID);
+            Console.Write("     DeviceID: " + channelID);
+            PrintOnAirChannelUI();
             Console.Write(" |            |");
             Console.Write("  BPM Track: " + bpmTrack + " BPM");
             Console.WriteLine("    RekordBoxTrackID: " + $"0x{BitConverter.ToUInt32(rekordboxTrackID, 0):X}");
@@ -89,8 +93,24 @@ namespace Pioneer_CLI.Devices
         public override string ToString()
         {
             string device_info = @"";
-
+            // TODO
             return device_info;
+        }
+
+        private void PrintOnAirChannelUI()
+        {
+            if(onAirChannel == true)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("       |ON AIR|");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("       |ON AIR|");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
     }
 }

@@ -10,5 +10,6 @@ namespace ProLinkLib.Commands.SyncCommands
     {
         public static int CDJ_CONTROL_COMMAND = 0x02;
         public static int SYNC_MODE_COMMAND = 0x2A;
+        public static int CHANNELSONAIR_COMMAND = 0x03;
     }
 }
