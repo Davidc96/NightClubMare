@@ -15,5 +15,5 @@ This project is divided by 3 repositories:
 
 # Credits and Thanksgiving
 [@Deep-Symmetry Team](https://github.com/Deep-Symmetry) to create the documentation about how the protocol works.</br>
-Amccanmir: A closest friend which helps figure out how the Pioneer device works and give me moral support XD.</br>
+**Espinado**: A closest friend which helps figure out how the Pioneer device works and give me moral support XD.</br>
 [@Plastic Shop](https://plastic.es/) which rents me these expensive devices to do tests and develop the software.</br>
