@@ -26,6 +26,7 @@ namespace Pioneer_CLI
             commands.Add("info", new InfoCommand());
             commands.Add("play", new PlayCommand());
             commands.Add("pause", new PauseCommand());
+            commands.Add("stop", new PauseCommand());
             commands.Add("sync", new SyncCommand());
             commands.Add("load", new LoadTrackCommand());
             commands.Add("debug", new DebugModeCommand());
