@@ -5,6 +5,7 @@ using ProLinkLib.Commands.StatusCommands;
 using static ProLinkLib.Commands.DiscoverCommands.Commands;
 using static ProLinkLib.Commands.StatusCommands.Commands;
 using static ProLinkLib.Commands.SyncCommands.Commands;
+using static ProLinkLib.ProLinkLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,14 +29,7 @@ namespace Pioneer_CLI
             virtualCDJ.GetStatusServer().OnRecvPacketFunc += StatusServerOnRecvPacket;
             virtualCDJ.GetSyncServer().OnRecvPacketFunc += SyncServerOnRecvPacket;
 
-            CDJList = new Dictionary<int, CDJ>();
-            
-            /*CDJ cdj1 = new CDJ();
-            cdj1.ChannelID = 0x03;
-            cdj1.DeviceName = "PRUEBA CDJ-2000NXS2";
-            cdj1.IpAddress = "192.168.1.1";
-            cdj1.MacAddress = "00:01:02:03:04:05";
-            CDJList.Add(0x03, cdj1);*/           
+            CDJList = new Dictionary<int, CDJ>();          
         }
 
         public Dictionary<int, CDJ> GetDevices()
@@ -53,6 +47,7 @@ namespace Pioneer_CLI
 
             Logger.WriteMessage(Encoding.UTF8.GetBytes("RECV FROM DISCOVER SERVER!!"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
             Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(command.GetRawData()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
+            
             // If there is a new KEEP_ALIVE command, it seems there is a new device connected
             if (packet_id == KEEP_ALIVE_COMMAND)
             {
@@ -120,7 +115,7 @@ namespace Pioneer_CLI
                 ChannelsOnAirCommand ch_command = (ChannelsOnAirCommand)command;
                 byte[] ch_array = { ch_command.Channel1, ch_command.Channel2, ch_command.Channel3, ch_command.Channel4 };
                 
-                for (int i = 0; i < 4; i++) // 4 is the number of max channels
+                for (int i = 0; i < MAX_CHANNELS; i++) // 4 is the number of max channels
                 {
                     if (CDJList.ContainsKey(i + 1))
                     {

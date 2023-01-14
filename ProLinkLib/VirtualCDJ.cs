@@ -4,6 +4,7 @@ using ProLinkLib.Network.UDP;
 using ProLinkLib.Network.UDP.DiscoverServer;
 using ProLinkLib.Network.UDP.StatusServer;
 using ProLinkLib.Network.UDP.SyncServer;
+using static ProLinkLib.ProLinkLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,12 @@ namespace ProLinkLib
             syncServer = new SyncServer();
             deviceSettings = new DeviceSettings();
 
-            ChannelID = 25;
+            ChannelID = VIRTUALCDJ_CHANNELID;
         }
 
         public void InitDevice()
         {
-            DeviceName = "CDJ-2000NXS2 DAVID";
+            DeviceName = VIRTUALCDJ_DEVICENAME;
             discoverServer.BroadcastAddress = BroadcastAddress;
             statusServer.BroadcastAddress = BroadcastAddress;
             syncServer.BroadcastAddress = BroadcastAddress;
@@ -69,6 +70,11 @@ namespace ProLinkLib
         public DeviceSettings GetDeviceSettings()
         {
             return deviceSettings;
+        }
+
+        public void ResetSettingsToDefault()
+        {
+            deviceSettings = new DeviceSettings();
         }
 
         // Setup the Virtual CDJ into the Network
