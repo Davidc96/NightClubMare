@@ -7,6 +7,8 @@ Pioneer high-end products uses an Ethernet connection to comunicate each other. 
 
 This project is possible thanks to Deep-Symmetry project which builds an entire [documentation](https://djl-analysis.deepsymmetry.org/djl-analysis/packets.html) about the protocol used by those devices. This project was tested using 2 CDJ-2000NXS2 devices and a DJM-900.
 
+Actually is tested with CDJ-3000 models and most of the features are NOT working!!!
+
 # Project information
 This project is divided by 3 repositories:
 - **ProLinkLib** is a custom C# library developed from scratch which can interact with the Pioneer devices, sending commands an retrieve information about them.
