@@ -44,81 +44,107 @@ namespace Pioneer_CLI.Commands
             {
                 case "onair_display":
                     device_settings.OnAirDisplay = (byte)((param1 == "on") ? 0x81 : 0x82);
+                    Console.WriteLine("onair_display changed to: " + param1);
                     break;
                 case "lcd_brightness":
                     device_settings.LCDBrightness = (byte)(0x80 + Convert.ToByte(param1));
+                    Console.WriteLine("lcd_brightness changed to: " + param1);
                     break;
                 case "quantize":
                     device_settings.QuantizeMode = (byte)((param1 == "on") ? 0x81 : 0x82);
+                    Console.WriteLine("quantize_mode changed to: " + param1);
                     break;
                 case "autocue_level":
                     device_settings.AutoCueLevel = Utils.GetAutoCueLevel(param1);
+                    Console.WriteLine("autocue_level changed to: " + param1);
                     break;
                 case "language":
                     device_settings.Language = Utils.GetLanguage(param1);
+                    Console.WriteLine("language changed to: " + param1);
                     break;
                 case "jog_ring_bright":
                     device_settings.JogBrightness = (byte)((param1 == "min") ? 0x81 : 0x82);
+                    Console.WriteLine("jog_ring_bright changed to: " + param1);
                     break;
                 case "endtrack_light":
                     device_settings.JogLedEndTrackBehaviour = (byte)((param1 == "on") ? 0x80 : 0x81);
+                    Console.WriteLine("endtrack_light changed to: " + param1);
                     break;
                 case "slipmode_light":
                     device_settings.SlipModeJogLed = (byte)((param1 == "on") ? 0x80 : 0x81);
+                    Console.WriteLine("slipmode_light changed to: " + param1);
                     break;
                 case "discslot_light":
                     device_settings.DiscSlotLedBehaviour = Utils.GetDiscSlotBrightnessMode(param1);
+                    Console.WriteLine("discslot_light changed to: " + param1);
                     break;
                 case "lock_ejectload":
                     device_settings.LockEjectLoadTracks = (byte)((param1 == "off") ? 0x80 : 0x81);
+                    Console.WriteLine("lock_ejectload changed to: " + param1);
                     break;
                 case "sync_mode":
                     device_settings.SyncModeActivate = (byte)((param1 == "off") ? 0x80 : 0x81);
+                    Console.WriteLine("sync_mode changed to: " + param1);
                     break;
                 case "autoplay_mode":
                     device_settings.AutoPlayMode = (byte)((param1 == "on") ? 0x80 : 0x81);
+                    Console.WriteLine("autoplay_mode changed to: " + param1);
                     break;
                 case "quantize_value":
                     device_settings.QuantizeModeValue = (byte)(0x79 + Convert.ToByte(param1));
+                    Console.WriteLine("quantize_value changed to: " + param1);
                     break;
                 case "hotcue_autoload":
                     device_settings.HotCueAutoLoad = (byte)((param1 == "off") ? 0x80 : 0x81);
+                    Console.WriteLine("hotcue_autoload changed to: " + param1);
                     break;
                 case "hotcue_color":
                     device_settings.HotCueColorMode = (byte)((param1 == "disable") ? 0x80 : 0x81);
+                    Console.WriteLine("hotcue_color changed to: " + param1);
                     break;
                 case "needle_lock":
                     device_settings.NeedleLockMode = (byte)((param1 == "off") ? 0x80 : 0x81);
+                    Console.WriteLine("needle_lock changed to: " + param1);
                     break;
                 case "time_display_mode":
                     device_settings.TimeDisplayMode = (byte)((param1 == "elapsed") ? 0x80 : 0x81);
+                    Console.WriteLine("time_display_mode changed to: " + param1);
                     break;
                 case "jog_mode":
                     device_settings.JogMode = (byte)((param1 == "cdj") ? 0x80 : 0x81);
+                    Console.WriteLine("jog_mode changed to: " + param1);
                     break;
                 case "autocue_mode":
                     device_settings.AutoCueMode = (byte)((param1 == "off") ? 0x80 : 0x81);
+                    Console.WriteLine("autocue_mode changed to: " + param1);
                     break;
-                case "mastertempo_mode":
+                case "master_tempo":
                     device_settings.MasterTempoMode = (byte)((param1 == "on") ? 0x80 : 0x81);
+                    Console.WriteLine("master_tempo changed to: " + param1);
                     break;
                 case "rangetempo_mode":
                     device_settings.RangeTempo = Utils.GetRangeTempo(param1);
+                    Console.WriteLine("rangetempo_mode changed to: " + param1);
                     break;
                 case "phasemeter_mode":
                     device_settings.PhaseMeter = (byte)((param1 == "squares") ? 0x80 : 0x81);
+                    Console.WriteLine("phasemeter_mode changed to: " + param1);
                     break;
                 case "vinylspeed_adjust":
                     device_settings.VinylSpeedAdjust = Utils.GetVinylSpeedAdjust(param1);
+                    Console.WriteLine("vinylspeed_adjust changed to: " + param1);
                     break;
                 case "joglcd_display":
                     device_settings.JogLCDContent = Utils.GetJogLCDContent(param1);
+                    Console.WriteLine("joglcd_display changed to: " + param1);
                     break;
                 case "button_brightness":
                     device_settings.ButtonBrightness = (byte)(0x80 + Convert.ToByte(param1));
+                    Console.WriteLine("button_brightness changed to: " + param1);
                     break;
                 case "joglcd_brightness":
                     device_settings.JogLCDBrightness = (byte)(0x80 + Convert.ToByte(param1));
+                    Console.WriteLine("joglcd_brightness changed to: " + param1);
                     break;
                 case "import":
                     virtual_cdj.LoadSettingsFromDisk(param1);
@@ -129,36 +155,24 @@ namespace Pioneer_CLI.Commands
                     Console.WriteLine("Settings exported successfully as " + param1 + ".json");
                     break;
                 case "send":
-                    int device_id = 0;
-                    //Console.WriteLine(Hex.Dump(PacketBuilder.PACKET_HEADER.Concat(device_settings.GetSettingsPacket(virtual_cdj, 1).ToBytes()).ToArray()));
-                    if (param1 == "")
+                    // Send all the settings packet to all the CDJ
+                    foreach(Devices.CDJ cdj in plc.GetDevices().Values)
                     {
-                        // If we are in a selected device and no param1 is provided get it from it.
-                        if(clc.GetSelectedDevice() != null)
+                        // CDJ goes from 1 to 6; 
+                        if(cdj.ChannelID < 6)
                         {
-                            device_id = clc.GetSelectedDevice().ChannelID;
-                        }
-                        else
-                        {
-                            Console.WriteLine("ID not provided and no device is selected! Please provide a device ID using the command settings send <device-ID> or select one device!");
+                            // Broadcast the paquet 
+                            virtual_cdj.GetStatusServer().SendPacketBroadcast(device_settings.GetSettingsPacket(virtual_cdj, cdj.ChannelID));
                         }
                     }
-                    else
-                    {
-                        device_id = Convert.ToInt32(param1);
-                    }
-                    
-                    var device_list = plc.GetDevices();
-                    if (!device_list.ContainsKey(device_id))
-                    {
-                        Console.WriteLine("ID not found! Use devices command to see the current devices on network");
-                        return;
-                    }
-             
-                    virtual_cdj.GetStatusServer().SendPacketToClient(device_list[device_id].IpAddress, device_settings.GetSettingsPacket(virtual_cdj, device_list[device_id].ChannelID));
+                    Console.WriteLine("Send settings to all the devices!");
                     break;
                 case "show":
                     PrintCurrentSettings(device_settings);
+                    break;
+                case "reset":
+                    virtual_cdj.ResetSettingsToDefault();
+                    Console.WriteLine("Settings reset to default!");
                     break;
                 case "help":
                 default:
