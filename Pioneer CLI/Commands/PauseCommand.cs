@@ -96,7 +96,7 @@ namespace Pioneer_CLI.Commands
             if (clc.GetSelectedDevice() != null)
             {
                 VirtualCDJ vcdj = plc.GetVirtualCDJ();
-                int id = clc.GetSelectedDevice().ChannelID;
+                int id = clc.GetSelectedDevice().GetChannelID();
                 CDJControlCommand ctrl_command = new CDJControlCommand();
 
                 ctrl_command.ChannelID = vcdj.ChannelID;
@@ -131,7 +131,7 @@ namespace Pioneer_CLI.Commands
             }
             else
             {
-                Console.WriteLine("No device was selected! First select a device");
+                Console.WriteLine("No device or mixer was selected! First select a CDJ device");
             }
 
         }

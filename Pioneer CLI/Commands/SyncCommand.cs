@@ -1,4 +1,5 @@
-﻿using ProLinkLib;
+﻿using Pioneer_CLI.Devices;
+using ProLinkLib;
 using ProLinkLib.Commands.SyncCommands;
 using ProLinkLib.Network.UDP;
 using System;
@@ -114,11 +115,12 @@ namespace Pioneer_CLI.Commands
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
-            if(clc.GetSelectedDevice() != null)
+            if(clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
             {
                 VirtualCDJ vcdj = plc.GetVirtualCDJ();
                 SyncModeCommand sync_command = new SyncModeCommand();
                 string mode = args.ToLower();
+                var cdj = (CDJ)clc.GetSelectedDevice();
 
                 sync_command.DeviceName = Utils.NameToBytes(vcdj.DeviceName, 0x14);
                 sync_command.ChannelID = vcdj.ChannelID;
@@ -138,7 +140,7 @@ namespace Pioneer_CLI.Commands
                     Console.WriteLine("Unknown mode: Usage sync <on|off>");
                     return;
                 }
-                vcdj.GetSyncServer().SendPacketToClient(clc.GetSelectedDevice().IpAddress, sync_command);
+                vcdj.GetSyncServer().SendPacketToClient(cdj.IpAddress, sync_command);
                 Console.WriteLine("Sync Mode: " + mode);
 
                 Logger.WriteMessage(Encoding.UTF8.GetBytes("SYNC MODE PAYLOAD"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
@@ -146,7 +148,7 @@ namespace Pioneer_CLI.Commands
             }
             else
             {
-                Console.WriteLine("No device was selected! First select a device");
+                Console.WriteLine("No device or mixer was selected! First select a CDJ device");
             }
         }
     }

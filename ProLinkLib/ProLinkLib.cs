@@ -8,5 +8,8 @@ namespace ProLinkLib
         public static byte VIRTUALCDJ_CHANNELID = 25;
         public static string VIRTUALCDJ_DEVICENAME = "CDJ-2000NXS2 DAVID";
 
+        public static int DEVICETYPE_CDJ = 0x01;
+        public static int DEVICETYPE_MIXER = 0x02;
+
     }
 }

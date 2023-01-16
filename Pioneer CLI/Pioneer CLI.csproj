@@ -60,6 +60,8 @@
     <Compile Include="Commands\SettingsCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Devices\CDJ.cs" />
+    <Compile Include="Devices\IDevice.cs" />
+    <Compile Include="Devices\Mixer.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="NetworkManagementController.cs" />
     <Compile Include="ProLinkController.cs" />

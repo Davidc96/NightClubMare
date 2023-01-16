@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pioneer_CLI.Devices
 {
-    public class CDJ
+    public class CDJ : IDevice
     {
         private string deviceName;
         private string ipAddress;
@@ -66,7 +66,7 @@ namespace Pioneer_CLI.Devices
            |	        |
             ------------
          */
-        public void PrintCDJInfo()
+        public void PrintDeviceInfo()
         {
             Console.WriteLine("  ------------");
             Console.Write(" | |________| |");
@@ -111,6 +111,26 @@ namespace Pioneer_CLI.Devices
                 Console.WriteLine("       |ON AIR|");
                 Console.ForegroundColor = ConsoleColor.White;
             }
+        }
+
+        public string GetDeviceName()
+        {
+            return deviceName;
+        }
+
+        public int GetChannelID()
+        {
+            return channelID;
+        }
+
+        public string GetIPAddress()
+        {
+            return ipAddress;
+        }
+
+        public string GetMacAddress()
+        {
+            return macAddress;
         }
     }
 }

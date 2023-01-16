@@ -11,7 +11,7 @@ namespace Pioneer_CLI
     public class CommandLineController
     {
         private ProLinkController plc;
-        private CDJ selectedCDJ;
+        private IDevice selectedCDJ;
         private Dictionary<string, ICommand> commands;
 
         public CommandLineController()
@@ -34,12 +34,12 @@ namespace Pioneer_CLI
 
         }
 
-        public void SelectDevice(CDJ device)
+        public void SelectDevice(IDevice device)
         {
             selectedCDJ = device;
         }
 
-        public CDJ GetSelectedDevice()
+        public IDevice GetSelectedDevice()
         {
             return selectedCDJ;
         }
@@ -65,7 +65,7 @@ namespace Pioneer_CLI
                 Console.WriteLine();
                 if (selectedCDJ != null)
                 {
-                    Console.Write("===:ID: " + selectedCDJ.ChannelID + "@" + selectedCDJ.DeviceName + "> ");
+                    Console.Write("===:ID: " + selectedCDJ.GetChannelID() + "@" + selectedCDJ.GetDeviceName() + "> ");
                 }
                 else
                 {

@@ -1,4 +1,5 @@
-﻿using ProLinkLib;
+﻿using Pioneer_CLI.Devices;
+using ProLinkLib;
 using ProLinkLib.Commands.SyncCommands;
 using ProLinkLib.Network.UDP;
 using System;
@@ -92,10 +93,11 @@ namespace Pioneer_CLI.Commands
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
-            if (clc.GetSelectedDevice() != null)
+            if (clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
             {
                 VirtualCDJ vcdj = plc.GetVirtualCDJ();
-                int id = clc.GetSelectedDevice().ChannelID;
+                var cdj = (CDJ)clc.GetSelectedDevice();
+                int id = cdj.ChannelID;
                 CDJControlCommand ctrl_command = new CDJControlCommand();
 
                 ctrl_command.ChannelID = vcdj.ChannelID;
@@ -129,7 +131,7 @@ namespace Pioneer_CLI.Commands
             }
             else
             {
-                Console.WriteLine("No device was selected! First select a device");
+                Console.WriteLine("No device or mixer was selected! First select a CDJ device");
             }
 
         }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pioneer_CLI.Devices;
 using ProLinkLib;
 using ProLinkLib.Network.UDP;
 
@@ -48,27 +49,28 @@ namespace Pioneer_CLI.Commands
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
-            if(clc.GetSelectedDevice() != null)
+            if(clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
             {
                 ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
+                var cdj = (CDJ)clc.GetSelectedDevice();
                 uint trackID = UInt32.Parse(args, NumberStyles.HexNumber);
                 ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
                 ld_command.ChannelID2 = plc.GetVirtualCDJ().ChannelID;
                 ld_command.DeviceName = Utils.NameToBytes(plc.GetVirtualCDJ().DeviceName, 0x14);
-                ld_command.DeviceToLoad = Convert.ToByte(clc.GetSelectedDevice().ChannelID);
-                ld_command.DeviceTrackListLocatedID = clc.GetSelectedDevice().TrackDeviceLocatedID;
-                ld_command.DeviceTracklistLocation = clc.GetSelectedDevice().TrackPhysicallyLocated;
-                ld_command.TrackType = clc.GetSelectedDevice().TrackType;
+                ld_command.DeviceToLoad = Convert.ToByte(cdj.ChannelID);
+                ld_command.DeviceTrackListLocatedID = cdj.TrackDeviceLocatedID;
+                ld_command.DeviceTracklistLocation = cdj.TrackPhysicallyLocated;
+                ld_command.TrackType = cdj.TrackType;
                 ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(trackID));
                 ld_command.Length = 0x34;
 
-                plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(clc.GetSelectedDevice().IpAddress, ld_command);
+                plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
                 Console.WriteLine($"Track ID: {trackID:X} loaded!");
 
             }
             else
             {
-                Console.WriteLine("No device was selected! First select a device");
+                Console.WriteLine("No device or mixer was selected! First select a CDJ device");
             }
         }
     }

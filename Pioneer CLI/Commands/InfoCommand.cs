@@ -18,7 +18,7 @@ namespace Pioneer_CLI.Commands
             if (clc.GetSelectedDevice() != null)
             {
                 var device = clc.GetSelectedDevice();
-                device.PrintCDJInfo();
+                device.PrintDeviceInfo();
             }
             else
             {
