@@ -60,6 +60,7 @@ namespace Pioneer_CLI.Commands
 
             Console.WriteLine("Packet imported successfully!");
             Console.WriteLine("Preview");
+            Console.WriteLine("--------------------");
             Console.WriteLine(Hex.Dump(file_data));
             Console.WriteLine("");
 
