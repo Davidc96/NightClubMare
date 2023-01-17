@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,28 +10,50 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class MediaResponseCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x06;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte Unknown1 = 0x00;
-        public byte Unknown2 = 0x00;
-        public byte ChannelID;
-        public ushort Length;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SubCategory = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public ushort Length = 0x9C;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes = new byte[0x3];
-        public byte DeviceTrackListLocatedID;                   // CDJ ChannelID where is located the tracklist
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte DeviceTrackListLocatedID = 0xA1;                   // CDJ ChannelID where is located the tracklist
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes2 = new byte[0x3];
-        public byte DeviceTracklistLocation;                    // 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
-        public byte[] MediaName = new byte[0x40];               // UTF-16 Media Name
-        public byte[] CreationDate = new byte[0x18];            // UTF-16 Creation Date
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte DeviceTracklistLocation = 0xA2;                    // 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] MediaName = Enumerable.Repeat((byte)0xA3, 0x40).ToArray();               // UTF-16 Media Name
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] CreationDate = Enumerable.Repeat((byte)0xA4, 0x18).ToArray();            // UTF-16 Creation Date
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] UnknownData = new byte[0x22];             // UTF-16 Unknown Data
-        public ushort TotalTracks;
-        public byte UIColor;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public ushort TotalTracks = 0xA6;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte UIColor = 0xA7;
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte BlankByte = 0x00;
-        public byte TracksType;
-        public byte SettingsAvailable;                        // 0x00 -> No 0x01 -> Yes
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte TracksType = 0xA8;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SettingsAvailable = 0xA9;                        // 0x00 -> No 0x01 -> Yes
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BlankBytes3 = new byte[0x02];
-        public ushort TotalPlaylist;
-        public byte[] TotalSpace = new byte[0x08];
-        public byte[] FreeSpace = new byte[0x08];
+        [JsonConverter(typeof(HexJsonConverter))]
+        public ushort TotalPlaylist = 0xAA;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] TotalSpace = Enumerable.Repeat((byte)0xAB, 0x40).ToArray();
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] FreeSpace = Enumerable.Repeat((byte)0xAC, 0x40).ToArray();
 
         public byte[] RawData;
         public void FromBytes(byte[] packet)
@@ -40,7 +63,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.BaseStream.Seek(0x0B, SeekOrigin.Begin);
                 DeviceName = bin.ReadBytes(0x14);
                 Unknown1 = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 ChannelID = bin.ReadByte();
                 Length = BitConverter.ToUInt16(Utils.SwapEndianesss(bin.ReadBytes(0x02)), 0);
                 BlankBytes = bin.ReadBytes(0x03);
@@ -83,7 +106,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.Write(ID);
                 bin.Write(DeviceName);
                 bin.Write(Unknown1);
-                bin.Write(Unknown2);
+                bin.Write(SubCategory);
                 bin.Write(ChannelID);
                 bin.Write(Utils.SwapEndianesss(BitConverter.GetBytes(Length)));
                 bin.Write(BlankBytes);

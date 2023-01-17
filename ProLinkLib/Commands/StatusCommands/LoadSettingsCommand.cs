@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,43 +10,81 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class LoadSettingsCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x34;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown1 = 0x02;
-        public byte ChannelID;
-        public byte ChannelDestID;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelDestID = 0xA1;
+        [JsonConverter(typeof(HexJsonConverter))]
         public ushort Length = 0x50;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] UnknownBytes = { 0x12, 0x34, 0x56, 0x78, 0x00, 0x00, 0x00, 0x03 };
-        public byte OnAirDisplay;                                                           // 0x81: ON 0x82: OFF
-        public byte LCDBrightness;                                                          // 0x81: Min Brightness to 0x85 (Max Brightness)
-        public byte QuantizeMode;                                                           // 0x81: ON 0x82: OFF
-        public byte AutoCueLevel;
-        public byte Language;
-        private byte Unknown2 = 0x01;
-        public byte JogBrightness;                                                          // 0x81: Min Bright 0x82: Full Bright
-        public byte JogLedEndTrackBehaviour;                                                // 0x80: Turn ON Led 0x82: Turn Off
-        public byte SlipModeJogLed;                                                         // 0x80: ON 0x82: OFF
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte OnAirDisplay = 0xA2;                                                           // 0x81: ON 0x82: OFF
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte LCDBrightness = 0xA3;                                                          // 0x81: Min Brightness to 0x85 (Max Brightness)
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte QuantizeMode = 0xA4;                                                           // 0x81: ON 0x82: OFF
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte AutoCueLevel = 0xA5;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte Language = 0xA6;
+        [JsonConverter(typeof(HexJsonConverter))]
+        private byte SubCategory = 0x01;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte JogBrightness = 0xA7;                                                          // 0x81: Min Bright 0x82: Full Bright
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte JogLedEndTrackBehaviour = 0xA8;                                                // 0x80: Turn ON Led 0x82: Turn Off
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SlipModeJogLed = 0xA9;                                                         // 0x80: ON 0x82: OFF
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes2 = { 0x01, 0x01, 0x01 };
-        public byte DiscSlotLedBehaviour;                                                   // 0x80 OFF 0x81 Min Led 0x82 Max Led
-        public byte LockEjectLoadTracks;                                                    // 0x80 False 0x81 True
-        public byte SyncModeActivate;                                                       // 0x80 False 0x81 True
-        public byte AutoPlayMode;                                                           // 0x80 True 0x81 False
-        public byte QuantizeModeValue;                                                      // 0x80 1 beat 0x81 1/2 beat 0x82 1/4 beat 0x83 8 beats
-        public byte HotCueAutoLoad;                                                         // 0x80 OFF 0x81 Enabled 0x82 Rekordbox owner
-        public byte HotCueColorMode;                                                        // 0x80 Disabled 0x81 Enabled
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte DiscSlotLedBehaviour = 0xAA;                                                   // 0x80 OFF 0x81 Min Led 0x82 Max Led
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte LockEjectLoadTracks = 0xAB;                                                    // 0x80 False 0x81 True
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SyncModeActivate = 0xAC;                                                       // 0x80 False 0x81 True
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte AutoPlayMode = 0xAD;                                                           // 0x80 True 0x81 False
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte QuantizeModeValue = 0xAE;                                                      // 0x80 1 beat 0x81 1/2 beat 0x82 1/4 beat 0x83 8 beats
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte HotCueAutoLoad = 0xAF;                                                         // 0x80 OFF 0x81 Enabled 0x82 Rekordbox owner
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte HotCueColorMode = 0xB0;                                                        // 0x80 Disabled 0x81 Enabled
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes3 = { 0x00, 0x00 };
-        public byte NeedleLockMode;                                                         // 0x80 Unlocked 0x81 Locked
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte NeedleLockMode = 0xB1;                                                         // 0x80 Unlocked 0x81 Locked
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes4 = { 0x00, 0x00 };
-        public byte TimeDisplayMode;                                                        // 0x80 Elapsed 0x81 Remaining
-        public byte JogMode;                                                                // 0x80 CDJ 0x81 Vinyl
-        public byte AutoCueMode;                                                            // 0x80 Disabled 0x81 Enabled
-        public byte MasterTempoMode;                                                        // 0x80 Enabled 0x81 Disabled
-        public byte RangeTempo;
-        public byte PhaseMeter;                                                             // 0x80 |===||===||===||===|  0x81 ---|---|---|---|---
-        public byte VinylSpeedAdjust;                                                       // 0x80 Touch & Release 0x81 Touch Only 0x82 Release Only
-        public byte JogLCDContent;                                                          // 0x80 Auto 0x81 Simple 0x82 Artwork
-        public byte ButtonBrightness;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
-        public byte JogLCDBrightness;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte TimeDisplayMode = 0xB2;                                                        // 0x80 Elapsed 0x81 Remaining
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte JogMode = 0xB3;                                                                // 0x80 CDJ 0x81 Vinyl
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte AutoCueMode = 0xB4;                                                            // 0x80 Disabled 0x81 Enabled
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte MasterTempoMode = 0xB5;                                                        // 0x80 Enabled 0x81 Disabled
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte RangeTempo = 0xB6;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PhaseMeter = 0xB7;                                                             // 0x80 |===||===||===||===|  0x81 ---|---|---|---|---
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte VinylSpeedAdjust = 0xB8;                                                       // 0x80 Touch & Release 0x81 Touch Only 0x82 Release Only
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte JogLCDContent = 0xB9;                                                          // 0x80 Auto 0x81 Simple 0x82 Artwork
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ButtonBrightness = 0xBA;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte JogLCDBrightness = 0xBB;                                                       // 0x81 Min Brightness to 0x84 Max Brightness
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] UnknownBytes5 = new byte[0x26];
 
         private byte[] rawData;
@@ -66,7 +105,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 QuantizeMode = bin.ReadByte();
                 AutoCueLevel = bin.ReadByte();
                 Language = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 JogBrightness = bin.ReadByte();
                 JogLedEndTrackBehaviour = bin.ReadByte();
                 SlipModeJogLed = bin.ReadByte();
@@ -128,7 +167,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.Write(QuantizeMode);
                 bin.Write(AutoCueLevel);
                 bin.Write(Language);
-                bin.Write(Unknown2);
+                bin.Write(SubCategory);
                 bin.Write(JogBrightness);
                 bin.Write(JogLedEndTrackBehaviour);
                 bin.Write(SlipModeJogLed);

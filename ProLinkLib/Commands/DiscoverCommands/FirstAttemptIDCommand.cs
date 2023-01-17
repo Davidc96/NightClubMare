@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,15 +10,24 @@ namespace ProLinkLib.Commands.DiscoverCommands
 {
     public class FirstAttemptIDCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x00;                                 // 0x0A
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ToMixer = 0x00;                            // 0x0B
-        public byte[] DeviceName = new byte[0x14];             // 0x0C - 0x1F
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();             // 0x0C - 0x1F
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte Unknown = 0x01;                            // 0x20
-        public byte Unknown2 = 0x02;                           // 0x21
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SubCategory = 0x02;                           // 0x21
+        [JsonConverter(typeof(HexJsonConverter))]
         public ushort Length = 44;                             // 0x22 - 0x23
-        public byte PacketCounter;                             // 0x24
-        public byte DeviceType;                                // 0x25   0x01 -> CDJ 0x02 -> Mixer
-        public byte[] MacAddress = new byte[6];                // 0x26 - 0x2B
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PacketCounter = 0xA0;                             // 0x24
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte DeviceType = 0xA1;                                // 0x25   0x01 -> CDJ 0x02 -> Mixer
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] MacAddress = { 0xA2, 0xA2, 0xA2, 0xA2, 0xA2, 0xA2 };                // 0x26 - 0x2B
 
         public byte[] RawData;
         public void FromBytes(byte[] packet)
@@ -28,7 +38,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
                 ToMixer = bin.ReadByte();
                 DeviceName = bin.ReadBytes(0x14);
                 Unknown = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 Length = BitConverter.ToUInt16(Utils.SwapEndianesss(bin.ReadBytes(2)), 0);
                 PacketCounter = bin.ReadByte();
                 DeviceType = bin.ReadByte();
@@ -44,7 +54,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
             Console.WriteLine("ToMixer: " + $"0x{ToMixer:X}");
             Console.WriteLine("DeviceName: " + Encoding.UTF8.GetString(DeviceName));
             Console.WriteLine("Unknown: " + $"0x{Unknown:X}");
-            Console.WriteLine("Unknown2: " + $"0x{Unknown2:X}");
+            Console.WriteLine("SubCategory: " + $"0x{SubCategory:X}");
             Console.WriteLine("Length: " + Length);
             Console.WriteLine("PacketCounter: " + PacketCounter);
             Console.WriteLine("DeviceType: " + (DeviceType == 0x01 ? "CDJ" : "Mixer"));
@@ -60,7 +70,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
                 bin.Write(ToMixer);
                 bin.Write(DeviceName);
                 bin.Write(Unknown);
-                bin.Write(Unknown2);
+                bin.Write(SubCategory);
                 bin.Write(Utils.SwapEndianesss(BitConverter.GetBytes(Length)));
                 bin.Write(PacketCounter);
                 bin.Write(DeviceType);

@@ -31,6 +31,8 @@ namespace Pioneer_CLI
             commands.Add("load", new LoadTrackCommand());
             commands.Add("debug", new DebugModeCommand());
             commands.Add("settings", new SettingsCommand());
+            commands.Add("packetbuilder", new PacketBuilderCommand());
+            commands.Add("pb", new PacketBuilderCommand());
 
         }
 

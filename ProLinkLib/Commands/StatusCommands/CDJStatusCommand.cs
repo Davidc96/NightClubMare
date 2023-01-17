@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,76 +10,144 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class CDJStatusCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x0A;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown = 0x01;
-        private byte Unknown2 = 0x05;
-        public byte ChannelID1;
+        [JsonConverter(typeof(HexJsonConverter))]
+        private byte SubCategory = 0x05;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID1 = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
         public ushort Length;
-        public byte ChannelID2;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID2 = 0xA1;
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown3 = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown4 = 0x01;
-        public byte ActivityFlag;                               // 0x00 -> IDLE 0x01 -> Playing, Loading or Searching track
-        public byte TrackDeviceLocatedID;                       // ChannelID if is in local, CDJ ChannelID where is located the track
-        public byte TrackPhysicallyLocated;                     // 0x00 -> NO TRACK, 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
-        public byte TrackType;                                  // 0x00 -> No track loaded, 0x01 -> Rekordbox track, 0x02 -> Unanalized track loaded, 0x05 -> CD track loaded
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ActivityFlag = 0xA2;                               // 0x00 -> IDLE 0x01 -> Playing, Loading or Searching track
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte TrackDeviceLocatedID = 0xA3;                       // ChannelID if is in local, CDJ ChannelID where is located the track
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte TrackPhysicallyLocated = 0xA4;                     // 0x00 -> NO TRACK, 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte TrackType = 0xA5;                                  // 0x00 -> No track loaded, 0x01 -> Rekordbox track, 0x02 -> Unanalized track loaded, 0x05 -> CD track loaded
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown5 = 0x00;
-        public byte[] RekordboxTrackID = new byte[0x4];         // RekordboxTrackID
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] RekordboxTrackID = { 0xA6, 0xA6, 0xA6, 0xA6 };         // RekordboxTrackID
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BlankBytes = new byte[0x2];
-        public byte[] RekordBoxTrackListPos = new byte[0x2];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] RekordBoxTrackListPos = { 0xA7, 0xA7 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BlankBytes2 = new byte[0x3];
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte UnknownFeatureDl;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes3 = new byte[0xE];
-        public byte[] NumberTracksInPlaylist = new byte[0x2];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] NumberTracksInPlaylist = { 0xA8, 0xA8 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes4 = new byte[0x22];
-        public byte USBActivity;
-        public byte SDActivity;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte USBActivity = 0xA9;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SDActivity = 0xAA;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes5 = new byte[0x3];
-        public byte USBLocalStatus;                                // 0x04 -> No USB Media Loaded, 0x00 -> USB Loaded, 0x02 or 0x03 -> USB Stop button
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte USBLocalStatus = 0xAB;                                 // 0x04 -> No USB Media Loaded, 0x00 -> USB Loaded, 0x02 or 0x03 -> USB Stop button
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes6 = new byte[0x3];
-        public byte SDLocalStatus;                                 // 0x04 -> No SD Media Loaded, 0x00 -> SD Loaded, 0x02 or 0x03 -> SD tap open and SD unmounted
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SDLocalStatus = 0xAC;                                 // 0x04 -> No SD Media Loaded, 0x00 -> SD Loaded, 0x02 or 0x03 -> SD tap open and SD unmounted
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte BlankByte;
-        public byte LinkAvailable;                                 // 0x01 -> True 0x00 False
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte LinkAvailable = 0xAD;                                 // 0x01 -> True 0x00 False
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes7 = new byte[0x5];
-        public byte PlayerStatus;                                  // 0x00 No track, 0x02 -> Track loading, 0x03 -> Play Normal, 0x04 -> Play Loop, 0x05 Player paused in other than cue point
-                                                                   // 0x06 Player paused cue point, 0x07 Cue play in progres, 0x08 Cue scratch in progress, 0x09 -> Player searching
-                                                                   // 0x0e Audio CD Shutdown 0x11 -> Reached End of the track
-        public byte[] FirmwareVersion = new byte[0x4];             // ASCII Representation
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PlayerStatus = 0xAE;                                  // 0x00 No track, 0x02 -> Track loading, 0x03 -> Play Normal, 0x04 -> Play Loop, 0x05 Player paused in other than cue point
+                                                                          // 0x06 Player paused cue point, 0x07 Cue play in progres, 0x08 Cue scratch in progress, 0x09 -> Player searching
+                                                                          // 0x0e Audio CD Shutdown 0x11 -> Reached End of the track
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] FirmwareVersion = { 0xAF, 0xAF, 0xAF, 0xAF };             // ASCII Representation
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes8 = new byte[0x4];
-        public byte[] SyncCounter = new byte[0x4];                 // Increase the counter when delegate Master Tempo
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] SyncCounter = { 0xB0, 0xB0, 0xB0, 0xB0 };                 // Increase the counter when delegate Master Tempo
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte BlankByte2 = 0x00;
-        public byte FlagStatus;                                    // bit 0 -> 0 bit 1 -> BPM  bit 2 -> 1 bit 3 -> On-Air bit4 -> SyncMode bit 5 -> Master bit 6 -> Play bit 7 -> 1
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte FlagStatus = 0xB1;                                    // bit 0 -> 0 bit 1 -> BPM  bit 2 -> 1 bit 3 -> On-Air bit4 -> SyncMode bit 5 -> Master bit 6 -> Play bit 7 -> 1
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte Unknown6 = 0xFF;
-        public byte PlayerStatus2;                                 // 0x7A -> Playing normally, 0x7E Playing but not due to someone is holding the Jog
-        public byte[] Pitch1 = new byte[0x4];                      // First Pitch Byte
-        public byte[] BPMControl = new byte[0x2];                  // 80 00 -> Rekordbox track loaded 00 00 No rekordbox track loaded 7F FF No track loaded
-        public byte[] BPMTrack = new byte[0x2];                    // (byte[0] * 256 + byte[1])
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PlayerStatus2 = 0xB2;                                 // 0x7A -> Playing normally, 0x7E Playing but not due to someone is holding the Jog
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] Pitch1 = { 0xB3, 0xB3, 0xB3, 0xB3 };                      // First Pitch Byte
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] BPMControl = { 0xB4, 0xB4 };                  // 80 00 -> Rekordbox track loaded 00 00 No rekordbox track loaded 7F FF No track loaded
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] BPMTrack = { 0xB5, 0xB5 };                    // (byte[0] * 256 + byte[1])
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes9 = new byte[0x4];
-        public byte[] Pitch2 = new byte[0x4];                      // Second Pitch Byte
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] Pitch2 = { 0xB6, 0xB6, 0xB6, 0xB6 };                      // Second Pitch Byte
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown7 = 0x00;
-        public byte PlayerModeStatus;                              // 0x00 No track loaded 0x01 Reverse mode or paused 0x09 Playing with Vinyl mode 0x0d Playing with CDJ mode
-        public byte MasterMeaningful;                              // 0x00 Not Master 0x01 Master and track is playing 0x02 Master but no track playing
-        public byte MasterHandoff;                                 // FF if is not master Other device ChannelID -> locate the master
-        public byte[] Beat = new byte[0x4];
-        public byte[] CueDistance = new byte[0x2];
-        public byte BeatCounter;                                   // Beat Counter 01 02 03 04
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PlayerModeStatus = 0xB7;                              // 0x00 No track loaded 0x01 Reverse mode or paused 0x09 Playing with Vinyl mode 0x0d Playing with CDJ mode
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte MasterMeaningful = 0xB8;                              // 0x00 Not Master 0x01 Master and track is playing 0x02 Master but no track playing
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte MasterHandoff = 0xB9;                                 // FF if is not master Other device ChannelID -> locate the master
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] Beat = { 0xB0, 0xB0, 0xB0, 0xB0 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] CueDistance = { 0xB1, 0xB1 };
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte BeatCounter = 0xB2;                                   // Beat Counter 01 02 03 04
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes10 = new byte[16];
-        public byte MediaPresence;                                 // Works only on CDJ-3000
-        public byte USBPresence;                                   // 0x01 -> Unsafe ejected 0x00 -> All ok
-        public byte SDPresence;                                    // 0x01 -> SD unsafe ejected 0x00 -> All Ok
-        public byte EmergencyLoop;                                 // 0x01 -> If emergency loop is active
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte MediaPresence = 0xB3;                                 // Works only on CDJ-3000
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte USBPresence = 0xB4;                                   // 0x01 -> Unsafe ejected 0x00 -> All ok
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SDPresence = 0xB5;                                    // 0x01 -> SD unsafe ejected 0x00 -> All Ok
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte EmergencyLoop = 0xB6;                                 // 0x01 -> If emergency loop is active
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes11 = new byte[0x5];
-        public byte[] Pitch3 = new byte[0x4];
-        public byte[] Pitch4 = new byte[0x4];
-        public byte[] PacketCounter = new byte[0x4];
-        public byte IsNexus;                                        // 0x0f if is nexus 0x1f XDJ-XZ and CDJ-3000 0x05 older players
-        public byte PreviewTrackSupport;                            // 0x20 is supported 0x00 No
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] Pitch3 = { 0xB7, 0xB7, 0xB7, 0xB7 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] Pitch4 = { 0xB8, 0xB8, 0xB8, 0xB8};
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] PacketCounter = { 0xB9, 0xB9, 0xB9, 0xB9 };
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte IsNexus = 0xBA;                                        // 0x0f if is nexus 0x1f XDJ-XZ and CDJ-3000 0x05 older players
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte PreviewTrackSupport = 0xBB;                            // 0x20 is supported 0x00 No
         private byte[] BlankBytes12 = new byte[0x2];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes = new byte[0xA];                // Starts with 12 34 56 78
-        public byte WaveColor;                                      // 0x01 -> Blue 0x03 -> RGB 0x04 -> 3-Band
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte WaveColor = 0xBC;                                      // 0x01 -> Blue 0x03 -> RGB 0x04 -> 3-Band
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown8;
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown9;
-        public byte WavePosition;                                   // 0x01 -> Center 0x02 -> Left
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte WavePosition = 0xBD;                                   // 0x01 -> Center 0x02 -> Left
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes13 = new byte[0x50];
 
         // TODO ADD CDJ 3000 Support
@@ -91,7 +160,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.BaseStream.Seek(0x0B, SeekOrigin.Begin);
                 DeviceName = bin.ReadBytes(0x14);
                 Unknown = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 ChannelID1 = bin.ReadByte();
                 Length = BitConverter.ToUInt16(Utils.SwapEndianesss(bin.ReadBytes(2)), 0);
                 ChannelID2 = bin.ReadByte();

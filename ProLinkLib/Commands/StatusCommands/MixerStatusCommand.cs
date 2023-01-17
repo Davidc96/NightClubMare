@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,20 +10,35 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class MixerStatusCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x29;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown = 0x01;
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte SubCategory = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID1 = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
         public ushort Length = 0x14;
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID2 = 0xA1;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes = { 0x00, 0x00 };
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte FlagStatus = 0xA2;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] Pitch = { 0xA3, 0xA3, 0xA3, 0xA3 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes = { 0x80, 0x00 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BPM = { 0xA4, 0xA4 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] UnknownBytes2 = { 0x00, 0x10, 0x00, 0x00, 0x00, 0x09 };
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte MasterHandoff = 0xA5;
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte BeatCount = 0xA6;
 
         public byte[] RawData;

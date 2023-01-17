@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,16 +10,27 @@ namespace ProLinkLib.Commands.SyncCommands
 {
     public class ChannelsOnAirCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x03;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown1 = 0x01;
-        private byte Unknown2 = 0x00;
-        public byte ChannelID = 0xF0;
-        public ushort Length = 0x04;
-        public byte Channel1 = 0xF1;
-        public byte Channel2 = 0xF2;
-        public byte Channel3 = 0xF3;
-        public byte Channel4 = 0xF4;
+        [JsonConverter(typeof(HexJsonConverter))]
+        private byte SubCategory = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public ushort Length = 0x09;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte Channel1 = 0xA1;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte Channel2 = 0xA2;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte Channel3 = 0xA3;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte Channel4 = 0xA4;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes = { 0x00, 0x00, 0x00, 0x00, 0x00 };
 
         public byte[] RawData;
@@ -29,7 +41,7 @@ namespace ProLinkLib.Commands.SyncCommands
                 bin.BaseStream.Seek(0x0B, SeekOrigin.Begin);
                 DeviceName = bin.ReadBytes(0x14);
                 Unknown1 = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 ChannelID = bin.ReadByte();
                 Length = BitConverter.ToUInt16(Utils.SwapEndianesss(bin.ReadBytes(0x02)), 0);
                 Channel1 = bin.ReadByte();
@@ -65,7 +77,7 @@ namespace ProLinkLib.Commands.SyncCommands
                 bin.Write(ID);
                 bin.Write(DeviceName);
                 bin.Write(Unknown1);
-                bin.Write(Unknown2);
+                bin.Write(SubCategory);
                 bin.Write(ChannelID);
                 bin.Write(Utils.SwapEndianesss(BitConverter.GetBytes(Length)));
                 bin.Write(Channel1);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,16 +10,27 @@ namespace ProLinkLib.Commands.StatusCommands
 {
     public class MediaQueryCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x05;
-        public byte[] DeviceName = new byte[0x14];
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte Unknown1 = 0x00;
-        public byte Unknown2 = 0x00;
-        public byte ChannelID;
-        public ushort Length;
-        public byte[] IPAddress = new byte[0x4];
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte SubCategory = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public byte ChannelID = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
+        public ushort Length = 0x0C;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        public byte[] IPAddress = { 0xA1, 0xA1, 0xA1, 0xA1 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes = new byte[0x3];
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte DeviceTrackListLocatedID;                   // CDJ ChannelID where is located the tracklist
-        private byte[] BlankBytes2 = new byte[0x3];         
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
+        private byte[] BlankBytes2 = new byte[0x3];
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte DeviceTracklistLocation;                    // 0x01 -> CD-Drive, 0x02 -> SD Slot, 0x03 -> USB Slot, 0x04 -> Laptop
 
         public byte[] RawData;
@@ -29,7 +41,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.BaseStream.Seek(0x0B, SeekOrigin.Begin);
                 DeviceName = bin.ReadBytes(0x14);
                 Unknown1 = bin.ReadByte();
-                Unknown2 = bin.ReadByte();
+                SubCategory = bin.ReadByte();
                 ChannelID = bin.ReadByte();
                 Length = BitConverter.ToUInt16(Utils.SwapEndianesss(bin.ReadBytes(0x02)), 0);
                 IPAddress = bin.ReadBytes(0x04);
@@ -60,7 +72,7 @@ namespace ProLinkLib.Commands.StatusCommands
                 bin.Write(ID);
                 bin.Write(DeviceName);
                 bin.Write(Unknown1);
-                bin.Write(Unknown2);
+                bin.Write(SubCategory);
                 bin.Write(ChannelID);
                 bin.Write(Utils.SwapEndianesss(BitConverter.GetBytes(Length)));
                 bin.Write(IPAddress);

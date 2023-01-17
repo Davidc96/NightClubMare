@@ -63,10 +63,22 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
             udpClient.Send(packet_b, packet_b.Length, BroadcastAddress, PORT);
         }
 
+        public void SendPacketBroadcast(byte[] packet)
+        {
+            //udpClient.Send(packet_b, packet_b.Length, "192.168.1.255", PORT);
+            udpClient.Send(packet, packet.Length, BroadcastAddress, PORT);
+        }
+
+
         public void SendPacketToClient(string dstIp, ICommand packet)
         {
             var packet_b = packetBuilder.BuildPacket(packet);
             udpClient.Send(packet_b, packet_b.Length, dstIp, PORT);
+        }
+
+        public void SendPacketToClient(string dstIp, byte[] packet)
+        {
+            udpClient.Send(packet, packet.Length, dstIp, PORT);
         }
 
     }
