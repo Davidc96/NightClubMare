@@ -57,6 +57,23 @@ namespace Pioneer_CLI
                 System.IO.File.WriteAllText(packet_name + "_template.json", json);
                 System.IO.File.WriteAllBytes(packet_name + "_binary.bin", bytes);
 
+                Console.WriteLine("Packet save as: " + packet_name + "_binary.bin");
+                Console.WriteLine("Template saved as: " + packet_name + "_template.json");
+
+            }
+            else
+            {
+                Console.WriteLine("Unknown command: " + packet_name + ". Use \"pb list\" to list all the available commands");
+            }
+        }
+
+        public void ListAllCommands()
+        {
+            Console.WriteLine("Available commands");
+            Console.WriteLine("------------------");
+            foreach(string cmd in commands.Keys)
+            {
+                Console.WriteLine(cmd)
             }
         }
     }
