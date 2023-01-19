@@ -40,9 +40,12 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
                 packetCommands[packet_id].FromBytes(packet);
                 callback(packet_id, packetCommands[packet_id]);
             }
-            catch
+            catch(Exception e)
             {
                 //Console.WriteLine("[Discover Server] Unknown packet " + packet_id);
+                Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.WARNING, "Exception error with packet " + packet_id + 
+                                     "\nException message: " + e.Message);
+                File.WriteAllBytes($"logs\\failed_dumped_packets\\discover_server - packet - {packet_id: X} - " + DateTime.Now.ToString() + ".bin", packet);
             }
         }
     

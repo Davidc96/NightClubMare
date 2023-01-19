@@ -29,6 +29,7 @@ namespace ProLinkLib.Network.UDP
                 builded_packet[PACKET_HEADER.Length + i] = command_b[i];
             }
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "Packet Builded\n\n" + Hex.Dump(builded_packet));
             return builded_packet;
 
         }

@@ -140,6 +140,7 @@ namespace Pioneer_CLI.Commands
                     Console.WriteLine("Unknown mode: Usage sync <on|off>");
                     return;
                 }
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent SYNC_COMMAND to CDJId: " + cdj.ChannelID);
                 vcdj.GetSyncServer().SendPacketToClient(cdj.IpAddress, sync_command);
                 Console.WriteLine("Sync Mode: " + mode);
 

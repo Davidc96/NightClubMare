@@ -64,8 +64,15 @@ namespace Pioneer_CLI.Commands
                 ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(trackID));
                 ld_command.Length = 0x34;
 
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
+                                    $"TrackID: 0x{trackID:X}\n" +
+                                    $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
+                                    $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
+                                    $"DeviceTrackListLocation: {ld_command.DeviceTracklistLocation}\n");
                 plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
-                Console.WriteLine($"Track ID: {trackID:X} loaded!");
+
+                
+                Console.WriteLine($"Track ID: 0x{trackID:X} loaded!");
 
             }
             else

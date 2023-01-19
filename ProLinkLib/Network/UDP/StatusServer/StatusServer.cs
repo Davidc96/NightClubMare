@@ -42,7 +42,7 @@ namespace ProLinkLib.Network.UDP.StatusServer
             });
             //receiveTask.Wait();
 
-
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Discover Server started at " + PORT);
             Console.WriteLine("[INFO] Status Server started at " + PORT);
 
         }

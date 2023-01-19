@@ -161,7 +161,8 @@ namespace Pioneer_CLI.Commands
                         // CDJ goes from 1 to 6; 
                         if(cdj.ChannelID < 6)
                         {
-                            // Broadcast the paquet 
+                            // Broadcast the paquet
+                            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent SETTINGS_COMMAND");
                             virtual_cdj.GetStatusServer().SendPacketBroadcast(device_settings.GetSettingsPacket(virtual_cdj, cdj.ChannelID));
                         }
                     }

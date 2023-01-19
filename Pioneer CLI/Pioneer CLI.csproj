@@ -66,7 +66,6 @@
     <Compile Include="Devices\CDJ.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\Mixer.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="NetworkManagementController.cs" />
     <Compile Include="PacketBuilder.cs" />
     <Compile Include="ProLinkController.cs" />

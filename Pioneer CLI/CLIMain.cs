@@ -25,6 +25,7 @@ namespace Pioneer_CLI
 
             status.FromBytes(test);
             clc.GetPLC().StatusServerOnRecvPacket(0x0A, status);*/
+
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());
             clc.InitCLI();
@@ -45,6 +46,15 @@ namespace Pioneer_CLI
             Console.WriteLine("");
             Console.WriteLine("*************************************************************************************************");
             Console.WriteLine();
+
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "\n" +
+                "*************************************************************************************************" + 
+                banner +
+                "\n                             Developed by @Davidc96 https://github.com/Davidc96 \n" +
+                "\n" +
+                "*************************************************************************************************\n");
+
+
         }
 
 

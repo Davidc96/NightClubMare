@@ -42,6 +42,7 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
             });
             //receiveTask.Wait();
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Discover Server started at " + PORT);
             Console.WriteLine("[INFO] Discover Server started at " + PORT);
 
         }

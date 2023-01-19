@@ -37,9 +37,12 @@ namespace ProLinkLib.Network.UDP.StatusServer
                 packetCommands[packet_id].FromBytes(packet);
                 callback(packet_id, packetCommands[packet_id]);
             }
-            catch
+            catch(Exception e)
             {
                 //Console.WriteLine("[Status Server] Unknown packet " + packet_id);
+                Logger.WriteLogFile("Status_Server - logs", Logger.LOG_TYPE.WARNING, $"Exception error with packet 0x{packet_id}" +
+                     "\nException message: " + e.Message);
+                File.WriteAllBytes($"logs\\failed_dumped_packets\\status_server - packet - {packet_id: X} - " + DateTime.Now.ToString() + ".bin", packet);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Pioneer_CLI.Devices;
+using ProLinkLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace Pioneer_CLI.Commands
                 }
 
                 clc.SelectDevice(device_list[device_id]);
+                
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User selected Device: " + device_id);
                 Console.WriteLine("Device " + device_id + " selected!");
                 
                 // Run info command automatically to show the current state of CDJ

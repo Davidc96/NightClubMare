@@ -124,6 +124,8 @@ namespace Pioneer_CLI.Commands
                 }
                 Logger.WriteMessage(Encoding.UTF8.GetBytes("PAUSE CDJControl PAYLOAD"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
                 Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(ctrl_command.ToBytes()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
+                
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, $"User sent PAUSE_COMMAND to CDJId: {id}!");
 
                 vcdj.GetSyncServer().SendPacketBroadcast(ctrl_command);
                 Console.WriteLine("CDJ " + id + " stopped!");

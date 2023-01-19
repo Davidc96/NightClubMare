@@ -138,6 +138,10 @@ namespace Pioneer_CLI.Commands
                     vcdj.GetSyncServer().SendPacketToClient(device.GetIPAddress(), file_data);
                 }
             }
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent CUSTOM_PAYLOAD_COMMAND");
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "CUSTOM Payload packet:\n" +
+                "Preview\n\n" +
+                Hex.Dump(file_data));
 
             Console.WriteLine("Packet sent!");
         }
