@@ -46,6 +46,9 @@ namespace Pioneer_CLI.Commands
                 case "export":
                     pb.ExportPacket(param1);
                     break;
+                case "list":
+                    pb.ListAllCommands();
+                    break;
                 default:
                     break;
             }
