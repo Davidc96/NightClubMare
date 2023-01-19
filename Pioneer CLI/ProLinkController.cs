@@ -57,7 +57,7 @@ namespace Pioneer_CLI
                     // Check if is not ourselves
                     if(Utils.BytesToIPString(virtualCDJ.IPaddress) != Utils.BytesToIPString(ka_command.IPAddress))
                     {
-                        if (ka_command.DeviceType == DEVICETYPE_CDJ)
+                        if (Encoding.UTF8.GetString(ka_command.DeviceName).Contains("CDJ"))
                         {
                             CDJ new_device = new CDJ();
                             new_device.ChannelID = ka_command.ChannelID;
@@ -70,7 +70,7 @@ namespace Pioneer_CLI
                             CDJList.Add(ka_command.ChannelID, new_device);
                         }
 
-                        if(ka_command.DeviceType == DEVICETYPE_MIXER)
+                        if(Encoding.UTF8.GetString(ka_command.DeviceName).Contains("DJM"))
                         {
                             Mixer new_device = new Mixer();
                             new_device.ChannelID = ka_command.ChannelID;
