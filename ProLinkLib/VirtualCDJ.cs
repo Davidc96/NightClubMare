@@ -85,6 +85,9 @@ namespace ProLinkLib
             SecondAttemptIDCommand second_command = new SecondAttemptIDCommand();
             FinalAttemptIDCommand final_command = new FinalAttemptIDCommand();
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Connecting VirtualCDJ to the NETWORK with\n" +
+                                                                    "ChannelID: " + ChannelID + "\n" +
+                                                                    "DeviceName: " + DeviceName);
             init_command.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
             
             first_command.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
@@ -102,7 +105,8 @@ namespace ProLinkLib
             final_command.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
             final_command.PacketCounter = 1;
             final_command.ChannelID = ChannelID;
-            
+
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending INIT_COMMAND Packet to reclaim ChannelID");
             // Send 3 init commands as the protocol does
             discoverServer.SendPacketBroadcast(init_command);
             Thread.Sleep(200);
@@ -111,6 +115,7 @@ namespace ProLinkLib
             discoverServer.SendPacketBroadcast(init_command);
             Thread.Sleep(500);
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending FIRST_ATTEMPT_COMMAND Packet to reclaim ChannelID");
             // Send first commands
             discoverServer.SendPacketBroadcast(first_command);
             Thread.Sleep(200);
@@ -121,6 +126,7 @@ namespace ProLinkLib
             discoverServer.SendPacketBroadcast(first_command);
             Thread.Sleep(500);
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending SECOND_ATTEMPT_COMMAND Packet to reclaim ChannelID");
             // Send second_command
             discoverServer.SendPacketBroadcast(second_command);
             Thread.Sleep(200);
@@ -131,6 +137,7 @@ namespace ProLinkLib
             discoverServer.SendPacketBroadcast(second_command);
             Thread.Sleep(500);
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending LAST_ATTEMPT_COMMAND Packet to reclaim ChannelID");
             // Send final command
             discoverServer.SendPacketBroadcast(final_command);
             Thread.Sleep(200);
@@ -141,6 +148,7 @@ namespace ProLinkLib
             discoverServer.SendPacketBroadcast(final_command);
             Thread.Sleep(500);
 
+            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "VirtualCDJ connected to the network!");
             // Set KeepAlive Task
             var keepAliveTask = Task.Run(() =>
             {
@@ -161,6 +169,7 @@ namespace ProLinkLib
             while (true)
             {
                 //Console.WriteLine("[Discover Server] Sending Keep Alive packet!");
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending KEEP_ALIVE Packet");
                 discoverServer.SendPacketBroadcast(keep_command);
                 await Task.Delay(1500);
             }
