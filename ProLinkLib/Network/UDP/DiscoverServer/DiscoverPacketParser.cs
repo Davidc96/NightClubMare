@@ -37,15 +37,18 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
             byte packet_id = bin.ReadByte();
             try
             {
+                Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.INFO, $"Received packet {Utils.GetDiscoverCommandMessageByID(packet_id)}");
+                Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.DEBUG, "Packet Preview\n\n" + Hex.Dump(packet));
+
                 packetCommands[packet_id].FromBytes(packet);
                 callback(packet_id, packetCommands[packet_id]);
             }
             catch(Exception e)
             {
                 //Console.WriteLine("[Discover Server] Unknown packet " + packet_id);
-                Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.WARNING, "Exception error with packet " + packet_id + 
+                Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.ERROR, $"Exception error with packet {packet_id:X}" + 
                                      "\nException message: " + e.Message);
-                File.WriteAllBytes($"logs\\failed_dumped_packets\\discover_server - packet - {packet_id: X} - " + DateTime.Now.ToString().Replace("/","").Replace(":","-") + ".bin", packet);
+                File.WriteAllBytes($"logs\\failed_dumped_packets\\discover_server - packet - {packet_id:X} - " + DateTime.Now.ToString().Replace("/","").Replace(":","-") + ".bin", packet);
             }
         }
     

@@ -329,5 +329,67 @@ namespace ProLinkLib
             string[] joglcd_content = { "Auto", "Simple", "Artwork" };
             return joglcd_content[lcd_content - 0x80];
         }
+
+        public static string GetDiscoverCommandMessageByID(byte packet_id)
+        {
+            switch(packet_id)
+            {
+                case 0x08:
+                    return "CONFLICTID_COMMAND";
+                case 0x0A:
+                    return "DISCOVER_COMMAND";
+                case 0x04:
+                    return "FINAL_ATTEMPT_ID_COMMAND";
+                case 0x05:
+                    return "FINAL_MIXER_ID_ASSIGN_COMMAND";
+                case 0x00:
+                    return "FIRST_ATTEMPT_ID_COMMAND";
+                case 0x06:
+                    return "KEEP_ALIVE_COMMAND";
+                case 0x03:
+                    return "MIXER_ID_ASSIGN_COMMAND";
+                case 0x01:
+                    return "MIXER_ID_ATTEMPT_COMMAND";
+                case 0x02:
+                    return "SECOND_ATTEMPT_ID_COMMAND";
+                default:
+                    return "UNKNOWN_PACKET";
+            }
+        }
+
+        public static string GetStatusCommandMessageByID(byte packet_id)
+        {
+            switch(packet_id)
+            {
+                case 0x05:
+                    return "MEDIA_QUERY_COMMAND";
+                case 0x06:
+                    return "MEDIA_RESPONSE_COMMAND";
+                case 0x0A:
+                    return "CDJ_STATUS_COMMAND";
+                case 0x29:
+                    return "MIXER_STATUS_COMMAND";
+                case 0x1A:
+                    return "LOAD_TRACK_ACK_COMMAND";
+                default:
+                    return "UNKNOWN_PACKET";
+
+            }
+        }
+
+        public static string GetSyncCommandMessageByID(byte packet_id)
+        {
+            switch(packet_id)
+            {
+                case 0x02:
+                    return "CDJ_CONTROL_COMMAND";
+                case 0x2A:
+                    return "SYNC_MODE_COMMAND";
+                case 0x03:
+                    return "CHANNELSONAIR_COMMAND";
+                default:
+                    return "UNKNOWN_PACKET";
+            }
+        }
     }
 }

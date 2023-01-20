@@ -34,15 +34,18 @@ namespace ProLinkLib.Network.UDP.StatusServer
             byte packet_id = bin.ReadByte();
             try
             {
+                Logger.WriteLogFile("Status_Server - logs", Logger.LOG_TYPE.INFO, $"Received packet {Utils.GetStatusCommandMessageByID(packet_id)}");
+                Logger.WriteLogFile("Status_Server - logs", Logger.LOG_TYPE.DEBUG, "Packet Preview\n\n" + Hex.Dump(packet));
+
                 packetCommands[packet_id].FromBytes(packet);
                 callback(packet_id, packetCommands[packet_id]);
             }
             catch(Exception e)
             {
                 //Console.WriteLine("[Status Server] Unknown packet " + packet_id);
-                Logger.WriteLogFile("Status_Server - logs", Logger.LOG_TYPE.WARNING, $"Exception error with packet 0x{packet_id}" +
+                Logger.WriteLogFile("Status_Server - logs", Logger.LOG_TYPE.WARNING, $"Exception error with packet 0x{packet_id:X}" +
                      "\nException message: " + e.Message);
-                File.WriteAllBytes($"logs\\failed_dumped_packets\\status_server - packet - {packet_id: X} - " + DateTime.Now.ToString().Replace("/","").Replace(":","-") + ".bin", packet);
+                File.WriteAllBytes($"logs\\failed_dumped_packets\\status_server - packet - {packet_id:X} - " + DateTime.Now.ToString().Replace("/","").Replace(":","-") + ".bin", packet);
             }
         }
     }
