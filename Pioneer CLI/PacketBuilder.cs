@@ -73,7 +73,7 @@ namespace Pioneer_CLI
             Console.WriteLine("------------------");
             foreach(string cmd in commands.Keys)
             {
-                Console.WriteLine(cmd)
+                Console.WriteLine(cmd);
             }
         }
     }

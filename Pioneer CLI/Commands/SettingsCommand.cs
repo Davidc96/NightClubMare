@@ -156,14 +156,18 @@ namespace Pioneer_CLI.Commands
                     break;
                 case "send":
                     // Send all the settings packet to all the CDJ
-                    foreach(Devices.CDJ cdj in plc.GetDevices().Values)
+                    foreach(Devices.IDevice device in plc.GetDevices().Values) // Mixer no puede ser un CDJ, corregir!!
                     {
-                        // CDJ goes from 1 to 6; 
-                        if(cdj.ChannelID < 6)
+                        if (device is Devices.CDJ)
                         {
-                            // Broadcast the paquet
-                            Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent SETTINGS_COMMAND");
-                            virtual_cdj.GetStatusServer().SendPacketBroadcast(device_settings.GetSettingsPacket(virtual_cdj, cdj.ChannelID));
+                            var cdj = (Devices.CDJ)device;
+                            // CDJ goes from 1 to 6; 
+                            if (cdj.ChannelID < 6)
+                            {
+                                // Broadcast the paquet
+                                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent SETTINGS_COMMAND");
+                                virtual_cdj.GetStatusServer().SendPacketBroadcast(device_settings.GetSettingsPacket(virtual_cdj, cdj.ChannelID));
+                            }
                         }
                     }
                     Console.WriteLine("Send settings to all the devices!");
