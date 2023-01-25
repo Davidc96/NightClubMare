@@ -18,13 +18,6 @@ namespace Pioneer_CLI
             PrintBanner();
             CommandLineController clc = new CommandLineController();
             NetworkManagementController nwc = new NetworkManagementController();
-            /* CDJStatusCommand status = new CDJStatusCommand();
-            FileStream f = new FileStream("CDJStatus4.hex.bin", FileMode.Open);
-            BinaryReader bin = new BinaryReader(f);
-            byte[] test = bin.ReadBytes((int)f.Length);
-
-            status.FromBytes(test);
-            clc.GetPLC().StatusServerOnRecvPacket(0x0A, status);*/
 
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());

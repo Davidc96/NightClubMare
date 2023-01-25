@@ -14,20 +14,7 @@ namespace ProLinkLib.Network.UDP
 
         public byte[] BuildPacket(ICommand command)
         {
-            byte[] builded_packet = new byte[command.GetSize()];
-            byte[] command_b = command.ToBytes();
-
-            // Copy the packet header
-            for(int i = 0; i < PACKET_HEADER.Length; i++)
-            {
-                builded_packet[i] = PACKET_HEADER[i];
-            }
-
-            // Copy the command content
-            for(int i = 0; i < (command_b.Length); i++)
-            {
-                builded_packet[PACKET_HEADER.Length + i] = command_b[i];
-            }
+            byte[] builded_packet = PACKET_HEADER.Concat(command.ToBytes()).ToArray();
 
             Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "Packet Builded\n\n" + Hex.Dump(builded_packet));
             return builded_packet;

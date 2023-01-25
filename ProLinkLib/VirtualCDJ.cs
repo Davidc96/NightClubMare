@@ -166,7 +166,6 @@ namespace ProLinkLib
             var cdjStatusTask = Task.Run(() =>
             {
                 CDJStatusTask();
-            
             });
 
         }
