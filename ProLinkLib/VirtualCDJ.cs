@@ -43,9 +43,15 @@ namespace ProLinkLib
         public void InitDevice()
         {
             DeviceName = VIRTUALCDJ_DEVICENAME;
+
+            discoverServer.IP = IPaddress;
+            statusServer.IP = IPaddress;
+            syncServer.IP = IPaddress;
+            
             discoverServer.BroadcastAddress = BroadcastAddress;
             statusServer.BroadcastAddress = BroadcastAddress;
             syncServer.BroadcastAddress = BroadcastAddress;
+
 
             discoverServer.initServer();
             statusServer.initServer();

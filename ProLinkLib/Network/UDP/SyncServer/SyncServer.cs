@@ -16,13 +16,12 @@ namespace ProLinkLib.Network.UDP.SyncServer
         private SyncPacketParser packetParser;
         private int PORT = 50001;
         public string BroadcastAddress = "169.254.255.255";
-        //public string BroadcastAddress = "192.168.1.255";
+        public byte[] IP;
         public Func<int, ICommand, bool> OnRecvPacketFunc;
 
         public SyncServer()
         {
             udpClient = new UdpClient();
-            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
             packetBuilder = new PacketBuilder();
             packetParser = new SyncPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -36,6 +35,8 @@ namespace ProLinkLib.Network.UDP.SyncServer
 
         public void initServer()
         {
+            udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
+            
             // Task to receive all the UDP packets
             var receiveTask = Task.Run(() =>
             {

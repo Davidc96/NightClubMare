@@ -16,12 +16,12 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
         private DiscoverPacketParser packetParser;
         private int PORT = 50000;
         public string BroadcastAddress = "169.254.255.255";
+        public byte[] IP;
         public Func<int, ICommand, bool> OnRecvPacketFunc;
 
         public DiscoverServer()
         {
             udpClient = new UdpClient();
-            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
             packetBuilder = new PacketBuilder();
             packetParser = new DiscoverPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -34,7 +34,9 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
         }
 
         public void initServer()
-        {            
+        {
+            udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
+            
             // Task to receive all the UDP packets
             var receiveTask = Task.Run(() =>
             {

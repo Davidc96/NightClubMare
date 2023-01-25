@@ -16,12 +16,12 @@ namespace ProLinkLib.Network.UDP.StatusServer
         private StatusPacketParser packetParser;
         private int PORT = 50002;
         public string BroadcastAddress = "169.254.255.255";
+        public byte[] IP;
         public Func<int, ICommand, bool> OnRecvPacketFunc;
 
         public StatusServer()
         {
             udpClient = new UdpClient();
-            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
             packetBuilder = new PacketBuilder();
             packetParser = new StatusPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -35,6 +35,8 @@ namespace ProLinkLib.Network.UDP.StatusServer
 
         public void initServer()
         {
+            udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
+            
             // Task to receive all the UDP packets
             var receiveTask = Task.Run(() =>
             {
