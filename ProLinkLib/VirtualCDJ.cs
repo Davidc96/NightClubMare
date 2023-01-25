@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ProLinkLib.Commands.StatusCommands;
 
 namespace ProLinkLib
 {
@@ -95,7 +96,7 @@ namespace ProLinkLib
                                                                     "ChannelID: " + ChannelID + "\n" +
                                                                     "DeviceName: " + DeviceName);
             init_command.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
-            
+
             first_command.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
             first_command.MacAddress = MacAddress;
             first_command.PacketCounter = 1;
@@ -161,6 +162,13 @@ namespace ProLinkLib
                 KeepAliveTask();
             });
 
+            // Set CDJStatus Task
+            var cdjStatusTask = Task.Run(() =>
+            {
+                CDJStatusTask();
+            
+            });
+
         }
 
         private async void KeepAliveTask()
@@ -178,6 +186,66 @@ namespace ProLinkLib
                 Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending KEEP_ALIVE Packet");
                 discoverServer.SendPacketBroadcast(keep_command);
                 await Task.Delay(1500);
+            }
+        }
+
+        private async void CDJStatusTask()
+        {
+            byte[] default_pitch = { 0x00, 0x0F, 0xC6, 0xA7 }; // Default pitch value while no track is loaded
+            byte[] default_bpmcontrol = { 0x7F, 0xFF };
+            byte[] default_bpmtrack = { 0xFF, 0xFF };
+            byte[] default_cuedistance = { 0x01, 0xFF };
+            CDJStatusCommand st = new CDJStatusCommand();
+            st.DeviceName = Utils.NameToBytes(DeviceName, 0x14);
+            st.ChannelID1 = ChannelID;
+            st.ChannelID2 = ChannelID;
+            st.ActivityFlag = 0x00;
+            st.TrackDeviceLocatedID = 0x00;
+            st.TrackPhysicallyLocated = 0x00;
+            st.TrackType = 0x00;
+            st.RekordboxTrackID = new byte[4];
+            st.RekordBoxTrackListPos = new byte[2];
+            st.NumberTracksInPlaylist = new byte[2];
+            st.USBActivity = 0X04;
+            st.SDActivity = 0x04;
+            st.USBLocalStatus = 0x04;
+            st.SDLocalStatus = 0x04;
+            st.LinkAvailable = 0x00;
+            st.PlayerStatus = 0x00;
+            st.FirmwareVersion = Encoding.ASCII.GetBytes("1.85");
+            st.SyncCounter = new byte[0x04];
+            st.FlagStatus = 0x8C;
+            st.PlayerStatus2 = 0xFE;
+            st.Pitch1 = default_pitch;
+            st.BPMControl = default_bpmcontrol;
+            st.BPMTrack = default_bpmtrack;
+            st.Pitch2 = default_pitch;
+            st.PlayerModeStatus = 0x00;
+            st.MasterHandoff = 0xFF;
+            st.Beat = new byte[0x4];
+            st.CueDistance = default_cuedistance;
+            st.BeatCounter = 0x00;
+            st.MediaPresence = 0x00;
+            st.USBPresence = 0x00;
+            st.SDPresence = 0x00;
+            st.EmergencyLoop = 0x00;
+            st.Pitch3 = default_pitch;
+            st.Pitch4 = default_pitch;
+            st.PacketCounter = new byte[4];
+            st.IsNexus = 0x1F;
+            st.PreviewTrackSupport = 0x00;
+            st.WaveColor = 0x00;
+            st.WavePosition = 0x01;
+
+            while (true)
+            {
+                uint packet_counter = BitConverter.ToUInt32(st.PacketCounter, 0);
+                packet_counter = packet_counter + 1;
+                st.PacketCounter = BitConverter.GetBytes(packet_counter);
+
+                Logger.WriteLogFile("app_info", Logger.LOG_TYPE.INFO, "Sending Virtual CDJ_STATUS");
+                statusServer.SendPacketBroadcast(st);
+                await Task.Delay(200);
             }
         }
 

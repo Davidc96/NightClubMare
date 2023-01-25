@@ -21,7 +21,7 @@ namespace ProLinkLib.Commands.StatusCommands
         [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID1 = 0xA0;
         [JsonConverter(typeof(HexJsonConverter))]
-        public ushort Length;
+        public ushort Length = 0x0100;
         [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID2 = 0xA1;
         [JsonConverter(typeof(HexJsonConverter))]
@@ -97,7 +97,7 @@ namespace ProLinkLib.Commands.StatusCommands
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BPMTrack = { 0xB5, 0xB5 };                    // (byte[0] * 256 + byte[1])
         [JsonConverter(typeof(ByteArrayJsonConverter))]
-        private byte[] BlankBytes9 = new byte[0x4];
+        private byte[] BlankBytes9 = { 0x7F, 0xFF, 0xFF, 0xFF };
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] Pitch2 = { 0xB6, 0xB6, 0xB6, 0xB6 };                      // Second Pitch Byte
         [JsonConverter(typeof(HexJsonConverter))]
@@ -129,7 +129,7 @@ namespace ProLinkLib.Commands.StatusCommands
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] Pitch3 = { 0xB7, 0xB7, 0xB7, 0xB7 };
         [JsonConverter(typeof(ByteArrayJsonConverter))]
-        public byte[] Pitch4 = { 0xB8, 0xB8, 0xB8, 0xB8};
+        public byte[] Pitch4 = { 0xB8, 0xB8, 0xB8, 0xB8 };
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] PacketCounter = { 0xB9, 0xB9, 0xB9, 0xB9 };
         [JsonConverter(typeof(HexJsonConverter))]
@@ -138,17 +138,21 @@ namespace ProLinkLib.Commands.StatusCommands
         public byte PreviewTrackSupport = 0xBB;                            // 0x20 is supported 0x00 No
         private byte[] BlankBytes12 = new byte[0x2];
         [JsonConverter(typeof(ByteArrayJsonConverter))]
-        private byte[] UnknownBytes = new byte[0xA];                // Starts with 12 34 56 78
+        private byte[] UnknownBytes = { 0x12, 0x34, 0x56, 0x78, 0x00, 0x00, 0x00 }; // Starts with 12 34 56 78
         [JsonConverter(typeof(HexJsonConverter))]
         public byte WaveColor = 0xBC;                                      // 0x01 -> Blue 0x03 -> RGB 0x04 -> 3-Band
         [JsonConverter(typeof(HexJsonConverter))]
-        private byte Unknown8;
+        private byte Unknown8 = 0x01;
         [JsonConverter(typeof(HexJsonConverter))]
-        private byte Unknown9;
+        private byte Unknown9 = 0x01;
         [JsonConverter(typeof(HexJsonConverter))]
         public byte WavePosition = 0xBD;                                   // 0x01 -> Center 0x02 -> Left
+        [JsonConverter(typeof(HexJsonConverter))]
+        private byte Unknown10 = 0x02;
+        [JsonConverter(typeof(HexJsonConverter))]
+        private byte Unknown11 = 0x01;
         [JsonConverter(typeof(ByteArrayJsonConverter))]
-        private byte[] BlankBytes13 = new byte[0x50];
+        private byte[] BlankBytes13 = new byte[0x47];
 
         // TODO ADD CDJ 3000 Support
 
@@ -224,7 +228,9 @@ namespace ProLinkLib.Commands.StatusCommands
                 Unknown8 = bin.ReadByte();
                 Unknown9 = bin.ReadByte();
                 WavePosition = bin.ReadByte();
-                BlankBytes13 = bin.ReadBytes(0x50);
+                Unknown10 = bin.ReadByte();
+                Unknown11 = bin.ReadByte();
+                BlankBytes13 = bin.ReadBytes(0x46);
             }
 
             RawData = packet;
@@ -242,7 +248,83 @@ namespace ProLinkLib.Commands.StatusCommands
 
         public byte[] ToBytes()
         {
-            throw new NotImplementedException();
+            MemoryStream stream = new MemoryStream();
+            using(BinaryWriter bin = new BinaryWriter(stream))
+            {
+                bin.Write(ID);
+                bin.Write(DeviceName);
+                bin.Write(Unknown);
+                bin.Write(SubCategory);
+                bin.Write(ChannelID1);
+                bin.Write(Utils.SwapEndianesss(BitConverter.GetBytes(Length)));
+                bin.Write(ChannelID2);
+                bin.Write(Unknown3);
+                bin.Write(Unknown4);
+                bin.Write(ActivityFlag);
+                bin.Write(TrackDeviceLocatedID);
+                bin.Write(TrackPhysicallyLocated);
+                bin.Write(TrackType);
+                bin.Write(Unknown5);
+                bin.Write(RekordboxTrackID);
+                bin.Write(BlankBytes);
+                bin.Write(RekordBoxTrackListPos);
+                bin.Write(BlankBytes2);
+                bin.Write(UnknownFeatureDl);
+                bin.Write(BlankBytes3);
+                bin.Write(NumberTracksInPlaylist);
+                bin.Write(BlankBytes4);
+                bin.Write(USBActivity);
+                bin.Write(SDActivity);
+                bin.Write(BlankBytes5);
+                bin.Write(USBLocalStatus);
+                bin.Write(BlankBytes6);
+                bin.Write(SDLocalStatus);
+                bin.Write(BlankByte);
+                bin.Write(LinkAvailable);
+                bin.Write(BlankBytes7);
+                bin.Write(PlayerStatus);
+                bin.Write(FirmwareVersion);
+                bin.Write(BlankBytes8);
+                bin.Write(SyncCounter);
+                bin.Write(BlankByte2);
+                bin.Write(FlagStatus);
+                bin.Write(Unknown6);
+                bin.Write(PlayerStatus2);
+                bin.Write(Pitch1);
+                bin.Write(BPMControl);
+                bin.Write(BPMTrack);
+                bin.Write(BlankBytes9);
+                bin.Write(Pitch2);
+                bin.Write(Unknown7);
+                bin.Write(PlayerModeStatus);
+                bin.Write(MasterMeaningful);
+                bin.Write(MasterHandoff);
+                bin.Write(Beat);
+                bin.Write(CueDistance);
+                bin.Write(BeatCounter);
+                bin.Write(BlankBytes10);
+                bin.Write(MediaPresence);
+                bin.Write(USBPresence);
+                bin.Write(SDPresence);
+                bin.Write(EmergencyLoop);
+                bin.Write(BlankBytes11);
+                bin.Write(Pitch3);
+                bin.Write(Pitch4);
+                bin.Write(PacketCounter);
+                bin.Write(IsNexus);
+                bin.Write(PreviewTrackSupport);
+                bin.Write(BlankBytes12);
+                bin.Write(UnknownBytes);
+                bin.Write(WaveColor);
+                bin.Write(Unknown8);
+                bin.Write(Unknown9);
+                bin.Write(WavePosition);
+                bin.Write(Unknown10);
+                bin.Write(Unknown11);
+                bin.Write(BlankBytes13);
+            }
+
+            return stream.ToArray();
         }
         public byte[] GetRawData()
         {

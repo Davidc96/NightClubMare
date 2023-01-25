@@ -35,6 +35,7 @@ namespace ProLinkLib.Network.UDP.SyncServer
 
         public void initServer()
         {
+            // Init Bind connection
             udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
             
             // Task to receive all the UDP packets
