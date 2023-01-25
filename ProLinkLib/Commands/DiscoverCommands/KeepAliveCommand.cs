@@ -31,7 +31,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] IPAddress = { 0xA3, 0xA3, 0xA3, 0xA3 };                 // 0x2C - 0x2F
         [JsonConverter(typeof(ByteArrayJsonConverter))]
-        public byte[] Payload = new byte[5];                   // 0x30 - 0x35
+        public byte[] Payload = { 0x01, 0x00, 0x00, 0x00, 0x01, 0x20};                   // 0x30 - 0x35
 
         public byte[] RawData;
         public void FromBytes(byte[] packet)

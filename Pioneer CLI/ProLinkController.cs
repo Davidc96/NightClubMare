@@ -70,7 +70,7 @@ namespace Pioneer_CLI
                             CDJList.Add(ka_command.ChannelID, new_device);
                         }
 
-                        if(Encoding.UTF8.GetString(ka_command.DeviceName).Contains("DJM"))
+                        if (Encoding.UTF8.GetString(ka_command.DeviceName).Contains("DJM") || Encoding.UTF8.GetString(ka_command.DeviceName).Contains("rekordbox"))
                         {
                             Mixer new_device = new Mixer();
                             new_device.ChannelID = ka_command.ChannelID;
