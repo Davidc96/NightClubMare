@@ -31,7 +31,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
         [JsonConverter(typeof(HexJsonConverter))]
         public byte PacketCounter = 0xA3;                             // 0x2F
         [JsonConverter(typeof(HexJsonConverter))]
-        public byte Unknown3 = 0x01;                           // 0x30
+        public byte DeviceType = 0x01;                           // 0x30 0x01 -> CDJ 0x02 -> Mixer 0x04 -> PC
         [JsonConverter(typeof(HexJsonConverter))]
         public byte isAutoAssigned = 0xA4;                            // 0x31
 
@@ -50,7 +50,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
                 MacAddress = bin.ReadBytes(6);
                 ChannelID = bin.ReadByte();
                 PacketCounter = bin.ReadByte();
-                Unknown3 = bin.ReadByte();
+                DeviceType = bin.ReadByte();
                 isAutoAssigned = bin.ReadByte();
             }
 
@@ -68,7 +68,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
             Console.WriteLine("MacAddress: " + $"{MacAddress[0]:X}:{MacAddress[1]:X}:{MacAddress[2]:X}:{MacAddress[3]:X}:{MacAddress[4]:X}:{MacAddress[5]:X}");
             Console.WriteLine("IPAddress: " + new System.Net.IPAddress(IPAddress).ToString());
             Console.WriteLine("ChannelID: " + ChannelID);
-            Console.WriteLine("Unknown3: " + Unknown3);
+            Console.WriteLine("Unknown3: " + DeviceType);
             Console.WriteLine("IsAutoAssigned: " + (isAutoAssigned == 0x01 ? "True" : "False"));
         }
 
@@ -87,7 +87,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
                 bin.Write(MacAddress);
                 bin.Write(ChannelID);
                 bin.Write(PacketCounter);
-                bin.Write(Unknown3);
+                bin.Write(DeviceType);
                 bin.Write(isAutoAssigned);
             }
 

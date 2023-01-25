@@ -25,7 +25,7 @@ namespace ProLinkLib.Commands.DiscoverCommands
         [JsonConverter(typeof(HexJsonConverter))]
         public byte PacketCounter = 0xA0;                             // 0x24
         [JsonConverter(typeof(HexJsonConverter))]
-        public byte DeviceType = 0xA1;                                // 0x25   0x01 -> CDJ 0x02 -> Mixer
+        public byte DeviceType = 0xA1;                                // 0x25   0x01 -> CDJ 0x02 -> Mixer 0x04 -> PC
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] MacAddress = { 0xA2, 0xA2, 0xA2, 0xA2, 0xA2, 0xA2 };                // 0x26 - 0x2B
 
