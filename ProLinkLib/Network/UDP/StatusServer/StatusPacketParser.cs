@@ -23,6 +23,7 @@ namespace ProLinkLib.Network.UDP.StatusServer
             packetCommands.Add(MEDIA_RESPONSE_COMMAND, new MediaResponseCommand());
             packetCommands.Add(CDJ_STATUS_COMMAND, new CDJStatusCommand());
             packetCommands.Add(LOAD_TRACK_ACK_COMMAND, new LoadTrackAckCommand());
+            packetCommands.Add(MIXER_STATUS_COMMAND, new MixerStatusCommand());
 
 
             //
