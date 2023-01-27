@@ -40,15 +40,19 @@ namespace ProLinkLib
 
         public static void WriteLogFile(string log_name, LOG_TYPE log_type, string content)
         {
-            string full_name = DateTime.Now.Date.ToString().Replace("/", "-").Replace(" 0:00:00", "") + " - " + log_name + ".txt";
-            string full_log_content = DateTime.Now.ToLocalTime().ToString() + " - " + "[" + log_type + "] " + content;
-
-            if(log_type == LOG_TYPE.DEBUG && PRINT_DEBUG == false)
+            try
             {
-               return;
+                string full_name = DateTime.Now.Date.ToString().Replace("/", "-").Replace(" 0:00:00", "") + " - " + log_name + ".txt";
+                string full_log_content = DateTime.Now.ToLocalTime().ToString() + " - " + "[" + log_type + "] " + content;
+
+                if (log_type == LOG_TYPE.DEBUG && PRINT_DEBUG == false)
+                {
+                    return;
+                }
+
+                File.AppendAllText(LOG_FILE_PATH + full_name, full_log_content + "\n");
             }
-           
-            File.AppendAllText(LOG_FILE_PATH + full_name, full_log_content + "\n");
+            catch (Exception) { }
         }
     }
 }
