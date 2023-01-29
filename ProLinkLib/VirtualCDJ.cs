@@ -24,12 +24,18 @@ namespace ProLinkLib
         public byte[] MacAddress = new byte[6];
         public byte[] IPaddress;
         public string BroadcastAddress;
-        
+
 
         private DiscoverServer discoverServer;
         private StatusServer statusServer;
         private SyncServer syncServer;
         private DeviceSettings deviceSettings;
+        private TrackMetadata trackMetadata;
+
+        private Task cdjStatusTask;
+        private Task keepAliveTask;
+        private bool stopKeepAliveTask = true;
+        private bool stopCDJStatusTask = true;
         public VirtualCDJ()
         {
 
@@ -39,6 +45,7 @@ namespace ProLinkLib
             deviceSettings = new DeviceSettings();
 
             ChannelID = VIRTUALCDJ_CHANNELID;
+            trackMetadata = new TrackMetadata();
         }
 
         public void InitDevice()
@@ -48,7 +55,7 @@ namespace ProLinkLib
             discoverServer.IP = IPaddress;
             statusServer.IP = IPaddress;
             syncServer.IP = IPaddress;
-            
+
             discoverServer.BroadcastAddress = BroadcastAddress;
             statusServer.BroadcastAddress = BroadcastAddress;
             syncServer.BroadcastAddress = BroadcastAddress;
@@ -58,6 +65,7 @@ namespace ProLinkLib
             statusServer.initServer();
             syncServer.initServer();
         }
+
 
         public DiscoverServer GetDiscoverServer()
         {
@@ -77,6 +85,11 @@ namespace ProLinkLib
         public DeviceSettings GetDeviceSettings()
         {
             return deviceSettings;
+        }
+
+        public TrackMetadata GetTrackMetadata()
+        {
+            return trackMetadata;
         }
 
         public void ResetSettingsToDefault()
@@ -157,13 +170,13 @@ namespace ProLinkLib
 
             Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "VirtualCDJ connected to the network!");
             // Set KeepAlive Task
-            var keepAliveTask = Task.Run(() =>
+            keepAliveTask = Task.Run(() =>
             {
                 KeepAliveTask();
             });
 
             // Set CDJStatus Task
-            var cdjStatusTask = Task.Run(() =>
+            cdjStatusTask = Task.Run(() =>
             {
                 CDJStatusTask();
             });
@@ -179,7 +192,7 @@ namespace ProLinkLib
             keep_command.IPAddress = IPaddress;
             keep_command.MacAddress = MacAddress;
 
-            while (true)
+            while (stopKeepAliveTask)
             {
                 //Console.WriteLine("[Discover Server] Sending Keep Alive packet!");
                 Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending KEEP_ALIVE Packet");
@@ -209,7 +222,7 @@ namespace ProLinkLib
             st.SDActivity = 0x04;
             st.USBLocalStatus = 0x04;
             st.SDLocalStatus = 0x04;
-            st.LinkAvailable = 0x00;
+            st.LinkAvailable = 0x01;
             st.PlayerStatus = 0x00;
             st.FirmwareVersion = Encoding.ASCII.GetBytes("1.85");
             st.SyncCounter = new byte[0x04];
@@ -236,13 +249,13 @@ namespace ProLinkLib
             st.WaveColor = 0x00;
             st.WavePosition = 0x01;
 
-            while (true)
+            while (stopCDJStatusTask)
             {
                 uint packet_counter = BitConverter.ToUInt32(st.PacketCounter, 0);
                 packet_counter = packet_counter + 1;
                 st.PacketCounter = BitConverter.GetBytes(packet_counter);
 
-                Logger.WriteLogFile("app_info", Logger.LOG_TYPE.INFO, "Sending Virtual CDJ_STATUS");
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending Virtual CDJ_STATUS");
                 statusServer.SendPacketBroadcast(st);
                 await Task.Delay(200);
             }
@@ -251,13 +264,19 @@ namespace ProLinkLib
         public void LoadSettingsFromDisk(string path)
         {
 
-            deviceSettings = JsonConvert.DeserializeObject<DeviceSettings>(System.IO.File.ReadAllText(path.Replace("\"","")));
+            deviceSettings = JsonConvert.DeserializeObject<DeviceSettings>(System.IO.File.ReadAllText(path.Replace("\"", "")));
         }
 
         public void SaveSettingsToDisk(string file_name)
         {
             string json = JsonConvert.SerializeObject(deviceSettings);
             System.IO.File.WriteAllText(file_name + ".json", json);
+        }
+
+        public void StopTasks()
+        {
+            stopKeepAliveTask = false;
+            stopCDJStatusTask = false;
         }
     }
 }

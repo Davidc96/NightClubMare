@@ -57,6 +57,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\InfoCommand.cs" />
     <Compile Include="Commands\LoadTrackCommand.cs" />
+    <Compile Include="Commands\MusicCommand.cs" />
     <Compile Include="Commands\PacketBuilderCommand.cs" />
     <Compile Include="Commands\PauseCommand.cs" />
     <Compile Include="Commands\PlayCommand.cs" />

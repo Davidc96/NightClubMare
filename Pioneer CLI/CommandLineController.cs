@@ -1,5 +1,7 @@
-﻿using Pioneer_CLI.Commands;
+﻿using ConsoleTables;
+using Pioneer_CLI.Commands;
 using Pioneer_CLI.Devices;
+using ProLinkLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,7 @@ namespace Pioneer_CLI
             commands.Add("settings", new SettingsCommand());
             commands.Add("packetbuilder", new PacketBuilderCommand());
             commands.Add("pb", new PacketBuilderCommand());
+            commands.Add("music", new MusicCommand());
 
         }
 
@@ -61,8 +64,11 @@ namespace Pioneer_CLI
             // Start the VIRTUALCDJ 
             plc.GetVirtualCDJ().InitDevice();
             plc.GetVirtualCDJ().ConnectToTheNetwork();
+
+            TrackMetadata track = new TrackMetadata();
             
-            while(!exit)
+
+            while (!exit)
             {
                 Console.WriteLine();
                 if (selectedCDJ != null)

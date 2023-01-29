@@ -54,11 +54,11 @@ namespace Pioneer_CLI
                 var cmd = commands[packet_name];
                 var bytes = PACKET_HEADER.Concat(commands[packet_name].ToBytes()).ToArray();
                 string json = JsonConvert.SerializeObject(cmd);
-                System.IO.File.WriteAllText(packet_name + "_template.json", json);
-                System.IO.File.WriteAllBytes(packet_name + "_binary.bin", bytes);
+                System.IO.File.WriteAllText("exported_packets\\"+ packet_name + "_template.json", json);
+                System.IO.File.WriteAllBytes("exported_packets\\" + packet_name + "_binary.bin", bytes);
 
-                Console.WriteLine("Packet save as: " + packet_name + "_binary.bin");
-                Console.WriteLine("Template saved as: " + packet_name + "_template.json");
+                Console.WriteLine("Packet save as: exported_packets\\" + packet_name + "_binary.bin");
+                Console.WriteLine("Template saved as: exported_packets\\" + packet_name + "_template.json");
 
             }
             else

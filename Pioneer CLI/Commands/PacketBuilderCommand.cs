@@ -50,6 +50,7 @@ namespace Pioneer_CLI.Commands
                     pb.ListAllCommands();
                     break;
                 default:
+                    Console.WriteLine("Usage: pb export <packet>, pb import <path_to_bin> or pb list");
                     break;
             }
         }

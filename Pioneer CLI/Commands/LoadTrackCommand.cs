@@ -49,35 +49,44 @@ namespace Pioneer_CLI.Commands
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
-            if(clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
+            try
             {
-                ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
-                var cdj = (CDJ)clc.GetSelectedDevice();
-                uint trackID = UInt32.Parse(args, NumberStyles.HexNumber);
-                ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
-                ld_command.ChannelID2 = plc.GetVirtualCDJ().ChannelID;
-                ld_command.DeviceName = Utils.NameToBytes(plc.GetVirtualCDJ().DeviceName, 0x14);
-                ld_command.DeviceToLoad = Convert.ToByte(cdj.ChannelID);
-                ld_command.DeviceTrackListLocatedID = cdj.TrackDeviceLocatedID;
-                ld_command.DeviceTracklistLocation = cdj.TrackPhysicallyLocated;
-                ld_command.TrackType = cdj.TrackType;
-                ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(trackID));
-                ld_command.Length = 0x34;
+                if (clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
+                {
+                    ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
+                    var cdj = (CDJ)clc.GetSelectedDevice();
+                    int trackID = Int32.Parse(args);
+                    var track = plc.GetVirtualCDJ().GetTrackMetadata().GetTrackByID(trackID);
 
-                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
-                                    $"TrackID: 0x{trackID:X}\n" +
-                                    $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
-                                    $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
-                                    $"DeviceTrackListLocation: {ld_command.DeviceTracklistLocation}\n");
-                plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
+                    ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
+                    ld_command.ChannelID2 = plc.GetVirtualCDJ().ChannelID;
+                    ld_command.DeviceName = Utils.NameToBytes(plc.GetVirtualCDJ().DeviceName, 0x14);
+                    ld_command.DeviceToLoad = Convert.ToByte(cdj.ChannelID);
+                    ld_command.DeviceTrackListLocatedID = track.TrackChannelID;
+                    ld_command.DeviceTracklistLocation = track.TrackPhysicallyLocated;
+                    ld_command.TrackType = cdj.TrackType;
+                    ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(track.RekordboxID));
+                    ld_command.Length = 0x34;
 
-                
-                Console.WriteLine($"Track ID: 0x{trackID:X} loaded!");
+                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
+                                        $"TrackID: 0x{track.RekordboxID:X}\n" +
+                                        $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
+                                        $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
+                                        $"DeviceTrackListLocation: {ld_command.DeviceTracklistLocation}\n");
+                    plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
 
+
+                    Console.WriteLine($"Track {track.TitleName} loaded!");
+
+                }
+                else
+                {
+                    Console.WriteLine("No device was selected! First select a CDJ device");
+                }
             }
-            else
+            catch(Exception)
             {
-                Console.WriteLine("No device or mixer was selected! First select a CDJ device");
+                Console.WriteLine("ID does not exist or tracklist is empty, use \"music\" command to retrieve tracks from the network");
             }
         }
     }

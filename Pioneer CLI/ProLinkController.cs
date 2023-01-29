@@ -21,6 +21,7 @@ namespace Pioneer_CLI
     {
         private VirtualCDJ virtualCDJ;
         private Dictionary<int, IDevice> CDJList;
+        private TrackMetadata trackMetadata;
 
         public ProLinkController()
         {
@@ -29,7 +30,8 @@ namespace Pioneer_CLI
             virtualCDJ.GetStatusServer().OnRecvPacketFunc += StatusServerOnRecvPacket;
             virtualCDJ.GetSyncServer().OnRecvPacketFunc += SyncServerOnRecvPacket;
 
-            CDJList = new Dictionary<int, IDevice>();          
+            CDJList = new Dictionary<int, IDevice>();
+            trackMetadata = new TrackMetadata();
         }
 
         public Dictionary<int, IDevice> GetDevices()
@@ -40,6 +42,11 @@ namespace Pioneer_CLI
         public VirtualCDJ GetVirtualCDJ()
         {
             return virtualCDJ;
+        }
+
+        public TrackMetadata GetTrackMetadata()
+        {
+            return trackMetadata;
         }
 
         public bool DiscoverServerOnRecvPacket(int packet_id, ICommand command)

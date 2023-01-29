@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProLinkLib.Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -97,6 +98,32 @@ namespace ProLinkLib
             return result;
         }
 
+        public static string BytesToName(byte[] name)
+        {
+            string nme = "";
+            for(int i = 0; i < name.Length; i++)
+            {
+                char nm = (char)name[i];
+                if(nm != 0x00)
+                {
+                    nme += nm;
+                }
+            }
+
+            return nme;
+        }
+        public static bool IsTrackDuplicated(Dictionary<int, Track> tracks, string track_name)
+        {
+            foreach(Track track in tracks.Values)
+            {
+                if(track.TitleName == track_name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public static string BytesToIPString(byte[] ip_bytes)
         {
             return new IPAddress(ip_bytes).ToString();
