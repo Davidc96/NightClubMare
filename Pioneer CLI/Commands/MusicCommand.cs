@@ -37,46 +37,40 @@ namespace Pioneer_CLI.Commands
                     return;
                 }
             }
-            
-            Console.WriteLine("Let's wait 5s to reflect the changes into the network");
-            vcdj.StopTasks();
-            vcdj.ConnectToTheNetwork();
-            Task.Delay(5000);
-            Console.WriteLine("Retrieving tracks, this operation will take a while...");
-            Console.WriteLine("[WARNING] This operation will show only unique name songs so maybe there are less than expected!");
-            foreach(IDevice device in devices.Values)
+
+            // If there are tracks, let's print it instead of 
+            if (plc.GetTrackMetadata().GetNumberOfTracks() > 0 && !args.Contains("reset"))
             {
-                if((device is CDJ) || device.GetDeviceName().Contains("rekordbox"))
+                var table = new ConsoleTable("ID", "Track Name");
+                for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
                 {
-                    if(device.GetDeviceName().Contains("rekordbox"))
-                    {
-                        Console.WriteLine("Rekordbox found! Getting tracks");
-                        // Rekordbox Tracklist found
-                        Console.WriteLine("Rekordbox tracks (Maximum 100):");
-                        
-                        plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
-                        plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), (byte)device.GetChannelID(), vcdj.ChannelID, 0x04, 0x01);
+                    var trck = plc.GetTrackMetadata().GetTrackByID(i);
+                    table.AddRow(i, trck.TitleName);
+                }
 
-                        var table = new ConsoleTable("ID", "Track Name");
-                        for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
-                        {
-                            var trck = plc.GetTrackMetadata().GetTrackByID(i);
-                            table.AddRow(i, trck.TitleName);
-                        }
-
-                        table.Write();
-                    }
-                    else
+                table.Write();
+            }
+            else
+            {
+                Console.WriteLine("Let's wait 5s to reflect the changes into the network");
+                vcdj.StopTasks();
+                vcdj.ConnectToTheNetwork();
+                Task.Delay(5000);
+                Console.WriteLine("Retrieving tracks, this operation will take a while...");
+                Console.WriteLine("[WARNING] This operation will show only unique name songs so maybe there are less than expected!");
+                foreach (IDevice device in devices.Values)
+                {
+                    if ((device is CDJ) || device.GetDeviceName().Contains("rekordbox"))
                     {
-                        var cdj = (CDJ)device;
-                        // Get Tracks from USB or SD Card only
-                        if(cdj.UsbLocalStatus == 0x00 || cdj.SdLocalStatus == 0x00)
+                        if (device.GetDeviceName().Contains("rekordbox"))
                         {
-                            Console.WriteLine("CDJ ID: " + cdj.GetChannelID() + " tracks (Maximum 100)");
-                            
+                            Console.WriteLine("Rekordbox found! Getting tracks");
+                            // Rekordbox Tracklist found
+                            Console.WriteLine("Rekordbox tracks (Maximum 100):");
+
                             plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
-                            plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), (byte)device.GetChannelID(), vcdj.ChannelID, (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01);
-                            
+                            plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01);
+
                             var table = new ConsoleTable("ID", "Track Name");
                             for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
                             {
@@ -86,10 +80,30 @@ namespace Pioneer_CLI.Commands
 
                             table.Write();
                         }
+                        else
+                        {
+                            var cdj = (CDJ)device;
+                            // Get Tracks from USB or SD Card only
+                            if (cdj.UsbLocalStatus == 0x00 || cdj.SdLocalStatus == 0x00)
+                            {
+                                Console.WriteLine("CDJ ID: " + cdj.GetChannelID() + " tracks (Maximum 100)");
+
+                                plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
+                                plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01);
+
+                                var table = new ConsoleTable("ID", "Track Name");
+                                for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
+                                {
+                                    var trck = plc.GetTrackMetadata().GetTrackByID(i);
+                                    table.AddRow(i, trck.TitleName);
+                                }
+
+                                table.Write();
+                            }
+                        }
                     }
                 }
             }
-            
         }
     }
 }

@@ -24,11 +24,11 @@ namespace ProLinkLib
             mt_client.ConnectToDB(IP);
         }
 
-        public void GetAllTracks(string IP, byte ID, byte TrackChannelID, byte TrackPhysicallyLocated, byte TrackType)
+        public void GetAllTracks(string IP, byte ChannelID, byte TrackChannelID, byte TrackPhysicallyLocated, byte TrackType)
         {
             mt_client.ConnectToDB(IP);
-            mt_client.SendHello(ID);
-            tracks = mt_client.GetAllTracks(ID, TrackChannelID, TrackPhysicallyLocated, TrackType);
+            mt_client.SendHello(ChannelID);
+            tracks = mt_client.GetAllTracks(ChannelID, TrackChannelID, TrackPhysicallyLocated, TrackType);
             // mt_client.Disconnect();
         }
 
