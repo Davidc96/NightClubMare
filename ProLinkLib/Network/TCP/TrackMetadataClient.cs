@@ -66,7 +66,7 @@ namespace ProLinkLib.Network.TCP
             initial_client.Close();
         }
 
-        public void SendHello(byte ID)
+        public void SendHello(byte ID, bool isRekordbox = false)
         {
             DBConnectionSetupPacket db_setup = new DBConnectionSetupPacket();
             DBConnectionSetupPacketResponse db_setup_response = new DBConnectionSetupPacketResponse();
@@ -114,7 +114,7 @@ namespace ProLinkLib.Network.TCP
             // Receive the Response
             nw_st.Read(setup_response, 0, setup_response.Length);
             
-            q_setup_res.ParseBytes(setup_response);
+            q_setup_res.ParseBytes(setup_response, isRekordbox);
             Console.WriteLine("[DEBUG] Received ChannelID: " + q_setup_res.ChannelID[3]);
         }
 
@@ -136,7 +136,7 @@ namespace ProLinkLib.Network.TCP
             request_client.Close();
         }
 
-        public Dictionary<int, Track> GetAllTracks(byte ID, byte TrackChannelID, byte TrackPhysicallyLoacted, byte TrackType)
+        public Dictionary<int, Track> GetAllTracks(byte ID, byte TrackChannelID, byte TrackPhysicallyLoacted, byte TrackType, bool isRekordbox = false)
         {
             Dictionary<int, Track> tracks = new Dictionary<int, Track>();
             uint offset = 0x00;
@@ -165,7 +165,7 @@ namespace ProLinkLib.Network.TCP
                     byte[] track_response = new byte[0x20];
 
                     nw_st.Read(track_response, 0, track_response.Length);
-                    trackmetadata.ParseBytes(track_response);
+                    trackmetadata.ParseBytes(track_response, isRekordbox);
                     // Console.WriteLine("[DEBUG] Number of tracks: " + trackmetadata.TrackCounter);
 
                     PacketCounter += 1;

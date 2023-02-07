@@ -56,27 +56,47 @@ namespace Pioneer_CLI.Commands
                     ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
                     var cdj = (CDJ)clc.GetSelectedDevice();
                     int trackID = Int32.Parse(args);
-                    var track = plc.GetVirtualCDJ().GetTrackMetadata().GetTrackByID(trackID);
+                    var track_metadata = plc.GetVirtualCDJ().GetTrackMetadata().GetTrackByID(trackID);
+                    var track_nfs = clc.GetRekordboxDB().GetTrackById(trackID);
+                    byte trackChannelID = 0x00;
+                    byte trackPhysicallyLocated = 0x00;
+                    byte RekordboxID = 0x00;
+                    string trackName = "";
+                    if(track_metadata != null)
+                    {
+                        trackChannelID = (byte)track_metadata.TrackChannelID;
+                        trackPhysicallyLocated = (byte)track_metadata.TrackPhysicallyLocated;
+                        RekordboxID = (byte)track_metadata.RekordboxID;
+                        trackName = track_metadata.TitleName;
+                    }
+
+                    if(track_nfs != null)
+                    {
+                        trackChannelID = (byte)track_nfs.TrackChannelID;
+                        trackPhysicallyLocated = (byte)track_nfs.TrackPhysicallyLocated;
+                        RekordboxID = (byte)track_nfs.RekordboxID;
+                        trackName = track_nfs.TrackName;
+                    }
 
                     ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
                     ld_command.ChannelID2 = plc.GetVirtualCDJ().ChannelID;
                     ld_command.DeviceName = Utils.NameToBytes(plc.GetVirtualCDJ().DeviceName, 0x14);
                     ld_command.DeviceToLoad = Convert.ToByte(cdj.ChannelID);
-                    ld_command.DeviceTrackListLocatedID = track.TrackChannelID;
-                    ld_command.DeviceTracklistLocation = track.TrackPhysicallyLocated;
+                    ld_command.DeviceTrackListLocatedID = trackChannelID;
+                    ld_command.DeviceTracklistLocation = trackPhysicallyLocated;
                     ld_command.TrackType = cdj.TrackType;
-                    ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(track.RekordboxID));
+                    ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(RekordboxID));
                     ld_command.Length = 0x34;
 
                     Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
-                                        $"TrackID: 0x{track.RekordboxID:X}\n" +
+                                        $"TrackID: 0x{RekordboxID:X}\n" +
                                         $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
                                         $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
                                         $"DeviceTrackListLocation: {ld_command.DeviceTracklistLocation}\n");
                     plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
 
 
-                    Console.WriteLine($"Track {track.TitleName} loaded!");
+                    Console.WriteLine($"Track {trackName} loaded!");
 
                 }
                 else

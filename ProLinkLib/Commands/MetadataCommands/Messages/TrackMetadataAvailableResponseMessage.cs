@@ -14,13 +14,20 @@ namespace ProLinkLib.Commands.MetadataCommands.Messages
         byte Unknown2 = 0x11;
         public uint TrackCounter;
 
-        public void ParseBytes(byte[] packet)
+        public void ParseBytes(byte[] packet, bool isRekordbox)
         {
             this.FromBytes(packet);
 
             using (BinaryReader bin = new BinaryReader(new MemoryStream(packet)))
             {
-                bin.BaseStream.Seek(0x16, SeekOrigin.Begin);
+                if(isRekordbox)
+                {
+                    bin.BaseStream.Seek(0x16, SeekOrigin.Begin);
+                }
+                else
+                {
+                    bin.BaseStream.Seek(0x20, SeekOrigin.Begin);
+                }
                 Unknown1 = bin.ReadByte();
                 TypeRequest = bin.ReadBytes(0x4);
                 Unknown2 = bin.ReadByte();

@@ -1,6 +1,7 @@
 ﻿using ProLinkLib;
 using ProLinkLib.Commands.DiscoverCommands;
 using ProLinkLib.Commands.StatusCommands;
+using ProLinkLib.Database;
 using ProLinkLib.Network.UDP;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Pioneer_CLI
             CommandLineController clc = new CommandLineController();
             NetworkManagementController nwc = new NetworkManagementController();
 
+            
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());
             clc.InitCLI();

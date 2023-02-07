@@ -2,6 +2,8 @@
 using Pioneer_CLI.Commands;
 using Pioneer_CLI.Devices;
 using ProLinkLib;
+using ProLinkLib.Database;
+using ProLinkLib.NFS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +17,16 @@ namespace Pioneer_CLI
         private ProLinkController plc;
         private IDevice selectedCDJ;
         private Dictionary<string, ICommand> commands;
+        private RekordboxDB rekordboxDB;
+        private NFSController nfs;
 
         public CommandLineController()
         {
             plc = new ProLinkController();
             selectedCDJ = null;
             commands = new Dictionary<string, ICommand>();
+            nfs = new NFSController();
+            rekordboxDB = new RekordboxDB();
 
             commands.Add("devices", new DevicesCommand());
             commands.Add("select", new SelectCommand());
@@ -36,6 +42,9 @@ namespace Pioneer_CLI
             commands.Add("packetbuilder", new PacketBuilderCommand());
             commands.Add("pb", new PacketBuilderCommand());
             commands.Add("music", new MusicCommand());
+            commands.Add("nfs", new NFSCommand());
+            commands.Add("auth", new AuthCommand());
+            commands.Add("db", new DBCommand());
 
         }
 
@@ -54,6 +63,16 @@ namespace Pioneer_CLI
             return plc;
         }
 
+        public RekordboxDB GetRekordboxDB()
+        {
+            return rekordboxDB;
+        }
+
+        public NFSController GetNFSController()
+        {
+            return nfs;
+        }
+
         public void InitCLI()
         {
             bool exit = false;
@@ -64,9 +83,6 @@ namespace Pioneer_CLI
             // Start the VIRTUALCDJ 
             plc.GetVirtualCDJ().InitDevice();
             plc.GetVirtualCDJ().ConnectToTheNetwork();
-
-            TrackMetadata track = new TrackMetadata();
-            
 
             while (!exit)
             {

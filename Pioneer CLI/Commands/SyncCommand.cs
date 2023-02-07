@@ -145,7 +145,7 @@ namespace Pioneer_CLI.Commands
                 Console.WriteLine("Sync Mode: " + mode);
 
                 Logger.WriteMessage(Encoding.UTF8.GetBytes("SYNC MODE PAYLOAD"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
-                Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(sync_command.ToBytes()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX); ;
+                Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(sync_command.ToBytes()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
             }
             else
             {

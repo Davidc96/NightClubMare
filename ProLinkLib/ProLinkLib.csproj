@@ -8,4 +8,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CDJNFSLibrary\CDJNFSLibrary.csproj" />
+    <ProjectReference Include="..\RekordboxNFSLibrary\RekordboxNFSLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

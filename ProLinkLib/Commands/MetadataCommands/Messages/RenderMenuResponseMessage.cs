@@ -41,7 +41,7 @@ namespace ProLinkLib.Commands.MetadataCommands.Messages
 
         public void ParseBytes(byte[] packet)
         {
-            this.FromBytes(packet);
+           this.FromBytes(packet);
            using(BinaryReader bin = new BinaryReader(new MemoryStream(packet)))
            {
                 bin.BaseStream.Seek(0x20, SeekOrigin.Begin);

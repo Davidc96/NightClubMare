@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <Authors>Randy von der Weide</Authors>
+    <PackageId>NFS-Client</PackageId>
+    <Product>NFS-Client</Product>
+    <RepositoryUrl>https://github.com/SonnyX/NFS-Client</RepositoryUrl>
+    <PackageTags>nfs nfs-client</PackageTags>
+    <Version>1.0.0</Version>
+    <AssemblyName>RekordboxNFSLibrary</AssemblyName>
+    <RootNamespace>RekordboxNFSLibrary</RootNamespace>
+  </PropertyGroup>
+</Project>

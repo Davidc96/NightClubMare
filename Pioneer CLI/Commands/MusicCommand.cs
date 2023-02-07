@@ -69,7 +69,7 @@ namespace Pioneer_CLI.Commands
                             Console.WriteLine("Rekordbox tracks (Maximum 100):");
 
                             plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
-                            plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01);
+                            plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01, true); // Rekordbox handle messages diferent from CDJ
 
                             var table = new ConsoleTable("ID", "Track Name");
                             for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
@@ -89,7 +89,7 @@ namespace Pioneer_CLI.Commands
                                 Console.WriteLine("CDJ ID: " + cdj.GetChannelID() + " tracks (Maximum 100)");
 
                                 plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
-                                plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01);
+                                plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01, false);
 
                                 var table = new ConsoleTable("ID", "Track Name");
                                 for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)

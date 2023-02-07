@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="CLIMain.cs" />
     <Compile Include="CommandLineController.cs" />
+    <Compile Include="Commands\AuthCommand.cs" />
+    <Compile Include="Commands\DBCommand.cs" />
     <Compile Include="Commands\DebugModeCommand.cs" />
     <Compile Include="Commands\DevicesCommand.cs" />
     <Compile Include="Commands\ExitCommand.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Commands\InfoCommand.cs" />
     <Compile Include="Commands\LoadTrackCommand.cs" />
     <Compile Include="Commands\MusicCommand.cs" />
+    <Compile Include="Commands\NFSCommand.cs" />
     <Compile Include="Commands\PacketBuilderCommand.cs" />
     <Compile Include="Commands\PauseCommand.cs" />
     <Compile Include="Commands\PlayCommand.cs" />
@@ -68,6 +71,11 @@
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\Mixer.cs" />
     <Compile Include="NetworkManagementController.cs" />
+    <Compile Include="NFSMode\Commands\CDCommand.cs" />
+    <Compile Include="NFSMode\Commands\ICommand.cs" />
+    <Compile Include="NFSMode\Commands\LSCommand.cs" />
+    <Compile Include="NFSMode\Commands\MountCommand.cs" />
+    <Compile Include="NFSMode\NFSCommandLineController.cs" />
     <Compile Include="PacketBuilder.cs" />
     <Compile Include="ProLinkController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,5 +94,6 @@
       <Name>ProLinkLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
