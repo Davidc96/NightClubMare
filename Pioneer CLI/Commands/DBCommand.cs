@@ -55,6 +55,9 @@ namespace Pioneer_CLI.Commands
                     break;
                 case "artists":
                     break;
+                default:
+                    Console.WriteLine("Usage db <connect|import|tracks|artists>");
+                    break;
             }
         }
 
@@ -92,6 +95,10 @@ namespace Pioneer_CLI.Commands
                     }
 
                     Console.WriteLine("Cannot establish a connection to the database, make sure you select the correct CDJ which contains the USB or SD Card");
+                }
+                else
+                {
+                    Console.WriteLine("Usage db connect <device_id>");
                 }
             }
             catch(Exception e)
