@@ -42,8 +42,12 @@ namespace Pioneer_CLI.Commands
             switch (command)
             {
                 case "connect":
-                    clc.GetRekordboxDB().ClearTables();
                     // clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)0x01, (byte)0x02);
+                    if(argument == "")
+                    {
+                        Console.WriteLine("Usage \"db connect <device id>\"");
+                    }
+                    clc.GetRekordboxDB().ClearTables();
                     ConnectCDJ(plc, clc, int.Parse(argument));
                     break;
                 case "import":
