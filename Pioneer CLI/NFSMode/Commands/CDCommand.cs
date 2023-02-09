@@ -14,7 +14,16 @@ namespace Pioneer_CLI.NFSMode.Commands
             string new_folder = args;
             if(new_folder != "")
             {
-                var next_directory = nfs.Combine(new_folder, nfs_clc.GetCurrentDirectory(), isRekordbox);
+                var next_directory = "";
+                if (new_folder == "..")
+                {
+                    next_directory = nfs.GetDirectoryName(nfs_clc.GetCurrentDirectory(), isRekordbox);
+                }
+                else
+                {
+                    next_directory = nfs.Combine(new_folder, nfs_clc.GetCurrentDirectory(), isRekordbox);
+                }
+                
                 nfs_clc.SetCurrentDirectory(next_directory);
             }
         }

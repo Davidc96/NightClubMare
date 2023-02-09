@@ -26,7 +26,7 @@ namespace Pioneer_CLI.NFSMode
             unit = "";
 
             commands.Add("cd", new CDCommand());
-            commands.Add("dir", new CDCommand());
+            commands.Add("dir", new LSCommand());
             commands.Add("ls", new LSCommand());
             commands.Add("mount", new MountCommand());
 
@@ -83,9 +83,11 @@ namespace Pioneer_CLI.NFSMode
                     }
 
                     commands[command].Run(this, nfs_controller, args, isRekordbox);
+                    Console.WriteLine("");
                 }
                 else if(command == "exit")
                 {
+                    nfs_controller.UnmountDevice(isRekordbox);
                     exit = true;
                 }
             }

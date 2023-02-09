@@ -57,6 +57,20 @@ namespace ProLinkLib.NFS
             }
         }
 
+        public void UnmountDevice(bool isRekordbox)
+        {
+            if(isRekordbox)
+            {
+                rb_nfsclient.UnMountDevice();
+                rb_nfsclient.Disconnect();
+            }
+            else
+            {
+                cdj_nfs_client.UnMountDevice();
+                cdj_nfs_client.Disconnect();
+            }
+        }
+
         public List<string> GetItemsFromDirectory(string remoteFolder, bool isRekordbox)
         {
             List<string> Items = new List<string>();
@@ -179,6 +193,18 @@ namespace ProLinkLib.NFS
             }
 
             cdj_nfs_client.Read(export_path, "db\\database.pdb");
+        }
+
+        public string GetDirectoryName(string full_directory_name, bool is_rekordbox)
+        {
+            if(is_rekordbox)
+            {
+                return rb_nfsclient.GetDirectoryName(full_directory_name);
+            }
+            else
+            {
+                return cdj_nfs_client.GetDirectoryName(full_directory_name);
+            }
         }
 
         private List<string> RemoveDuplicatesAndInvalid(List<string> items)
