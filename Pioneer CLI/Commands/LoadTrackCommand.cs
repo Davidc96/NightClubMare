@@ -69,13 +69,17 @@ namespace Pioneer_CLI.Commands
                         RekordboxID = (byte)track_metadata.RekordboxID;
                         trackName = track_metadata.TitleName;
                     }
-
-                    if(track_nfs != null)
+                    else if(track_nfs != null)
                     {
                         trackChannelID = (byte)track_nfs.TrackChannelID;
                         trackPhysicallyLocated = (byte)track_nfs.TrackPhysicallyLocated;
                         RekordboxID = (byte)track_nfs.RekordboxID;
                         trackName = track_nfs.TrackName;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Song was not found, please use \"music\" command or \"db connect <device id>\" command to retrieve music from CDJ or Rekordbox");
+                        return;
                     }
 
                     ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
