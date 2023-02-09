@@ -161,6 +161,19 @@ namespace Pioneer_CLI
                     }
                 }
             }
+
+            if(packet_id == BEAT_COMMAND)
+            {
+                BeatCommand b_command = (BeatCommand)command;
+                if(CDJList.ContainsKey(b_command.ChannelID))
+                {
+                    if (CDJList[b_command.ChannelID] is CDJ)
+                    {
+                        var cdj = (CDJ)CDJList[b_command.ChannelID];
+                        cdj.Beat = b_command.BeatCount;
+                    }
+                }
+            }
             return true;
         }
     

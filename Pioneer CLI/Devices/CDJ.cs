@@ -19,6 +19,7 @@ namespace Pioneer_CLI.Devices
         private byte usbLocalStatus;
         private byte sdLocalStatus;
         private byte playerStatus;
+        private int beat;
         public struct flagStatus
         {
             private bool bpmSync;
@@ -55,6 +56,7 @@ namespace Pioneer_CLI.Devices
         public byte TrackPhysicallyLocated { get => trackPhysicallyLocated; set => trackPhysicallyLocated = value; }
         public byte TrackType { get => trackType; set => trackType = value; }
         public bool OnAirChannel { get => onAirChannel; set => onAirChannel = value; }
+        public int Beat { get => beat; set => beat = value; }
 
         /*
          *  ------------
@@ -74,6 +76,7 @@ namespace Pioneer_CLI.Devices
             Console.Write("     DeviceID: " + channelID);
             PrintOnAirChannelUI();
             Console.Write(" |            |");
+            PrintBeat();
             Console.Write("  BPM Track: " + bpmTrack + " BPM");
             Console.WriteLine("    RekordBoxTrackID: " + $"0x{BitConverter.ToUInt32(rekordboxTrackID, 0):X}");
             Console.Write(" |    ----    |");
@@ -131,6 +134,28 @@ namespace Pioneer_CLI.Devices
         public string GetMacAddress()
         {
             return macAddress;
+        }
+
+        private void PrintBeat()
+        {
+            string beat_form = "|====|====|====|====|";
+            switch (beat)
+            {
+                case 1:
+                    beat_form = "|////|====|====|====|";
+                    break;
+                case 2:
+                    beat_form = "|====|////|====|====|";
+                    break;
+                case 3:
+                    beat_form = "|====|====|////|====|";
+                    break;
+                case 4:
+                    beat_form = "|====|====|====|////|";
+                    break;
+            }
+
+            Console.Write(beat_form);
         }
     }
 }

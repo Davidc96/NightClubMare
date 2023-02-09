@@ -44,6 +44,7 @@ namespace Pioneer_CLI
             commands.Add("cdj_control", new CDJControlCommand());
             commands.Add("channels_onair", new ChannelsOnAirCommand());
             commands.Add("sync_mode", new SyncModeCommand());
+            commands.Add("beat_packet", new BeatCommand());
         
         }
 

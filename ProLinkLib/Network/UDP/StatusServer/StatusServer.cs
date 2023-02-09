@@ -12,6 +12,8 @@ namespace ProLinkLib.Network.UDP.StatusServer
     public class StatusServer
     {
         private UdpClient udpClient;
+        private UdpClient udpClient_ow;
+
         private PacketBuilder packetBuilder;
         private StatusPacketParser packetParser;
         private int PORT = 50002;
@@ -22,6 +24,7 @@ namespace ProLinkLib.Network.UDP.StatusServer
         public StatusServer()
         {
             udpClient = new UdpClient();
+            udpClient_ow = new UdpClient(); // One Way UDP Client when a CDJ connects to a CDJ it uses this
             packetBuilder = new PacketBuilder();
             packetParser = new StatusPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -82,6 +85,13 @@ namespace ProLinkLib.Network.UDP.StatusServer
         public void SendPacketToClient(string dstIp, byte[] packet)
         {
             udpClient.Send(packet, packet.Length, dstIp, PORT);
+        }
+
+        public void SendPacketToRekordbox(string dstIp, ICommand packet)
+        {
+            udpClient_ow.Connect(dstIp, PORT);
+            var packet_b = packetBuilder.BuildPacket(packet);
+            udpClient_ow.Send(packet_b, packet_b.Length);
         }
     }
 }
