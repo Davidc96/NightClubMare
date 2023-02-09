@@ -159,6 +159,10 @@ namespace ProLinkLib.Database
 
         public Track GetTrackById(int track_id)
         {
+            if(track_id > trackTable.Count)
+            {
+                return null;
+            }
             return trackTable[track_id];
         }
 
