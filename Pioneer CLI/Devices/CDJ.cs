@@ -75,14 +75,14 @@ namespace Pioneer_CLI.Devices
             Console.Write("  DeviceName: " + deviceName);
             Console.Write("     DeviceID: " + channelID);
             PrintOnAirChannelUI();
-            Console.Write(" |            |");
+            Console.Write(" |            |  ");
             PrintBeat();
             Console.Write("  BPM Track: " + bpmTrack + " BPM");
             Console.WriteLine("    RekordBoxTrackID: " + $"0x{BitConverter.ToUInt32(rekordboxTrackID, 0):X}");
-            Console.Write(" |    ----    |");
-            Console.Write("  USB: " + Utils.GetDeviceStatus(usbLocalStatus) + "(" + $"0x{usbLocalStatus:X}" + ")");
-            Console.WriteLine(" SD: " + Utils.GetDeviceStatus(sdLocalStatus) + "(" + $"0x{sdLocalStatus:X}" + ")");
+            Console.WriteLine(" |    ----    |");
             Console.Write(" |   |    |   |");
+            Console.Write("  USB: " + Utils.GetDeviceStatus(usbLocalStatus) + "(" + $"0x{usbLocalStatus:X}" + ")");
+            Console.Write(" SD: " + Utils.GetDeviceStatus(sdLocalStatus) + "(" + $"0x{sdLocalStatus:X}" + ")");
             Console.WriteLine("  Player: " + Utils.GetPlayerStatus(playerStatus) + "(" + $"0x{playerStatus:X}" + ")");
             Console.WriteLine(" |    ----    |");
             Console.Write(" |	      |");

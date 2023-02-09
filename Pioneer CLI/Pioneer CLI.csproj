@@ -72,6 +72,7 @@
     <Compile Include="Devices\Mixer.cs" />
     <Compile Include="NetworkManagementController.cs" />
     <Compile Include="NFSMode\Commands\CDCommand.cs" />
+    <Compile Include="NFSMode\Commands\GETCommand.cs" />
     <Compile Include="NFSMode\Commands\ICommand.cs" />
     <Compile Include="NFSMode\Commands\LSCommand.cs" />
     <Compile Include="NFSMode\Commands\MountCommand.cs" />

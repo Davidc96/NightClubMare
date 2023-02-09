@@ -62,7 +62,7 @@ namespace Pioneer_CLI
                 if(!CDJList.ContainsKey(ka_command.ChannelID))
                 {
                     // Check if is not ourselves
-                    if(Utils.BytesToIPString(virtualCDJ.IPaddress) != Utils.BytesToIPString(ka_command.IPAddress))
+                    if(Utils.BytesToIPString(virtualCDJ.IPaddress) == Utils.BytesToIPString(ka_command.IPAddress))
                     {
                         if (Encoding.UTF8.GetString(ka_command.DeviceName).Contains("CDJ"))
                         {
