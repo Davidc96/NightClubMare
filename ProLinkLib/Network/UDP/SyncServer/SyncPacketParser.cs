@@ -22,6 +22,7 @@ namespace ProLinkLib.Network.UDP.SyncServer
             packetCommands.Add(CDJ_CONTROL_COMMAND, new CDJControlCommand());
             packetCommands.Add(SYNC_MODE_COMMAND, new SyncModeCommand());
             packetCommands.Add(CHANNELSONAIR_COMMAND, new ChannelsOnAirCommand());
+            packetCommands.Add(BEAT_COMMAND, new BeatCommand());
         }
         public void readPacket(byte[] packet, Func<int, ICommand, bool> callback)
         {
