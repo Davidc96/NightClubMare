@@ -36,8 +36,9 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
         public void initServer()
         {
             // Init Bind connection
-            udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
-            
+            //udpClient.Client.Bind(new IPEndPoint(new IPAddress(IP), PORT));
+            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
+
             // Task to receive all the UDP packets
             var receiveTask = Task.Run(() =>
             {
