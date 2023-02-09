@@ -34,7 +34,7 @@ namespace ProLinkLib
 
         public Track GetTrackByID(int id)
         {
-            if (tracks.ContainsKey(id))
+            if (!tracks.ContainsKey(id))
             {
                 return null;
             }
