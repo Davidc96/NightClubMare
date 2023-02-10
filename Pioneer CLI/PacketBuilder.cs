@@ -35,6 +35,7 @@ namespace Pioneer_CLI
             // Status Commands
             commands.Add("cdj_status", new CDJStatusCommand());
             commands.Add("load_settings", new LoadSettingsCommand());
+            commands.Add("load_tracks", new LoadTrackCommand());
             commands.Add("load_track_ack", new LoadTrackAckCommand());
             commands.Add("media_query", new MediaQueryCommand());
             commands.Add("media_response", new MediaResponseCommand());
