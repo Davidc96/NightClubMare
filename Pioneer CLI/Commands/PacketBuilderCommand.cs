@@ -148,6 +148,7 @@ namespace Pioneer_CLI.Commands
                 Hex.Dump(file_data));
 
             Console.WriteLine("Packet sent!");
+            f.Close();
         }
     }
 }
