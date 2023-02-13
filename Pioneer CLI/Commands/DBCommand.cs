@@ -46,6 +46,7 @@ namespace Pioneer_CLI.Commands
                     if(argument == "")
                     {
                         Console.WriteLine("Usage \"db connect <device id>\"");
+                        return;
                     }
                     clc.GetRekordboxDB().ClearTables();
                     ConnectCDJ(plc, clc, int.Parse(argument));
