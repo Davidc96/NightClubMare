@@ -256,6 +256,7 @@ namespace ProLinkLib
                 st.PacketCounter = BitConverter.GetBytes(packet_counter);
 
                 Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "Sending Virtual CDJ_STATUS");
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "CDJ_STATUS Packet information:\n" + Hex.Dump(st.ToBytes()));
                 statusServer.SendPacketBroadcast(st);
                 await Task.Delay(200);
             }

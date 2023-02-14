@@ -30,7 +30,9 @@ namespace ProLinkLib.Network.TCP
         }
         public void ConnectToDB(string IP)
         {
-            if(request_port != 0)
+            byte[] response;
+
+            if (request_port != 0)
             {
                 // We already know the port so skip it
                 return;
@@ -51,7 +53,7 @@ namespace ProLinkLib.Network.TCP
             // Send HELLO Message
             DBServerQueryPacketCommand q_server_cmd = new DBServerQueryPacketCommand();
             DBServerQueryPacketResponseCommand q_server_resp_cmd = new DBServerQueryPacketResponseCommand();
-            byte[] response = new byte[q_server_resp_cmd.GetSize()];
+            response = new byte[q_server_resp_cmd.GetSize()];
             
             nw_st.Write(q_server_cmd.ToBytes(), 0, q_server_cmd.GetSize());
 
@@ -70,52 +72,62 @@ namespace ProLinkLib.Network.TCP
         {
             DBConnectionSetupPacket db_setup = new DBConnectionSetupPacket();
             DBConnectionSetupPacketResponse db_setup_response = new DBConnectionSetupPacketResponse();
-            
-            request_client = new TcpClient();
 
-            request_client.Connect(IP, request_port);
-            
-            if (!request_client.Connected)
-            {
-                Console.WriteLine("[ERROR] Failed to connect to the DBServer");
-                return;
-            }
-            
-            NetworkStream nw_st = request_client.GetStream();
-
-            // Send HELLO message
             byte[] response = new byte[db_setup_response.GetSize()];
-
-            nw_st.Write(db_setup.ToBytes(), 0, db_setup.GetSize());
-
-            // Receive the HELLO response message
-            nw_st.Read(response, 0, response.Length);
-
-            // If everything is correct let's send the Query Setup Message
-            QuerySetupMessage q_setup = new QuerySetupMessage();
-            QuerySetupResponseMessage q_setup_res = new QuerySetupResponseMessage();
-            
-            q_setup.Type = 0x0;
-            q_setup.FieldType = 0x0F;
-            q_setup.NumberOfFields = 0x01;
-
-            q_setup.ArgumentInformation = new byte[0xC];
-            q_setup.ArgumentInformation[0] = 0x06;
-            
-            q_setup.Arguments = new byte[0x5];
-            q_setup.Arguments[0] = 0x11;
-            q_setup.Arguments[4] = ID;
-
-            byte[] builded_packet = pb.BuildMessage(0xFFFFFFFE, q_setup);
             byte[] setup_response = new byte[0x20];
-            
-            nw_st.Write(builded_packet, 0, builded_packet.Length);
+            try
+            {
+                request_client = new TcpClient();
 
-            // Receive the Response
-            nw_st.Read(setup_response, 0, setup_response.Length);
-            
-            q_setup_res.ParseBytes(setup_response, isRekordbox);
-            Console.WriteLine("[DEBUG] Received ChannelID: " + q_setup_res.ChannelID[3]);
+                request_client.Connect(IP, request_port);
+
+                if (!request_client.Connected)
+                {
+                    Console.WriteLine("[ERROR] Failed to connect to the DBServer");
+                    return;
+                }
+
+                NetworkStream nw_st = request_client.GetStream();
+
+                // Send HELLO message
+                response = new byte[db_setup_response.GetSize()];
+
+                nw_st.Write(db_setup.ToBytes(), 0, db_setup.GetSize());
+
+                // Receive the HELLO response message
+                nw_st.Read(response, 0, response.Length);
+
+                // If everything is correct let's send the Query Setup Message
+                QuerySetupMessage q_setup = new QuerySetupMessage();
+                QuerySetupResponseMessage q_setup_res = new QuerySetupResponseMessage();
+
+                q_setup.Type = 0x0;
+                q_setup.FieldType = 0x0F;
+                q_setup.NumberOfFields = 0x01;
+
+                q_setup.ArgumentInformation = new byte[0xC];
+                q_setup.ArgumentInformation[0] = 0x06;
+
+                q_setup.Arguments = new byte[0x5];
+                q_setup.Arguments[0] = 0x11;
+                q_setup.Arguments[4] = ID;
+
+                byte[] builded_packet = pb.BuildMessage(0xFFFFFFFE, q_setup);
+                setup_response = new byte[0x20];
+
+                nw_st.Write(builded_packet, 0, builded_packet.Length);
+
+                // Receive the Response
+                nw_st.Read(setup_response, 0, setup_response.Length);
+
+                q_setup_res.ParseBytes(setup_response, isRekordbox);
+                Console.WriteLine("[DEBUG] Received ChannelID: " + q_setup_res.ChannelID[3]);
+            }
+            catch(Exception ex)
+            {
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, " TrackMetadataClient.cs-SendHello(): Exception error\n" + ex.Message + 
+                    "\nHello_Response:\n" + Hex.Dump(response) + "\nSetup Response packet:\n" + Hex.Dump(setup_response));     
+            }
         }
 
         public void Disconnect()
@@ -139,6 +151,8 @@ namespace ProLinkLib.Network.TCP
         public Dictionary<int, Track> GetAllTracks(byte ID, byte TrackChannelID, byte TrackPhysicallyLoacted, byte TrackType, bool isRekordbox = false)
         {
             Dictionary<int, Track> tracks = new Dictionary<int, Track>();
+            byte[] track_response = new byte[0x20];
+            byte[] render_response = new byte[0x200];
             uint offset = 0x00;
 
             for (int i = 0; i < 100; i++) // Let's limit the number of tracks just in case it brakes
@@ -162,7 +176,7 @@ namespace ProLinkLib.Network.TCP
 
                     // Response, should be 4000
                     TrackMetadataAvailableResponseMessage trackmetadata = new TrackMetadataAvailableResponseMessage();
-                    byte[] track_response = new byte[0x20];
+                    track_response = new byte[0x20];
 
                     nw_st.Read(track_response, 0, track_response.Length);
                     trackmetadata.ParseBytes(track_response, isRekordbox);
@@ -188,7 +202,7 @@ namespace ProLinkLib.Network.TCP
                     nw_st.Write(render_request, 0, render_request.Length);
 
                     // Get All the responses and parse them
-                    byte[] render_response = new byte[0x200];
+                    render_response = new byte[0x200];
 
 
                     nw_st.Read(render_response, 0, render_response.Length);
@@ -223,9 +237,10 @@ namespace ProLinkLib.Network.TCP
                     PacketCounter += 1;
                     offset += 1;
                 }
-                catch(Exception)
+                catch(Exception ex)
                 {
-                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, "Error while processing song response");
+                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, "TrackMetadataClient.cs-GetAllTracks(): Exception while parsing\n" + ex.Message + 
+                        "\nTrack_Response:\n" + Hex.Dump(track_response) + "\nRender_response:\n" + Hex.Dump(render_response));
                 }
 
 
