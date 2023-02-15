@@ -30,42 +30,48 @@ namespace ProLinkLib.Network.TCP
         }
         public void ConnectToDB(string IP)
         {
-            byte[] response;
-
-            if (request_port != 0)
+            byte[] response = null;
+            try
             {
-                // We already know the port so skip it
-                return;
-            }
+                if (request_port != 0)
+                {
+                    // We already know the port so skip it
+                    return;
+                }
 
-            TcpClient initial_client = new TcpClient();
-            this.IP = IP;
-           
-            initial_client.Connect(IP, INITIAL_PORT);
-            if(!initial_client.Connected)
+                TcpClient initial_client = new TcpClient();
+                this.IP = IP;
+
+                initial_client.Connect(IP, INITIAL_PORT);
+                if (!initial_client.Connected)
+                {
+                    Console.WriteLine("[ERROR] Failed to connect to the DBServer");
+                    return;
+                }
+
+                NetworkStream nw_st = initial_client.GetStream();
+
+                // Send HELLO Message
+                DBServerQueryPacketCommand q_server_cmd = new DBServerQueryPacketCommand();
+                DBServerQueryPacketResponseCommand q_server_resp_cmd = new DBServerQueryPacketResponseCommand();
+                response = new byte[q_server_resp_cmd.GetSize()];
+
+                nw_st.Write(q_server_cmd.ToBytes(), 0, q_server_cmd.GetSize());
+
+                // Receive the RemoteDB PORT
+                nw_st.Read(response, 0, response.Length);
+                q_server_resp_cmd.FromBytes(response);
+
+                request_port = q_server_resp_cmd.Port;
+
+                Console.WriteLine("[DEBUG] Port Received: " + request_port);
+
+                initial_client.Close();
+            }
+            catch(Exception ex)
             {
-                Console.WriteLine("[ERROR] Failed to connect to the DBServer");
-                return;
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, "TrackMetadataClient.cs-ConnectToDB: Exception error\n" + ex.Message + "\nDBQueryResponse:\n" + Hex.Dump(response));
             }
-            
-            NetworkStream nw_st = initial_client.GetStream();
-
-            // Send HELLO Message
-            DBServerQueryPacketCommand q_server_cmd = new DBServerQueryPacketCommand();
-            DBServerQueryPacketResponseCommand q_server_resp_cmd = new DBServerQueryPacketResponseCommand();
-            response = new byte[q_server_resp_cmd.GetSize()];
-            
-            nw_st.Write(q_server_cmd.ToBytes(), 0, q_server_cmd.GetSize());
-
-            // Receive the RemoteDB PORT
-            nw_st.Read(response, 0, response.Length);
-            q_server_resp_cmd.FromBytes(response);
-
-            request_port = q_server_resp_cmd.Port;
-            
-            Console.WriteLine("[DEBUG] Port Received: " + request_port);
-            
-            initial_client.Close();
         }
 
         public void SendHello(byte ID, bool isRekordbox = false)
