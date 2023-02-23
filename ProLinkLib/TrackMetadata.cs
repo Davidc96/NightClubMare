@@ -1,4 +1,5 @@
-﻿using ProLinkLib.Network.TCP;
+﻿using ProLinkLib.Database;
+using ProLinkLib.Network.TCP;
 using ProLinkLib.Objects;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace ProLinkLib
         {
             mt_client = new TrackMetadataClient();
             tracks    = new Dictionary<int, Track>();
+
         }
 
         public void InitTrackMetadataConnection(string IP)

@@ -24,7 +24,7 @@ namespace ProLinkLib.Database
 
         }
 
-        public void InitDB(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated)
+        public void InitDBFromFile(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated)
         {
             // Create empty value as first element
             trackTable.Add(new Track());
@@ -170,6 +170,11 @@ namespace ProLinkLib.Database
         {
             trackTable.Clear();
             artistTable.Clear();
+        }
+
+        public void AddTrack(Track track)
+        {
+            trackTable.Add(track);
         }
     }
 }
