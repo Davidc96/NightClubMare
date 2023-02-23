@@ -85,7 +85,7 @@ namespace Pioneer_CLI.Commands
                     if (cdj.UsbLocalStatus == 0x00)
                     {
                         clc.GetNFSController().MountDevice("/C/", false);
-                        clc.GetNFSController().GetRekordboxDB("/C/PIONEER/rekordbox/export.pdb");
+                        clc.GetNFSController().GetRekordboxDB();
                         clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x03);
                         return;
 
@@ -94,7 +94,7 @@ namespace Pioneer_CLI.Commands
                     if (cdj.SdLocalStatus == 0x00)
                     {
                         clc.GetNFSController().MountDevice("/U/", false);
-                        clc.GetNFSController().GetRekordboxDB("/U/PIONEER/rekordbox/export.pdb");
+                        clc.GetNFSController().GetRekordboxDB();
                         clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x02);
                         return;
                     }

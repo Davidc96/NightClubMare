@@ -184,15 +184,20 @@ namespace ProLinkLib.NFS
             return null;
         }
 
-        public void GetRekordboxDB(string export_path)
+        public void GetRekordboxDB()
         {
             // Delete old database
             if (System.IO.File.Exists("db\\database.pdb"))
             {
                 System.IO.File.Delete("db\\database.pdb");
             }
+            var export_db_path = ".";
+            export_db_path = cdj_nfs_client.Combine("PIONEER", export_db_path);
+            export_db_path = cdj_nfs_client.Combine("rekordbox", export_db_path);
+            export_db_path = cdj_nfs_client.Combine("export.pdb", export_db_path);
 
-            cdj_nfs_client.Read(export_path, "db\\database.pdb");
+
+            cdj_nfs_client.Read(export_db_path, "db\\database.pdb");
         }
 
         public string GetDirectoryName(string full_directory_name, bool is_rekordbox)
