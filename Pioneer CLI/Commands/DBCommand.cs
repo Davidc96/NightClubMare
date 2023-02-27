@@ -48,12 +48,10 @@ namespace Pioneer_CLI.Commands
                         Console.WriteLine("Usage \"db connect <device id>\"");
                         return;
                     }
-                    clc.GetRekordboxDB().ClearTables();
                     ConnectCDJ(plc, clc, int.Parse(argument));
                     break;
                 case "import":
-                    clc.GetRekordboxDB().ClearTables();
-                    clc.GetRekordboxDB().InitDB(param1.Replace("\"", ""), 0x00, 0x00);
+                    clc.GetMetadataDB().GetElementsFromRekordboxDB(param1.Replace("\"", ""), 0x00, 0x00);
                     break;
                 case "tracks":
                     PrintAllTracks(clc);
@@ -86,7 +84,7 @@ namespace Pioneer_CLI.Commands
                     {
                         clc.GetNFSController().MountDevice("/C/", false);
                         clc.GetNFSController().GetRekordboxDB();
-                        clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x03);
+                        clc.GetMetadataDB().GetElementsFromRekordboxDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x03);
                         return;
 
                     }
@@ -95,7 +93,7 @@ namespace Pioneer_CLI.Commands
                     {
                         clc.GetNFSController().MountDevice("/U/", false);
                         clc.GetNFSController().GetRekordboxDB();
-                        clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x02);
+                        clc.GetMetadataDB().GetElementsFromRekordboxDB("db\\database.pdb", (byte)cdj.ChannelID, (byte)0x02);
                         return;
                     }
 
@@ -115,13 +113,13 @@ namespace Pioneer_CLI.Commands
 
         public void PrintAllTracks(CommandLineController clc)
         {
-            var tracks = clc.GetRekordboxDB().GetAllTracks();
+            var tracks = clc.GetMetadataDB().GetTracks();
             ConsoleTable table = new ConsoleTable("ID", "TrackName", "Artist", "BPM");
             var id = 0;
             foreach(var track in tracks)
             {
                 if(id != 0)
-                    table.AddRow(id, track.TrackName, clc.GetRekordboxDB().GetArtistById(track.ArtistID).ArtistName, (track.Tempo / 100.0));
+                    table.AddRow(id, track.TrackName, clc.GetMetadataDB().GetArtistById(track.ArtistID).ArtistName, (track.Tempo / 100.0));
 
                 id += 1;
             }

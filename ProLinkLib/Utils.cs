@@ -1,4 +1,4 @@
-﻿using ProLinkLib.Objects;
+﻿using ProLinkLib.Database.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -112,11 +112,11 @@ namespace ProLinkLib
 
             return nme;
         }
-        public static bool IsTrackDuplicated(Dictionary<int, Track> tracks, string track_name)
+        public static bool IsTrackDuplicated(List<Track> tracks, string track_name)
         {
-            foreach(Track track in tracks.Values)
+            foreach(Track track in tracks)
             {
-                if(track.TitleName == track_name)
+                if(track.TrackName == track_name)
                 {
                     return true;
                 }

@@ -39,13 +39,13 @@ namespace Pioneer_CLI.Commands
             }
 
             // If there are tracks, let's print it instead of 
-            if (plc.GetTrackMetadata().GetNumberOfTracks() > 0 && !args.Contains("reset"))
+            if (clc.GetMetadataDB().GetTracks().Count > 0 && !args.Contains("reset"))
             {
                 var table = new ConsoleTable("ID", "Track Name");
-                for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
+                for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count; i++)
                 {
-                    var trck = plc.GetTrackMetadata().GetTrackByID(i);
-                    table.AddRow(i, trck.TitleName);
+                    var trck = clc.GetMetadataDB().GetTrackById(i);
+                    table.AddRow(i, trck.TrackName);
                 }
 
                 table.Write();
@@ -68,14 +68,13 @@ namespace Pioneer_CLI.Commands
                             // Rekordbox Tracklist found
                             Console.WriteLine("Rekordbox tracks (Maximum 100):");
 
-                            plc.GetTrackMetadata().InitTrackMetadataConnection(device.GetIPAddress());
-                            plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01, true); // Rekordbox handle messages diferent from CDJ
+                            clc.GetMetadataDB().GetTracksFromTCP(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01, true); // Rekordbox handle messages diferent from CDJ
 
                             var table = new ConsoleTable("ID", "Track Name");
-                            for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
+                            for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count + 1; i++)
                             {
-                                var trck = plc.GetTrackMetadata().GetTrackByID(i);
-                                table.AddRow(i, trck.TitleName);
+                                var trck = clc.GetMetadataDB().GetTrackById(i-1);
+                                table.AddRow(i, trck.TrackName);
                             }
 
                             table.Write();
@@ -92,10 +91,10 @@ namespace Pioneer_CLI.Commands
                                 plc.GetTrackMetadata().GetAllTracks(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01, false);
 
                                 var table = new ConsoleTable("ID", "Track Name");
-                                for (int i = 1; i < plc.GetTrackMetadata().GetNumberOfTracks() + 1; i++)
+                                for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count + 1; i++)
                                 {
-                                    var trck = plc.GetTrackMetadata().GetTrackByID(i);
-                                    table.AddRow(i, trck.TitleName);
+                                    var trck = clc.GetMetadataDB().GetTrackById(i - 1);
+                                    table.AddRow(i, trck.TrackName);
                                 }
 
                                 table.Write();

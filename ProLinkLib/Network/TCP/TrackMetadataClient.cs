@@ -1,6 +1,6 @@
 ﻿using ProLinkLib.Commands.MetadataCommands;
 using ProLinkLib.Commands.MetadataCommands.Messages;
-using ProLinkLib.Objects;
+using ProLinkLib.Database.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,6 @@ namespace ProLinkLib.Network.TCP
         {
             request_client = new TcpClient();
             pb = new PacketBuilder();
-            TrackID = 1;
         }
         public void ConnectToDB(string IP)
         {
@@ -154,9 +153,10 @@ namespace ProLinkLib.Network.TCP
             request_client.Close();
         }
 
-        public Dictionary<int, Track> GetAllTracks(byte ID, byte TrackChannelID, byte TrackPhysicallyLoacted, byte TrackType, bool isRekordbox = false)
+        public List<Track> GetAllTracks(byte ID, byte TrackChannelID, byte TrackPhysicallyLoacted, byte TrackType, bool isRekordbox = false)
         {
-            Dictionary<int, Track> tracks = new Dictionary<int, Track>();
+            List<Track> tracks = new List<Track>();
+            
             byte[] track_response = new byte[0x20];
             byte[] render_response = new byte[0x200];
             uint offset = 0x00;
@@ -229,15 +229,14 @@ namespace ProLinkLib.Network.TCP
 
                     Track track = new Track();
                     track.RekordboxID = render_resp.RekordboxTrackID;
-                    track.TitleName = render_resp.TitleName;
+                    track.TrackName = render_resp.TitleName;
                     track.TrackPhysicallyLocated = TrackPhysicallyLoacted;
                     track.TrackChannelID = TrackChannelID;
 
                     // If a song is duplicated in one or more lists, rekordbox shows it as an independent track so let's remove it if we already have the title
-                    if (!Utils.IsTrackDuplicated(tracks, track.TitleName))
+                    if (!Utils.IsTrackDuplicated(tracks, track.TrackName))
                     {
-                        tracks.Add(TrackID, track);
-                        TrackID += 1;
+                        tracks.Add(track);
                     }
 
                     PacketCounter += 1;

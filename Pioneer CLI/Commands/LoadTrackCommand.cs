@@ -56,8 +56,7 @@ namespace Pioneer_CLI.Commands
                     ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
                     var cdj = (CDJ)clc.GetSelectedDevice();
                     int trackID = Int32.Parse(args);
-                    var track_metadata = plc.GetVirtualCDJ().GetTrackMetadata().GetTrackByID(trackID);
-                    var track_nfs = clc.GetRekordboxDB().GetTrackById(trackID);
+                    var track_metadata = clc.GetMetadataDB().GetTrackById(trackID);
                     byte trackChannelID = 0x00;
                     byte trackPhysicallyLocated = 0x00;
                     byte RekordboxID = 0x00;
@@ -67,14 +66,7 @@ namespace Pioneer_CLI.Commands
                         trackChannelID = (byte)track_metadata.TrackChannelID;
                         trackPhysicallyLocated = (byte)track_metadata.TrackPhysicallyLocated;
                         RekordboxID = (byte)track_metadata.RekordboxID;
-                        trackName = track_metadata.TitleName;
-                    }
-                    else if(track_nfs != null)
-                    {
-                        trackChannelID = (byte)track_nfs.TrackChannelID;
-                        trackPhysicallyLocated = (byte)track_nfs.TrackPhysicallyLocated;
-                        RekordboxID = (byte)track_nfs.RekordboxID;
-                        trackName = track_nfs.TrackName;
+                        trackName = track_metadata.TrackName;
                     }
                     else
                     {

@@ -152,18 +152,9 @@ namespace ProLinkLib.Database
             return trackTable;
         }
 
-        public Artist GetArtistById(uint artist_id)
+        public Dictionary<uint, Artist> GetArtists()
         {
-            return artistTable[artist_id];
-        }
-
-        public Track GetTrackById(int track_id)
-        {
-            if(track_id > trackTable.Count)
-            {
-                return null;
-            }
-            return trackTable[track_id];
+            return artistTable;
         }
 
         public void ClearTables()
@@ -172,9 +163,5 @@ namespace ProLinkLib.Database
             artistTable.Clear();
         }
 
-        public void AddTrack(Track track)
-        {
-            trackTable.Add(track);
-        }
     }
 }

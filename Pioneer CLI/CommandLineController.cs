@@ -18,6 +18,7 @@ namespace Pioneer_CLI
         private IDevice selectedCDJ;
         private Dictionary<string, ICommand> commands;
         private RekordboxDB rekordboxDB;
+        private MetadataDB metadata;
         private NFSController nfs;
 
         public CommandLineController()
@@ -26,7 +27,8 @@ namespace Pioneer_CLI
             selectedCDJ = null;
             commands = new Dictionary<string, ICommand>();
             nfs = new NFSController();
-            rekordboxDB = new RekordboxDB();
+            metadata = new MetadataDB();
+
 
             commands.Add("devices", new DevicesCommand());
             commands.Add("select", new SelectCommand());
@@ -63,9 +65,9 @@ namespace Pioneer_CLI
             return plc;
         }
 
-        public RekordboxDB GetRekordboxDB()
+        public MetadataDB GetMetadataDB()
         {
-            return rekordboxDB;
+            return metadata;
         }
 
         public NFSController GetNFSController()
