@@ -35,6 +35,22 @@ IMAGE HERE
 Enables the debug mode which opens the PCLILogger server and shows all the incomming or outgoing packets.</br>
 IMAGE HERE
 
+### db
+Command uses to connect to rekordbox db first we need to start the connection to the CDJ.
+```
+db connect <CDJ ID>
+```
+Once is connected we can use the command db tracks to retrieve all tracks loaded using the command
+```
+db tracks or music
+db artists
+```
+
+### music
+Command to retrieve some music using TCP Message protocol
+
+DISCLAIMER: It is recommended to use db command to retrieve all the music from a CDJ, use music command if db connect does not work
+
 ## Specific-Device's commands
 You can use this commands if a Pioneer specific device is selected using the **select** command.
 
