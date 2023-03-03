@@ -42,10 +42,10 @@ namespace Pioneer_CLI.Commands
             if (clc.GetMetadataDB().GetTracks().Count > 0 && !args.Contains("reset"))
             {
                 var table = new ConsoleTable("ID", "Track Name");
-                for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count; i++)
+                for (int i = 0; i < clc.GetMetadataDB().GetTracks().Count; i++)
                 {
                     var trck = clc.GetMetadataDB().GetTrackById(i);
-                    table.AddRow(i, trck.TrackName);
+                    table.AddRow(i+1, trck.TrackName);
                 }
 
                 table.Write();
@@ -71,10 +71,10 @@ namespace Pioneer_CLI.Commands
                             clc.GetMetadataDB().GetTracksFromTCP(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), 0x04, 0x01, true); // Rekordbox handle messages diferent from CDJ
 
                             var table = new ConsoleTable("ID", "Track Name");
-                            for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count + 1; i++)
+                            for (int i = 0; i < clc.GetMetadataDB().GetTracks().Count; i++)
                             {
-                                var trck = clc.GetMetadataDB().GetTrackById(i-1);
-                                table.AddRow(i, trck.TrackName);
+                                var trck = clc.GetMetadataDB().GetTrackById(i);
+                                table.AddRow(i+1, trck.TrackName);
                             }
 
                             table.Write();
@@ -90,10 +90,10 @@ namespace Pioneer_CLI.Commands
                                 clc.GetMetadataDB().GetTracksFromTCP(device.GetIPAddress(), vcdj.ChannelID, (byte)device.GetChannelID(), (cdj.UsbLocalStatus == 0x00) ? (byte)0x03 : (byte)0x02, 0x01, false);
 
                                 var table = new ConsoleTable("ID", "Track Name");
-                                for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count + 1; i++)
+                                for (int i = 1; i < clc.GetMetadataDB().GetTracks().Count; i++)
                                 {
-                                    var trck = clc.GetMetadataDB().GetTrackById(i - 1);
-                                    table.AddRow(i, trck.TrackName);
+                                    var trck = clc.GetMetadataDB().GetTrackById(i);
+                                    table.AddRow(i+1, trck.TrackName);
                                 }
 
                                 table.Write();
