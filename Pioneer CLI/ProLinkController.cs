@@ -30,6 +30,11 @@ namespace Pioneer_CLI
             virtualCDJ.GetSyncServer().OnRecvPacketFunc += SyncServerOnRecvPacket;
 
             CDJList = new Dictionary<int, IDevice>();
+
+            var task = Task.Run(() =>
+            {
+                TimeOutTask();
+            });
         }
 
         public Dictionary<int, IDevice> GetDevices()
@@ -40,6 +45,26 @@ namespace Pioneer_CLI
         public VirtualCDJ GetVirtualCDJ()
         {
             return virtualCDJ;
+        }
+        
+        // Task to remove innactive devices
+        public async void TimeOutTask()
+        {
+            while(true)
+            {
+                foreach(int device_id in CDJList.Keys)
+                {
+                    var device = CDJList[device_id];
+                    var current_timeout = device.GetTimeOut() - 1;
+
+                    // If device is not connected let's remove it from the list
+                    if(current_timeout <= 0)
+                    {
+                        CDJList.Remove(device_id);
+                    }
+                }
+                await Task.Delay(1000);
+            }
         }
 
         public bool DiscoverServerOnRecvPacket(int packet_id, ICommand command)
@@ -66,6 +91,7 @@ namespace Pioneer_CLI
                             new_device.MacAddress = $"{ka_command.MacAddress[0]:X}:{ka_command.MacAddress[1]:X}" +
                                 $":{ka_command.MacAddress[2]:X}:{ka_command.MacAddress[3]:X}:" +
                                 $"{ka_command.MacAddress[4]:X}:{ka_command.MacAddress[5]:X}";
+                            new_device.SetTimeOut(5);
 
                             CDJList.Add(ka_command.ChannelID, new_device);
                         }
@@ -79,10 +105,15 @@ namespace Pioneer_CLI
                             new_device.MacAddress = $"{ka_command.MacAddress[0]:X}:{ka_command.MacAddress[1]:X}" +
                                 $":{ka_command.MacAddress[2]:X}:{ka_command.MacAddress[3]:X}:" +
                                 $"{ka_command.MacAddress[4]:X}:{ka_command.MacAddress[5]:X}";
+                            new_device.SetTimeOut(5);
 
                             CDJList.Add(ka_command.ChannelID, new_device);
                         }
                     }
+                }
+                else
+                {
+                    CDJList[ka_command.ChannelID].SetTimeOut(5); // Let's reset the counter
                 }
             }
             else
