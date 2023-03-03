@@ -17,6 +17,7 @@ namespace Pioneer_CLI.Devices
         private byte[] pitch;
         private float bpm;
         private int beat;
+        private int TimeOutCounter;
         public string DeviceName { get => deviceName; set => deviceName = value; }
         public string IpAddress { get => ipAddress; set => ipAddress = value; }
         public string MacAddress { get => macAddress; set => macAddress = value; }
@@ -112,6 +113,16 @@ namespace Pioneer_CLI.Devices
             }
 
             Console.WriteLine(beat_form);
+        }
+
+        public int GetTimeOut()
+        {
+            return TimeOutCounter;
+        }
+
+        public void SetTimeOut(int timeout)
+        {
+            TimeOutCounter = timeout;
         }
     }
 }

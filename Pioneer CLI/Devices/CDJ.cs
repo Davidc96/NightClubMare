@@ -20,6 +20,7 @@ namespace Pioneer_CLI.Devices
         private byte sdLocalStatus;
         private byte playerStatus;
         private int beat;
+        private int TimeOutCounter;
         public struct flagStatus
         {
             private bool bpmSync;
@@ -156,6 +157,16 @@ namespace Pioneer_CLI.Devices
             }
 
             Console.Write(beat_form);
+        }
+
+        public int GetTimeOut()
+        {
+            return TimeOutCounter;
+        }
+
+        public void SetTimeOut(int timeout)
+        {
+            TimeOutCounter = timeout;
         }
     }
 }

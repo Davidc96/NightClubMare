@@ -11,6 +11,9 @@ namespace Pioneer_CLI.Devices
         void PrintDeviceInfo();
         string GetDeviceName();
         int GetChannelID();
+
+        int GetTimeOut();
+        void SetTimeOut(int timeout);
         string GetIPAddress();
         string GetMacAddress();
     }
