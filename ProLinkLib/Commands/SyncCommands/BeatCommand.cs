@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,24 +10,42 @@ namespace ProLinkLib.Commands.SyncCommands
 {
     public class BeatCommand : ICommand
     {
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ID = 0x28;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] DeviceName = Enumerable.Repeat((byte)0xB0, 0x14).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte Unknown1 = 0x01;
+        [JsonConverter(typeof(HexJsonConverter))]
         private byte SubCategory = 0x00;
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID = 0xA0;
+        [JsonConverter(typeof(HexJsonConverter))]
         public ushort Length = 0x3c;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint NextBeat = 0xA1A1A1A1;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint SecondBeat = 0xA2A2A2A2;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint NextBar = 0xA3A3A3A3;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint FourthBeat = 0xA4A4A4A4;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint SecondBar = 0xA5A5A5A5;
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint EightBar = 0xA6A6A6A6;
         private byte[] FBytes = Enumerable.Repeat((byte)0xFF, 24).ToArray();
+        [JsonConverter(typeof(HexJsonConverter))]
         public uint Pitch = 0xA7A7A7A7;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes = { 0x00, 0x00 };
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] BPM = { 0xA8, 0xA8 };
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte BeatCount = 0xA9;
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         private byte[] BlankBytes2 = { 0x00, 0x00 };
+        [JsonConverter(typeof(HexJsonConverter))]
         public byte ChannelID2 = 0xAA;
 
         private byte[] RawData;
