@@ -27,8 +27,7 @@ namespace ProLinkLib
         public void GetElementsFromRekordboxDB(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated)
         {
             rekordboxDB.InitDBFromFile(file_db, TrackChannelID, TrackPhysicallyLocated);
-            tracks.Concat(rekordboxDB.GetAllTracks());
-            artists.Concat(rekordboxDB.GetArtists());
+            artists = rekordboxDB.GetArtists();
 
             var trks = rekordboxDB.GetAllTracks();
 
