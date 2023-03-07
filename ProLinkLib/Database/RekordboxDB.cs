@@ -111,28 +111,30 @@ namespace ProLinkLib.Database
                         {
                             Artist artist = new Artist();
                             var artist_info = (ArtistRow)row.Body;
-                            
-                            if (!artistTable.ContainsKey(artist_info.Id))
+                            if (artist_info != null)
                             {
-                                artist.ArtistID = artist_info.Id;
-                                if (artist_info.Name.Body is DeviceSqlLongAscii)
+                                if (!artistTable.ContainsKey(artist_info.Id))
                                 {
-                                    artist.ArtistName = ((DeviceSqlLongAscii)artist_info.Name.Body).Text;
-                                }
-                                else if (artist_info.Name.Body is DeviceSqlLongUtf16le)
-                                {
-                                    artist.ArtistName = ((DeviceSqlLongUtf16le)artist_info.Name.Body).Text;
-                                }
-                                else if (artist_info.Name.Body is DeviceSqlShortAscii)
-                                {
-                                    artist.ArtistName = ((DeviceSqlShortAscii)artist_info.Name.Body).Text;
-                                }
-                                else if (artist_info.Name.Body is DeviceSqlString)
-                                {
-                                    artist.ArtistName = ((DeviceSqlShortAscii)((DeviceSqlString)artist_info.Name.Body).Body).Text;
-                                }
+                                    artist.ArtistID = artist_info.Id;
+                                    if (artist_info.Name.Body is DeviceSqlLongAscii)
+                                    {
+                                        artist.ArtistName = ((DeviceSqlLongAscii)artist_info.Name.Body).Text;
+                                    }
+                                    else if (artist_info.Name.Body is DeviceSqlLongUtf16le)
+                                    {
+                                        artist.ArtistName = ((DeviceSqlLongUtf16le)artist_info.Name.Body).Text;
+                                    }
+                                    else if (artist_info.Name.Body is DeviceSqlShortAscii)
+                                    {
+                                        artist.ArtistName = ((DeviceSqlShortAscii)artist_info.Name.Body).Text;
+                                    }
+                                    else if (artist_info.Name.Body is DeviceSqlString)
+                                    {
+                                        artist.ArtistName = ((DeviceSqlShortAscii)((DeviceSqlString)artist_info.Name.Body).Body).Text;
+                                    }
 
-                                artistTable.Add(artist_info.Id, artist);
+                                    artistTable.Add(artist_info.Id, artist);
+                                }
                             }
                         }
                     }
