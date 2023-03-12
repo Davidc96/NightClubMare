@@ -244,7 +244,7 @@ namespace ProLinkLib
             st.Pitch3 = default_pitch;
             st.Pitch4 = default_pitch;
             st.PacketCounter = new byte[4];
-            st.IsNexus = 0x1F;
+            st.IsNexus = 0x0F;                                  // 0x1F -> CDJ-3000 0x0F -> Other Nexus players
             st.PreviewTrackSupport = 0x00;
             st.WaveColor = 0x00;
             st.WavePosition = 0x01;
