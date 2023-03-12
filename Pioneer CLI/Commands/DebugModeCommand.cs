@@ -16,8 +16,7 @@ namespace Pioneer_CLI.Commands
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
-            Logger logger = new Logger();
-            System.Diagnostics.Process.Start("PCLILogger.exe", "1"); // Start PCLILogger
+            Logger.PRINT_DEBUG = true;
         }
     }
 }
