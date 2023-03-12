@@ -84,7 +84,8 @@ namespace Pioneer_CLI.Commands
                     ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(RekordboxID));
                     ld_command.Length = 0x34;
 
-                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
+                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, $"User load {trackName}(0x{RekordboxID}) to DeviceID: {cdj.ChannelID}")
+                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
                                         $"TrackID: 0x{RekordboxID:X}\n" +
                                         $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
                                         $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
