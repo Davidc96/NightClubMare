@@ -73,6 +73,21 @@ namespace Pioneer_CLI.Devices
 
         }
 
+        public string GetDeviceInfo()
+        {
+            string device_info = "";
+            device_info += " ------------------------ \n";
+            device_info += "|    4    1    2    3    |\n";
+            device_info += "|    .    .    .    .    |\n";
+            device_info += "|    .    .    .    .    |\n";
+            device_info += "|    .    .    .    .    |\n";
+            device_info += "|    |    |    |    |    |\n";
+            device_info += "|        ---|---         |\n";
+            device_info += " ------------------------ \n";
+            device_info += "      BPM: " + bpm + "    \n";
+            return device_info;
+        }
+
         public string GetDeviceName()
         {
             return deviceName;

@@ -94,10 +94,33 @@ namespace Pioneer_CLI.Devices
             Console.WriteLine("                 IP: " + IpAddress + " MAC: " + MacAddress);
         }
 
-        public override string ToString()
+        /*
+        * 
+        * |===|===|===|===|
+		    ------------    
+           | |_CH: ID_| |
+           |            |
+           |    ----    |
+           |   |    |   |
+           |    ----    |
+           | STOP  SYNC |
+            ------------
+          Track name limit...
+         */
+        public string GetDeviceInfo(string trackName)
         {
-            string device_info = @"";
-            // TODO
+            string device_info = "";
+            device_info += PrintReducedBeat();
+            device_info += "  ------------  \n";
+            device_info += " | |_CH: " + ChannelID + "_| |\n";
+            device_info += " |            |\n";
+            device_info += " |    ----    |\n";
+            device_info += " |   |    |   |\n";
+            device_info += " |    ----    |\n";
+            device_info += " | " + ((FlagStatus.Play == true) ? "PLAY" : "STOP") + "  " + ((FlagStatus.SyncMode == true) ? "SYNC" : "    ") + " |\n";
+            device_info += "  ------------ \n";
+            device_info += ((trackName == "") ? "No Track" : trackName) + "\n";
+            
             return device_info;
         }
 
@@ -135,6 +158,28 @@ namespace Pioneer_CLI.Devices
         public string GetMacAddress()
         {
             return macAddress;
+        }
+
+        private string PrintReducedBeat()
+        {
+            string beat_form = "|===|===|===|===|";
+            switch (beat)
+            {
+                case 1:
+                    beat_form = "|///|===|===|===|";
+                    break;
+                case 2:
+                    beat_form = "|===|///|===|===|";
+                    break;
+                case 3:
+                    beat_form = "|===|===|///|===|";
+                    break;
+                case 4:
+                    beat_form = "|===|===|===|///|";
+                    break;
+            }
+
+            return beat_form;
         }
 
         private void PrintBeat()
