@@ -52,16 +52,27 @@ namespace Pioneer_CLI
         {
             while(true)
             {
-                foreach(int device_id in CDJList.Keys)
+                try
                 {
-                    var device = CDJList[device_id];
-                    var current_timeout = device.GetTimeOut() - 1;
-
-                    // If device is not connected let's remove it from the list
-                    if(current_timeout <= 0)
+                    foreach (int device_id in CDJList.Keys)
                     {
-                        CDJList.Remove(device_id);
+                        var device = CDJList[device_id];
+                        var current_timeout = device.GetTimeOut() - 1;
+
+                        // If device is not connected let's remove it from the list
+                        if (current_timeout <= 0)
+                        {
+                            CDJList.Remove(device_id);
+                        }
+                        else
+                        {
+                            device.SetTimeOut(current_timeout);
+                        }
                     }
+                }
+                catch(Exception)
+                {
+                    // Exception because we are modificating the dict inside the loop TODO: Remove try exception
                 }
                 await Task.Delay(1000);
             }
@@ -96,7 +107,7 @@ namespace Pioneer_CLI
                             CDJList.Add(ka_command.ChannelID, new_device);
                         }
 
-                        if (Encoding.UTF8.GetString(ka_command.DeviceName).Contains("DJM") || Encoding.UTF8.GetString(ka_command.DeviceName).Contains("rekordbox"))
+                        if (Encoding.UTF8.GetString(ka_command.DeviceName).Contains("DJM") || Encoding.UTF8.GetString(ka_command.DeviceName).Contains("rekordbox") || ka_command.DeviceType == 0x02)
                         {
                             Mixer new_device = new Mixer();
                             new_device.ChannelID = ka_command.ChannelID;
