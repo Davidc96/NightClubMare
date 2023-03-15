@@ -14,7 +14,7 @@ namespace ProLinkLib
         public static UdpClient udpClient;
         public static int PORT = 9000;
         public static string LOG_FILE_PATH = "logs\\";
-        public static bool PRINT_DEBUG = false;
+        public static bool PRINT_DEBUG = true;
 
         public enum LOG_TYPE
         {
@@ -28,6 +28,14 @@ namespace ProLinkLib
         {
             HEX,
             STRING
+        }
+        public static void InitLogTreeDirectory()
+        {
+            if(!Directory.Exists(LOG_FILE_PATH))
+            {
+                Directory.CreateDirectory(LOG_FILE_PATH);
+                Directory.CreateDirectory(LOG_FILE_PATH + "failed_dumped_packets");
+            }
         }
 
         public static void WriteMessage(byte[] message, LOG_TYPE log_type = LOG_TYPE.INFO, PRINT_MODE print_mode = PRINT_MODE.STRING)

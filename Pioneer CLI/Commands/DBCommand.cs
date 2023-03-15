@@ -3,6 +3,7 @@ using Pioneer_CLI.Devices;
 using ProLinkLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,12 @@ namespace Pioneer_CLI.Commands
             switch (command)
             {
                 case "connect":
-                    // clc.GetRekordboxDB().InitDB("db\\database.pdb", (byte)0x01, (byte)0x02);
+                    // Create the directory if it doesn't exist
+                    if(!Directory.Exists("db"))
+                    {
+                        Directory.CreateDirectory("db");
+                    }
+
                     if(argument == "")
                     {
                         Console.WriteLine("Usage \"db connect <device id>\"");

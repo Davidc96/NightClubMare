@@ -84,7 +84,7 @@ namespace Pioneer_CLI.Commands
                     ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(RekordboxID));
                     ld_command.Length = 0x34;
 
-                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, $"User load {trackName}(0x{RekordboxID}) to DeviceID: {cdj.ChannelID}")
+                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, $"User load {trackName}(0x{RekordboxID}) to DeviceID: {cdj.ChannelID}");
                     Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
                                         $"TrackID: 0x{RekordboxID:X}\n" +
                                         $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
@@ -101,9 +101,10 @@ namespace Pioneer_CLI.Commands
                     Console.WriteLine("No device was selected! First select a CDJ device");
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                Console.WriteLine("ID does not exist or tracklist is empty, use \"music\" command to retrieve tracks from the network");
+                Console.WriteLine("ID does not exist or tracklist is empty, use \"music\" or \"db connect <device_id>\" command to retrieve tracks from the network");
+                Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, "Exception while loading a track:\n" + ex.Message);
             }
         }
     }

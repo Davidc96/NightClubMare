@@ -17,10 +17,12 @@ namespace Pioneer_CLI
         static void Main(string[] args)
         {
             PrintBanner();
+
+            // Let's create the directories used in logs
+            Logger.InitLogTreeDirectory();
             CommandLineController clc = new CommandLineController();
             NetworkManagementController nwc = new NetworkManagementController();
 
-            
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());
             clc.InitCLI();
