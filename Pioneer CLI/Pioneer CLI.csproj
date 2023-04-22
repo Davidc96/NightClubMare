@@ -67,6 +67,13 @@
     <Compile Include="Commands\SelectCommand.cs" />
     <Compile Include="Commands\SettingsCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="DBManager\DBCommands\DisconnectCommand.cs" />
+    <Compile Include="DBManager\DBCommands\IDBCommand.cs" />
+    <Compile Include="DBManager\DBCommands\ImportCommand.cs" />
+    <Compile Include="DBManager\DBCommands\ShowCommand.cs" />
+    <Compile Include="DBManager\DBCommands\TrackCommand.cs" />
+    <Compile Include="DBManager\DBManagerController.cs" />
+    <Compile Include="DBManager\DBMCommandLine.cs" />
     <Compile Include="Devices\CDJ.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\Mixer.cs" />
