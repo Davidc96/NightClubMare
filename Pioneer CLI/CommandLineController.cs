@@ -17,7 +17,6 @@ namespace Pioneer_CLI
         private ProLinkController plc;
         private IDevice selectedCDJ;
         private Dictionary<string, ICommand> commands;
-        private RekordboxDB rekordboxDB;
         private MetadataDB metadata;
         private NFSController nfs;
 
