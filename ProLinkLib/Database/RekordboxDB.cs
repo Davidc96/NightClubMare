@@ -80,6 +80,7 @@ namespace ProLinkLib.Database
                                     track.TrackPath = ((DeviceSqlLongUtf16le)track_info.FilePath.Body).Text;
                                 }
 
+                                track.TrackPath = track.TrackPath.Replace("-1", ""); // TO BE OBSERVED
                                 track.TrackChannelID = TrackChannelID;
                                 track.TrackPhysicallyLocated = TrackPhysicallyLocated;
 

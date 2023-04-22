@@ -15,13 +15,25 @@ namespace ProLinkLib
         private TrackMetadata trackMetadata;
         private Database.RekordboxDB rekordboxDB;
 
+        private int device_metadata_location;
+
         public MetadataDB() 
         {
             tracks = new List<Track>();
             artists = new Dictionary<uint, Artist>();
+            device_metadata_location = 0;
 
             trackMetadata = new TrackMetadata();
             rekordboxDB = new Database.RekordboxDB();
+        }
+        public int GetDeviceMetadataLocation()
+        {
+            return device_metadata_location;
+        }
+
+        public void SetDeviceMetadataLocation(int location)
+        {
+            device_metadata_location = location;
         }
 
         public void GetElementsFromRekordboxDB(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated)
@@ -102,6 +114,11 @@ namespace ProLinkLib
         public List<Track> GetTracks()
         {
             return tracks;
+        }
+
+        public List<Artist> GetArtists()
+        {
+            return artists.Values.ToList();
         }
     } 
 }

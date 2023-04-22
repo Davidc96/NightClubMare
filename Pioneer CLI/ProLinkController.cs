@@ -42,6 +42,19 @@ namespace Pioneer_CLI
             return CDJList;
         }
 
+        public IDevice GetDeviceById(int id)
+        {
+            try
+            {
+                return CDJList[id];
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+
+        }
+
         public VirtualCDJ GetVirtualCDJ()
         {
             return virtualCDJ;
