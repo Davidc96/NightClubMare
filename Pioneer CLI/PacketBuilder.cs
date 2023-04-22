@@ -5,6 +5,7 @@ using ProLinkLib.Commands.StatusCommands;
 using ProLinkLib.Commands.SyncCommands;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,10 @@ namespace Pioneer_CLI
                 var cmd = commands[packet_name];
                 var bytes = PACKET_HEADER.Concat(commands[packet_name].ToBytes()).ToArray();
                 string json = JsonConvert.SerializeObject(cmd);
+                if(!Directory.Exists("exported_packets"))
+                {
+                    Directory.CreateDirectory("exported_packets");
+                }
                 System.IO.File.WriteAllText("exported_packets\\"+ packet_name + "_template.json", json);
                 System.IO.File.WriteAllBytes("exported_packets\\" + packet_name + "_binary.bin", bytes);
 
