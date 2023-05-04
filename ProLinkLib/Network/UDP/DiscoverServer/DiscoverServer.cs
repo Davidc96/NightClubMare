@@ -12,6 +12,7 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
     public class DiscoverServer
     {
         private UdpClient udpClient;
+        private UdpClient udpClient_ow;
         private PacketBuilder packetBuilder;
         private DiscoverPacketParser packetParser;
         private int PORT = 50000;
@@ -22,6 +23,7 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
         public DiscoverServer()
         {
             udpClient = new UdpClient();
+            udpClient_ow = new UdpClient();
             packetBuilder = new PacketBuilder();
             packetParser = new DiscoverPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -78,12 +80,14 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
         public void SendPacketToClient(string dstIp, ICommand packet)
         {
             var packet_b = packetBuilder.BuildPacket(packet);
-            udpClient.Send(packet_b, packet_b.Length, dstIp, PORT);
+            udpClient_ow.Connect(dstIp, PORT);
+            udpClient_ow.Send(packet_b, packet_b.Length);
         }
 
         public void SendPacketToClient(string dstIp, byte[] packet)
         {
-            udpClient.Send(packet, packet.Length, dstIp, PORT);
+            udpClient_ow.Connect(dstIp, PORT);
+            udpClient_ow.Send(packet, packet.Length);
         }
 
     }

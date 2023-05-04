@@ -80,12 +80,14 @@ namespace ProLinkLib.Network.UDP.StatusServer
         public void SendPacketToClient(string dstIp, ICommand packet)
         {
             var packet_b = packetBuilder.BuildPacket(packet);
-            udpClient.Send(packet_b, packet_b.Length, dstIp, PORT);
+            udpClient_ow.Connect(dstIp, PORT);
+            udpClient_ow.Send(packet_b, packet_b.Length);
         }
 
         public void SendPacketToClient(string dstIp, byte[] packet)
         {
-            udpClient.Send(packet, packet.Length, dstIp, PORT);
+            udpClient_ow.Connect(dstIp, PORT);
+            udpClient_ow.Send(packet, packet.Length);
         }
 
         public void SendPacketToRekordbox(string dstIp, ICommand packet)

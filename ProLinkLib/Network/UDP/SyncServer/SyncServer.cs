@@ -12,6 +12,7 @@ namespace ProLinkLib.Network.UDP.SyncServer
     public class SyncServer
     {
         private UdpClient udpClient;
+        private UdpClient udpConnect;
         private PacketBuilder packetBuilder;
         private SyncPacketParser packetParser;
         private int PORT = 50001;
@@ -22,6 +23,7 @@ namespace ProLinkLib.Network.UDP.SyncServer
         public SyncServer()
         {
             udpClient = new UdpClient();
+            udpConnect = new UdpClient();
             packetBuilder = new PacketBuilder();
             packetParser = new SyncPacketParser();
             OnRecvPacketFunc = OnRecvPacket;
@@ -77,12 +79,14 @@ namespace ProLinkLib.Network.UDP.SyncServer
         public void SendPacketToClient(string dstIp, ICommand packet)
         {
             var packet_b = packetBuilder.BuildPacket(packet);
-            udpClient.Send(packet_b, packet_b.Length, dstIp, PORT);
+            udpConnect.Connect(new IPEndPoint(IPAddress.Parse(dstIp), PORT));
+            udpConnect.Send(packet_b, packet_b.Length);
         }
 
         public void SendPacketToClient(string dstIp, byte[] packet)
         {
-            udpClient.Send(packet, packet.Length, dstIp, PORT);
+            udpConnect.Connect(new IPEndPoint(IPAddress.Parse(dstIp), PORT));
+            udpConnect.Send(packet, packet.Length);
         }
     }
 }
