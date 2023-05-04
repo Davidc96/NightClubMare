@@ -32,7 +32,7 @@ namespace Pioneer_CLI.Commands
                     rb_command.DeviceType = 0x04; // Laptop
 
                     Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, "User sent AUTH_COMMAND to Rekordbox");
-                    plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(devices[id].GetIPAddress(), rb_command);
+                    plc.GetVirtualCDJ().GetStatusServer().SendPacketToRekordbox(devices[id].GetIPAddress(), rb_command);
 
                     Logger.WriteMessage(Encoding.UTF8.GetBytes("AUTH MODE PAYLOAD"), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.STRING);
                     Logger.WriteMessage(PacketBuilder.PACKET_HEADER.Concat(rb_command.ToBytes()).ToArray(), Logger.LOG_TYPE.INFO, Logger.PRINT_MODE.HEX);
