@@ -105,7 +105,18 @@ namespace ProLinkLib
                 return null;
             }
         }
+        public Track GetTrackByRBId(uint rb_id)
+        {
+            foreach (var track in tracks)
+            {
+                if (track.RekordboxID == rb_id)
+                {
+                    return track;
+                }
+            }
 
+            return null;
+        }
         public Artist GetArtistById(uint id)
         {
             return artists[id];
