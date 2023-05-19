@@ -47,7 +47,7 @@ namespace ProLinkLib.Network.UDP.DiscoverServer
             {
                 //Console.WriteLine("[Discover Server] Unknown packet " + packet_id);
                 Logger.WriteLogFile("Discover_Server - logs", Logger.LOG_TYPE.ERROR, $"Exception error with packet {packet_id:X}" + 
-                                     "\nException message: " + e.Message);
+                                     "\nException message: " + e.Message + "Exception Class" + e.GetType().ToString());
                 File.WriteAllBytes($"logs\\failed_dumped_packets\\discover_server - packet - 0x{packet_id:X} - " + DateTime.Now.ToString().Replace("/","").Replace(":","-") + ".bin", packet);
             }
         }
