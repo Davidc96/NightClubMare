@@ -41,7 +41,7 @@ namespace Pioneer_CLI.Commands
             switch(main_arg)
             {
                 case "import":
-                    ImportPacket(plc, plc.GetVirtualCDJ(), param1);
+                    ImportPacket(plc, plc.GetVirtualCDJ(), pb, param1);
                     break;
                 case "export":
                     pb.ExportPacket(param1);
@@ -55,7 +55,7 @@ namespace Pioneer_CLI.Commands
             }
         }
 
-        private void ImportPacket(ProLinkController plc, VirtualCDJ vcdj, string path)
+        private void ImportPacket(ProLinkController plc, VirtualCDJ vcdj, PacketBuilder pb, string path)
         {
             FileStream f = new FileStream(path.Replace("\"", ""), FileMode.Open);
             BinaryReader bin = new BinaryReader(f);
@@ -67,6 +67,17 @@ namespace Pioneer_CLI.Commands
             Console.WriteLine("--------------------");
             Console.WriteLine(Hex.Dump(file_data));
             Console.WriteLine("");
+
+            Console.WriteLine("Would you like to send it or view it? Default: send: ");
+            var option = Console.ReadLine().ToLower();
+            
+            if(option.Contains("view"))
+            {
+                pb.ListAllCommands();
+                Console.WriteLine("Select which kind of packet is: ");
+                var packet_type = Console.ReadLine();
+                pb.ImportPacket(packet_type, file_data);
+            }
 
             Console.Write("Would you like to broadcast the packet or send it to specific device? [broadcast|client|exit] Default: broadcast: ");
             var send_method = Console.ReadLine();

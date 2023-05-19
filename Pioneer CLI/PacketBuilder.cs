@@ -47,7 +47,13 @@ namespace Pioneer_CLI
             commands.Add("channels_onair", new ChannelsOnAirCommand());
             commands.Add("sync_mode", new SyncModeCommand());
             commands.Add("beat_packet", new BeatCommand());
-        
+
+            // Create the exported packets directory
+            if (!Directory.Exists("exported_packets"))
+            {
+                Directory.CreateDirectory("exported_packets");
+            }
+
         }
 
         public void ExportPacket(string packet_name)
@@ -56,11 +62,8 @@ namespace Pioneer_CLI
             {
                 var cmd = commands[packet_name];
                 var bytes = PACKET_HEADER.Concat(commands[packet_name].ToBytes()).ToArray();
-                string json = JsonConvert.SerializeObject(cmd);
-                if(!Directory.Exists("exported_packets"))
-                {
-                    Directory.CreateDirectory("exported_packets");
-                }
+                string json = JsonConvert.SerializeObject(cmd, Formatting.Indented);
+                
                 System.IO.File.WriteAllText("exported_packets\\"+ packet_name + "_template.json", json);
                 System.IO.File.WriteAllBytes("exported_packets\\" + packet_name + "_binary.bin", bytes);
 
@@ -81,6 +84,21 @@ namespace Pioneer_CLI
             foreach(string cmd in commands.Keys)
             {
                 Console.WriteLine(cmd);
+            }
+        }
+
+        public void ImportPacket(string packet_type, byte[] file_data)
+        {
+            if(commands.ContainsKey(packet_type))
+            {
+                var cmd = commands[packet_type];
+                cmd.FromBytes(file_data);
+                string json = JsonConvert.SerializeObject(cmd, Formatting.Indented);
+                System.IO.File.WriteAllText("exported_packets\\" + packet_type + "_imported.json", json);
+            }
+            else
+            {
+                Console.WriteLine("Unknown packet: " + packet_type);
             }
         }
     }
