@@ -1,4 +1,4 @@
-# Pioneer-CLI
+# NightClubMare
 CLI to control Pioneer CDJ devices
 
 # Description
