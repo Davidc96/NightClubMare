@@ -27,7 +27,16 @@ F6 = ProtoField.uint8("ProLink.F6", "F6", base.HEX)
 DstChannelID = ProtoField.uint8("ProLink.DstChannelID", "DstChannelID", base.HEX)
 SyncMode = ProtoField.uint8("ProLink.SyncMode", "SyncMode", base.HEX)
 
-pioneer_sync.fields = {header, ID, ToMixer, DeviceName, Unknown, SubCategory, ChannelID, Length, C1, C2, C3, C4, F1, F2, F3, F4, F5, F6 }
+-- Master Tempo takeover
+NewMTChannelID = ProtoField.uint8("ProLink.NewMTChannelID", "NewMTChannelID", base.HEX)
+
+-- Absolute Position --
+TrackLength = ProtoField.uint32("ProLink.TrackLength", "TrackLength", base.DEC)
+PlayHead = ProtoField.uint32("ProLink.CurrentPosition", "Current Position", base.DEC)
+Pitch = ProtoField.float("ProLink.Pitch", "Pitch")
+BPM = ProtoField.float("ProLink.BPM", "BPM")
+
+pioneer_sync.fields = {header, ID, ToMixer, DeviceName, Unknown, SubCategory, ChannelID, Length, C1, C2, C3, C4, F1, F2, F3, F4, F5, F6, DstChannelID, SyncMode, NewMTChannelID, TrackLength,  PlayHead, Pitch, BPM}
 
 function pioneer_sync.dissector(buffer, pinfo, tree)
     ---- Function to dissect the buffer ---
@@ -76,4 +85,31 @@ function pioneer_sync.dissector(buffer, pinfo, tree)
     if packet_type == 0x2A then
         subtree:set_text("Pro Link Sync Control")
 
+        subtree:add(DstChannelID, base(0x27, 1))
+        subtree:add(SyncMode, base(0x2B, 1))
+    end
+
+    -- Master Tempo Takeover Request --
+    if packet_type == 0x26 then
+        subtree:set_text("Pro Link Master Tempo Takeover Request")
+
+        subtree:add(NewMTChannelID, buffer(0x27, 1))
+    end
+
+    -- Master tempo Takeover Response --
+    if packet_type == 0x27 then
+        subtree:set_text("Pro Link Master Tempo Takeover Response")
+
+        subtree:add(DstChannelID, base(0x27, 1))
+    end
+
+    -- Absolute Position --
+    if packet_type == 0x0B then
+        subtree:set_text("Pro Link Absolute Position")
+
+        subtree:add(TrackLength, base(0x24, 4))
+        subtree:add(PlayHead, base(0x28, 4))
+        subtree:add(Pitch, base(0x2c, 4):uint() / 10.0)
+        subtree:add(BPM, base(0x38, 4):uint() / 10.0)
+    end
 end
