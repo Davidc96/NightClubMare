@@ -15,16 +15,16 @@ Payload = ProtoField.uint8("ProLinkDI.Payload", "Payload", base.HEX)
 
 -- First Stage --
 PacketCounter = ProtoField.uint8("ProLink.PacketCounter", "PacketCounter", base.HEX)
-DeviceType = ProtoField.uint8("ProLink.DeviceType", "DeviceType", base.HEX)
-DeviceTypeStr = ProtoField.string("ProLink.DeviceTypeStr", "DeviceTypeStr", base.ASCII)
+DeviceType = ProtoField.string("ProLink.DeviceType", "DeviceType", base.ASCII)
 MacAddress = ProtoField.ether("ProLink.MACAddress", "MACAddress")
 
 -- Second Stage --
 IPAddress = ProtoField.ipv4("ProLink.IP", "IP")
-ChannelID = ProtoField.uint8("ProLink.ChannelID", "ChannelID")
+ChannelID = ProtoField.uint8("ProLink.ChannelID", "ChannelID", base.HEX)
 AutoAssign = ProtoField.uint8("ProLink.AutoAssigned", "AutoAssigned")
 
-pioneer_discover.fields = {header, ID, ToMixer, DeviceName, Unknown, SubCategory, Length, Payload, PacketCounter, DeviceType, DeviceTypeStr, MacAddress, IPAddress, ChannelID, AutoAssign}
+pioneer_discover.fields = {header, ID, ToMixer, DeviceName, Unknown, SubCategory, Length, Payload, PacketCounter, DeviceType, 
+    MacAddress, IPAddress, ChannelID, AutoAssign}
 
 function pioneer_discover.dissector(buffer, pinfo, tree)
     ---- Function to dissect the buffer ---
@@ -33,6 +33,7 @@ function pioneer_discover.dissector(buffer, pinfo, tree)
     pinfo.cols.protocol = pioneer_discover.name
     ---- Add the info using subtree
     local subtree = tree:add(pioneer_discover, buffer(), "Pro Link Discover Protocol")
+    
     subtree:add(header, buffer(0, 0xA)) -- buffer(start_offset, number_bytes)
     subtree:add(ID, buffer(0xA, 1))
     subtree:add(ToMixer, buffer(0xB, 1))
@@ -42,91 +43,97 @@ function pioneer_discover.dissector(buffer, pinfo, tree)
     subtree:add(Length, buffer(0x22, 2))
 
     local packet_type = buffer(0xA, 1):uint()
+    local payload = subtree:add(pioneer_discover, buffer(), "Pro Link Packet Payload")
     -- Device Init --
     if packet_type == 0x0A then
         subtree:set_text("Pro Link Discover Device Init")
-        subtree:add(Payload, buffer(0x24, 1))
+        pinfo.cols.protocol = "PRO_LINK_DEVICE_INIT"
+
+        payload:add(Payload, buffer(0x24, 1))
     end
 
     -- First Attempt --
     if packet_type == 0x00 then
         subtree:set_text("Pro Link Discover First Stage")
-        
-        subtree:add(PacketCounter, buffer(0x24, 1))
-        subtree:add(DeviceType, buffer(0x25, 1))
-        subtree:add(DeviceTypeStr, get_devicetype(buffer(0x25, 1):uint())) -- TODO: Add into the Field: DeviceType (0xNumber)
-        subtree:add(MacAddress, buffer(0x26, 6))
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_FIRST_STAGE"
+
+        payload:add(PacketCounter, buffer(0x24, 1))
+        payload:add(DeviceType, buffer(0x25, 1), get_devicetype(buffer(0x25, 1):uint()))
+        payload:add(MacAddress, buffer(0x26, 6))
     end
 
     -- Second Attempt --
     if packet_type == 0x02 then
         subtree:set_text("Pro Link Discover Second Stage")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_SECOND_STAGE"
 
-        subtree:add(IPAddress, buffer(0x24, 4))
-        subtree:add(MacAddress, buffer(0x28, 6))
-        subtree:add(ChannelID, buffer(0x2E, 1))
-        subtree:add(PacketCounter, buffer(0x2F, 1))
-        subtree:add(DeviceType, buffer(0x30, 1))
-        subtree:add(DeviceTypeStr, get_devicetype(buffer(0x30, 1):uint()))
-        subtree:add(AutoAssign, buffer(0x31, 1))
+        payload:add(IPAddress, buffer(0x24, 4))
+        payload:add(MacAddress, buffer(0x28, 6))
+        payload:add(ChannelID, buffer(0x2E, 1))
+        payload:add(PacketCounter, buffer(0x2F, 1))
+        payload:add(DeviceType, buffer(0x30, 1), get_devicetype(buffer(0x30, 1):uint()))
+        payload:add(AutoAssign, buffer(0x31, 1))
     end
 
     -- Final Stage --
     if packet_type == 0x04 then
         subtree:set_text("Pro Link Discover Final Stage")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_FINAL_STAGE"
 
-        subtree:add(ChannelID, buffer(0x24, 1))
-        subtree:add(PacketCounter, buffer(0x25, 1))
+        payload:add(ChannelID, buffer(0x24, 1))
+        payload:add(PacketCounter, buffer(0x25, 1))
     end
 
     -- Keep Alive Packet --
     if packet_type == 0x06 then
         subtree:set_text("Pro Link Discover Keep Alive")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_KEEP_ALIVE"
 
-        subtree:add(ChannelID, buffer(0x24, 1))
-        subtree:add(DeviceType, buffer(0x25, 1))
-        subtree:add(DeviceTypeStr, get_devicetype(buffer(0x25, 1):uint()))
-        subtree:add(MacAddress, buffer(0x26, 6))
-        subtree:add(IPAddress, buffer(0x27, 4))
+        payload:add(ChannelID, buffer(0x24, 1))
+        payload:add(DeviceType, buffer(0x25, 1), get_devicetype(buffer(0x25, 1):uint()))
+        payload:add(MacAddress, buffer(0x26, 6))
+        payload:add(IPAddress, buffer(0x2C, 4))
     end
 
     -- Mixer Device Number Assigment Intention --
     if packet_type == 0x01 then
         subtree:set_text("Pro Link Mixer Device Number Assigment")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_MIXER_DEV_NUMB_ASSIGNMENT"
 
-        subtree:add(IPAddress, buffer(0x24, 4))
-        subtree:add(MACAddress, buffer(0X28, 6))
+        payload:add(IPAddress, buffer(0x24, 4))
+        payload:add(MACAddress, buffer(0X28, 6))
     end
 
     -- CDJ Device Number Assigment --
     if packet_type == 0x03 then
         subtree:set_text("Pro Link CDJ Device Number Assigment")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_CDJ_DEV_NUMB_ASSIGMENT"
 
-        subtree:add(ChannelID, buffer(0x24, 1))
-        subtree:add(PacketCounter, buffer(0x25, 1))
+        payload:add(ChannelID, buffer(0x24, 1))
+        payload:add(PacketCounter, buffer(0x25, 1))
     end
 
     -- CDJ Device Number Assigment Finished --
     if packet_type == 0x05 then
         subtree:set_text("Pro Link CDJ Device Number Assigment Finished")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_CDJ_DEV_NUMB_ASSIGMENT_FINISHED"
 
-        subtree:add(ChannelID, buffer(0x24, 1))
+        payload:add(ChannelID, buffer(0x24, 1))
     end
 
     -- Channel Conflicts --
     if packet_type == 0x08 then
         subtree:set_text("Pro Link Channel Conflict")
+        pinfo.cols.protocol = "PRO_LINK_DISCOVER_CHANNEL_CONFLICT"
 
-        subtree:add(ChannelID, buffer(0x24, 1))
-        subtree:add(IPAddress, buffer(0x25, 4))
+        payload:add(ChannelID, buffer(0x24, 1))
+        payload:add(IPAddress, buffer(0x25, 4))
     end
 end
 
-udp_protocol = DissectorTable.get("udp.port"):add(50000, pioneer_discover)
-
 function get_devicetype(device_type)
     if device_type == 0x01 then
-        return "CDJ (0x00)"
+        return "CDJ (0x01)"
     end
 
     if device_type == 0x02 then
@@ -143,3 +150,5 @@ end
 function get_autoassigned(is_autoassigned)
     
 end
+
+udp_protocol = DissectorTable.get("udp.port"):add(50000, pioneer_discover)
