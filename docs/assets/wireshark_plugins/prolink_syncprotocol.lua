@@ -156,8 +156,8 @@ function pioneer_sync.dissector(buffer, pinfo, tree)
         local pitch = ((byte_2 * 10000 + byte_3 * 100 + byte_4) - 10000) / 10000
         local bpm = (bpm_1 * 256 + bpm_2) / 100.0
 
-        payload:add(Pitch, base(0x54, 4), pitch)
-        payload:add(BPM, base(0x5A, 2), bpm)
+        payload:add(Pitch, buffer(0x54, 4), pitch)
+        payload:add(BPM, buffer(0x5A, 2), bpm)
         payload:add(BeatCounter, buffer(0x5C, 1))
     end
 end
