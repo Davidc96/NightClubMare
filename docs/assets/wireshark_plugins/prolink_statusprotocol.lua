@@ -83,17 +83,32 @@ BeatCounter = ProtoField.uint8("ProLink.BeatCounter", "Beat Counter", base.HEX)
 ActivityFlag = ProtoField.string("ProLink.ActivityFlag", "Activity Flag", base.ASCII)
 TrackChannelID = ProtoField.uint8("ProLink.TrackChannelID", "Track ChannelID", base.HEX)
 TrackSlotLocation = ProtoField.string("ProLink.TrackSlotLocation", "Track Slot Location", base.ASCII)
-TrackType = ProtoField.string("ProLink.TrackType", "Track Type", base.ASCII)
 UnknownStatus = ProtoField.uint8("ProLink.UnknownStatus", "Unknown Status", base.HEX)
 UnknownBytes4 = ProtoField.bytes("ProLink.UnknownBytes4", "Unknown Bytes 4", base.SPACE)
 NumbTracksCD = ProtoField.uint16("ProLink.NumbTracksCD", "Number of Tracks in a CD", base.DEC)
-UnknownBytes5 = ProtoField.bytes("ProLink.UnknownBytes5", "Unknown Bytes 5", base.HEX)
-UsbActivity = ProtoField.uint8("ProLink.USBActivity", "USB Activity", base.HEX)
+UnknownBytes5 = ProtoField.bytes("ProLink.UnknownBytes5", "Unknown Bytes 5", base.SPACE)
+USBActivity = ProtoField.uint8("ProLink.USBActivity", "USB Activity", base.HEX)
 SDActivity = ProtoField.uint8("ProLink.SDActivity", "SD Activity", base.HEX)
 UnknownBytes6 = ProtoField.bytes("ProLink.UnknownBytes6", "Unknown Bytes 6", base.SPACE)
-UsbStatus = ProtoField.string("ProLink.USBStatus", "USB Status", base.ASCII)
+USBStatus = ProtoField.string("ProLink.USBStatus", "USB Status", base.ASCII)
 UnknownBytes7 = ProtoField.bytes("ProLink.UnknownBytes7", "Unknown Bytes 7", base.SPACE)
 SDStatus = ProtoField.string("ProLink.SDStatus", "SD Status", base.ASCII)
+UnknownByte2 = ProtoField.uint8("ProLink.UnknownByte2", "Unknown Byte 2", base.HEX)
+LinkAvailable = ProtoField.uint8("ProLink.LinkAvailable", "Link Available", base.HEX)
+UnknownBytes8 = ProtoField.bytes("ProLink.UnknownBytes8", "Unknown Bytes 8", base.SPACE)
+PlayModeStatus = ProtoField.string("ProLink.PlayModeStatus", "Play Mode Status", base.ASCII)
+FirmwareVersion = ProtoField.string("ProLink.FirmwareVersion", "Firmware Version", base.ASCII)
+UnknownBytes9 = ProtoField.bytes("ProLink.UnknownBytes9", "Unknown Bytes 9", base.SPACE)
+CDJSyncMode = ProtoField.uint32("ProLink.CDJSyncMode", "CDJ Sync Mode", base.HEX)
+UnknownByte3 = ProtoField.uint8("ProLink.UnknownByte3", "Unknown Byte 3", base.HEX)
+UnknownByte4 = ProtoField.uint8("ProLink.UnknownByte4", "Unknown Byte 4", base.HEX)
+TrackPlayerStatus = ProtoField.string("ProLink.TrackPlayerStatus", "Track Player Status", base.ASCII)
+Pitch1 = ProtoField.bytes("ProLink.Pitch1", "Pitch1", base.SPACE)
+MasterBPMAcceptedValue = ProtoField.uint16("ProLink.MasterBPMAcceptedValue", "Master BPM Accepted Value", base.HEX)
+UnknownBytes10 = ProtoField.bytes("ProLink.UnknownBytes10", "Unknown Bytes 10", base.SPACE)
+Pitch2 = ProtoField.bytes("ProLink.Pitch2", "Pitch2", base.SPACE)
+UnknownBytes11 = ProtoField.uint8("ProLink.UnkownBytes11", "Unknown Bytes 11", base.HEX)
+
 
 
 pioneer_status.fields = {header, ID, DeviceName, Unknown, SubCategory, ChannelID, 
@@ -103,8 +118,9 @@ pioneer_status.fields = {header, ID, DeviceName, Unknown, SubCategory, ChannelID
     Language, UnknownByte, JogRingBrightness, JogRingIndicator, SlipFlashing, UnknownBytes2, PlayerDiscSlotBrightness, LockFeature,
     AutoPlayMode, QuantizeBeatValue, HotCueAutoLoad, HotCueColor, NeedleLockFeature, TimeMode, JogMode, AutoCue, 
     MasterTempo, RangeTempo, PhaseMeter, UnknownBytes3, VinylSpeedAdjust, JogDisplayMode, JogWheelLCDBright, StatusFlag_Play, StatusFlag_Master, StatusFlag_Sync,
-    StatusFlag_OnAir, StatusFlag_BPM, Pitch, BPM, MasterHandoff, BeatCounter, ActivityFlag, TrackChannelID, TrackSlotLocation, TrackType, UnknownStatus, UnknownBytes4,
-
+    StatusFlag_OnAir, StatusFlag_BPM, Pitch, BPM, MasterHandoff, BeatCounter, ActivityFlag, TrackChannelID, TrackSlotLocation, UnknownStatus, UnknownBytes4,
+    NumbTracksCD, UnknownBytes5, USBActivity, SDActivity, UnknownBytes6, USBStatus, UnknownBytes7, SDStatus, UnknownByte2, LinkAvailable, UnknownBytes8,
+    PlayModeStatus, FirmwareVersion, UnknownBytes9, CDJSyncMode, UnknownByte3
 
 }
 
@@ -266,12 +282,27 @@ function pioneer_status.dissector(buffer, pinfo, tree)
         payload:add(UnknownBytes4, buffer(0x38, 14))
         payload:add(NumbTracksCD, buffer(0x46, 2))
         payload:add(UnknownBytes5, buffer(0x48, 34))
-        payload:add(USBActivity, buffer(0x6A, 1), get_usbstatus(buffer(0x6A, 1):uint()))
-        payload:add(SDActivity, buffer(0x6B, 1), get_sdstatus(buffer(0x6B, 1):uint()))
+        payload:add(USBActivity, buffer(0x6A, 1))
+        payload:add(SDActivity, buffer(0x6B, 1))
         payload:add(UnknownBytes6, buffer(0x6C, 3))
-        payload:add(USBStatus, buffer(0x))
+        payload:add(USBStatus, buffer(0x6F, 1), get_usbstatus(buffer(0x6F, 1):uint()))
+        payload:add(UnknownBytes7, buffer(0x70, 3))
+        payload:add(SDStatus, buffer(0x73, 1), get_sdstatus(buffer(0x73, 1):uint()))
+        payload:add(UnknownByte2, buffer(0x74, 1))
+        payload:add(LinkAvailable, buffer(0x75, 1))
+        payload:add(UnknownBytes8, buffer(0x76, 5))
+        payload:add(PlayModeStatus, buffer(0x7B, 1), get_playmodestatus(buffer(0x7B, 1):uint()))
+        payload:add(FirmwareVersion, buffer(0x7C, 4))
+        payload:add(UnknownBytes9, buffer(0x80, 4))
+        payload:add(CDJSyncMode, buffer(0x84, 4))
+        payload:add(UnknownByte3, buffer(0x88, 1))
 
-
+        -- Status FLAG --
+        payload:add(StatusFlag_Play, buffer(0x89, 1), buffer(0x89, 1):uint())
+        payload:add(StatusFlag_Master, buffer(0x89, 1), buffer(0x89, 1):uint())
+        payload:add(StatusFlag_Sync, buffer(0x89, 1), buffer(0x89, 1):uint())
+        payload:add(StatusFlag_OnAir, buffer(0x89, 1), buffer(0x89, 1):uint())
+        payload:add(StatusFlag_BPM, buffer(0x89, 1), buffer(0x89, 1):uint())
     end
 
 end
@@ -665,5 +696,67 @@ function get_sdstatus(sd_status)
 
     return "Unknown status"
 end
+
+function get_playmodestatus(playmode)
+    if playmode == 0x00 then
+        return "No track Loaded (0x00)"
+    end
+
+    if playmode == 0x02 then
+        return "Track is loading (0x02)"
+    end
+
+    if playmode == 0x03 then
+        return "Playing normal (0x03)"
+    end
+
+    if playmode == 0x04 then
+        return "Playing loop (0x04)"
+    end
+
+    if playmode == 0x05 then
+        return "Paused (0x05)"
+    end
+
+    if playmode == 0x06 then
+        return "Paused in cue point (0x06)"
+    end
+
+    if playmode == 0x07 then
+        return "Playing while pressed Cue Point (0x07)"
+    end
+
+    if playmode == 0x08 then
+        return "Scratch in progress (0x08)"
+    end
+
+    if playmode == 0x09 then
+        return "Searching in forwards o backwards"
+    end
+
+    if playmode == 0x0E then
+        return "CD Spun down (0x0E)"
+    end
+
+    if playmode == 0x11 then
+        return "End of track (0x11)"
+    end
+
+    return "Unknown Value"
+end
+
+function get_trackplayerstatus(status)
+    if status == 0x7a then
+        return "Playing (0x7A)"
+    end
+
+    if status == 0x7e then
+        return "Stopped (0x7E)"
+    end
+
+    return "Unknown"
+end
+
+
 
 udp_protocol = DissectorTable.get("udp.port"):add(50002, pioneer_status)
