@@ -77,7 +77,7 @@ StatusFlag_BPM = ProtoField.uint8("ProLink.StatusFlagBPM", "Status Flag BPM", ba
 Pitch = ProtoField.float("ProLink.Pitch", "Pitch")
 BPM = ProtoField.float("ProLink.BPM", "BPM", base.DEC)
 MasterHandoff = ProtoField.uint8("ProLink.MasterHandoff", "Master Handoff", base.HEX)
-BeatCounter = ProtoField.uint8("ProLink.BeatCounter", "Beat Counter", base.HEX)
+BeatCycle = ProtoField.uint8("ProLink.BeatCycle", "Beat Cycle", base.HEX)
 
 -- CDJ Status --
 ActivityFlag = ProtoField.string("ProLink.ActivityFlag", "Activity Flag", base.ASCII)
@@ -105,9 +105,29 @@ UnknownByte4 = ProtoField.uint8("ProLink.UnknownByte4", "Unknown Byte 4", base.H
 TrackPlayerStatus = ProtoField.string("ProLink.TrackPlayerStatus", "Track Player Status", base.ASCII)
 Pitch1 = ProtoField.bytes("ProLink.Pitch1", "Pitch1", base.SPACE)
 MasterBPMAcceptedValue = ProtoField.uint16("ProLink.MasterBPMAcceptedValue", "Master BPM Accepted Value", base.HEX)
+-- BPM VALUE
 UnknownBytes10 = ProtoField.bytes("ProLink.UnknownBytes10", "Unknown Bytes 10", base.SPACE)
 Pitch2 = ProtoField.bytes("ProLink.Pitch2", "Pitch2", base.SPACE)
-UnknownBytes11 = ProtoField.uint8("ProLink.UnkownBytes11", "Unknown Bytes 11", base.HEX)
+UnknownByte5 = ProtoField.uint8("ProLink.UnkownByte5", "Unknown Byte 5", base.HEX)
+PlayModeInfo = ProtoField.string("ProLink.PlayModeInfo", "Play Mode Info", base.ASCII)
+MasterMeaning = ProtoField.uint8("ProLink.MasterMeaning", "Master Meaningful", base.HEX)
+-- Master Handoff
+BeatCounter = ProtoField.uint32("ProLink.BeatCounter", "Beat Counter", base.DEC)
+-- Beat Cycle
+UnknownBytes11 = ProtoField.bytes("ProLink.UnknownBytes11", "Unknown Bytes 11", base.SPACE)
+UnknownByte6 = ProtoField.uint8("ProLink.UnknownByte6", "Unknown Byte 6", base.HEX)
+MediaPresence = ProtoField.string("ProLink.MediaPresence", "Media Presence", base.ASCII)
+USBError = ProtoField.uint8("ProLink.USBError", "USB Unsafe Ejected", base.HEX)
+SDError = ProtoField.uint8("ProLink.SDError", "SD Unsafe Ejected", base.HEX)
+EmergencyLoop = ProtoField.uint8("ProLink.EmergencyLoop", "Emergency Loop", base.HEX)
+UnknownBytes12 = ProtoField.bytes("ProLink.UnknownBytes12", "Unknown Bytes 12", base.SPACE)
+Pitch3 = ProtoField.bytes("ProLink.Pitch3", "Pitch3", base.SPACE)
+Pitch4 = ProtoField.bytes("ProLink.Pitch4", "Pitch4", base.SPACE)
+PacketCounter = ProtoField.uint32("ProLink.PacketCounter", "Packet Counter", base.DEC)
+CDJType = ProtoField.string("ProLink.CDJType", "CDJ Type", base.ASCII)
+TouchAudio = ProtoField.uint8("ProLink.TouchAudio", "Touch Audio Support", base.HEX)
+-- TODO: IMPLEMENT CDJ3000
+
 
 
 
@@ -118,9 +138,11 @@ pioneer_status.fields = {header, ID, DeviceName, Unknown, SubCategory, ChannelID
     Language, UnknownByte, JogRingBrightness, JogRingIndicator, SlipFlashing, UnknownBytes2, PlayerDiscSlotBrightness, LockFeature,
     AutoPlayMode, QuantizeBeatValue, HotCueAutoLoad, HotCueColor, NeedleLockFeature, TimeMode, JogMode, AutoCue, 
     MasterTempo, RangeTempo, PhaseMeter, UnknownBytes3, VinylSpeedAdjust, JogDisplayMode, JogWheelLCDBright, StatusFlag_Play, StatusFlag_Master, StatusFlag_Sync,
-    StatusFlag_OnAir, StatusFlag_BPM, Pitch, BPM, MasterHandoff, BeatCounter, ActivityFlag, TrackChannelID, TrackSlotLocation, UnknownStatus, UnknownBytes4,
+    StatusFlag_OnAir, StatusFlag_BPM, Pitch, BPM, MasterHandoff, BeatCycle, ActivityFlag, TrackChannelID, TrackSlotLocation, UnknownStatus, UnknownBytes4,
     NumbTracksCD, UnknownBytes5, USBActivity, SDActivity, UnknownBytes6, USBStatus, UnknownBytes7, SDStatus, UnknownByte2, LinkAvailable, UnknownBytes8,
-    PlayModeStatus, FirmwareVersion, UnknownBytes9, CDJSyncMode, UnknownByte3
+    PlayModeStatus, FirmwareVersion, UnknownBytes9, CDJSyncMode, UnknownByte3, UnknownByte4, TrackPlayerStatus, Pitch1, MasterBPMAcceptedValue,
+    UnknownBytes10, Pitch2, UnknownByte5, PlayModeInfo, MasterMeaning, BeatCounter, UnknownBytes11, UnknownByte6, MediaPresence, USBError, SDError,
+    EmergencyLoop, UnknownBytes12, Pitch3, Pitch4, PacketCounter, CDJType, TouchAudio
 
 }
 
@@ -222,7 +244,7 @@ function pioneer_status.dissector(buffer, pinfo, tree)
         payload:add(UnknownBytes2, buffer(0x30, 6))
         
         payload:add(MasterHandoff, buffer(0x36, 1))
-        payload:add(BeatCounter, buffer(0x37, 1))
+        payload:add(BeatCycle, buffer(0x37, 1))
 
     end
 
