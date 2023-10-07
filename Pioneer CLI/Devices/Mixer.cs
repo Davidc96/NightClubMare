@@ -85,6 +85,7 @@ namespace Pioneer_CLI.Devices
             device_info += "|        ---|---         |\n";
             device_info += " ------------------------ \n";
             device_info += "      BPM: " + bpm + "    \n";
+            
             return device_info;
         }
 

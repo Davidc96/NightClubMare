@@ -18,8 +18,11 @@ namespace ProLinkLib.Database.Objects
 
         public string TrackName;
         public string TrackPath;
+        public string ArtWorkPath;
+        public string ArtWork;
         public uint TrackChannelID;
         public uint TrackPhysicallyLocated;
+
 
     }
 }

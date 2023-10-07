@@ -99,7 +99,7 @@ namespace Pioneer_CLI.Commands
             }
 
             Console.Write("Where do you want to send this packet? [Discover|Status|Sync|All] Default: All: ");
-            var option = Console.ReadLine();
+            option = Console.ReadLine();
 
             if(option.ToLower() == "discover")
             {

@@ -106,6 +106,34 @@ namespace Pioneer_CLI.DBManager
             }
         }
 
+        // Download artwork and get the content in base64
+        public string DownloadArtWork(string path)
+        {
+            if (connected_device.UsbLocalStatus == 0x00)
+            {
+                nfs.MountDevice("/C/", false);
+                nfs.DownloadFile(path);
+            }
+
+            else if (connected_device.SdLocalStatus == 0x00)
+            {
+                nfs.MountDevice("/U/", false);
+                nfs.DownloadFile(path);
+            }
+
+            string[] path_splitted = path.Split('/');
+            string file_name = path_splitted[path_splitted.Length - 1];
+            string base64content = "";
+
+            if(System.IO.File.Exists("db\\" + file_name))
+            {
+                base64content = Convert.ToBase64String(System.IO.File.ReadAllBytes("db\\" + file_name));
+            }
+
+            return base64content;
+
+        }
+
 
     }
 }
