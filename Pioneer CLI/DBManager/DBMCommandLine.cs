@@ -1,5 +1,5 @@
 ﻿using Pioneer_CLI.DBManager.DBCommands;
-using Pioneer_CLI.Devices;
+using ProLinkLib.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,8 @@ namespace Pioneer_CLI.DBManager
             db_imported = false;
 
             // Commands from DB
-            commands.Add("show", new ShowCommand());
+            //TODO: Add connect command and delete track command
+            commands.Add("songmanager", new SongManagerCommand());
             commands.Add("track", new TrackCommand());
             commands.Add("import", new ImportCommand());
             commands.Add("disconnect", new DisconnectCommand());
@@ -42,8 +43,16 @@ namespace Pioneer_CLI.DBManager
             }
             else
             {
-                db.ConnectDB(device_to_connect);
-                db_imported = true;
+                if(db.ConnectDB(device_to_connect))
+                {
+                    db_imported = true;
+                }
+                else
+                {
+                    Console.WriteLine("[ERROR] Failed to connect to the CDJ DB, Check if the device id has an USB or SD and try again later...");
+                    offline_mode = true;
+                }
+
             }
 
             while (!exit)
@@ -93,6 +102,12 @@ namespace Pioneer_CLI.DBManager
                     }
 
                     commands[command].Execute(db, args);
+                    
+                    if(command.Contains("songmanager"))
+                    {
+                        db.DisconnectDB();
+                        Console.WriteLine("CLI is disconnected from DB, please reconnect it if you want to use the command line.");
+                    }
 
                 }
                 args = "";

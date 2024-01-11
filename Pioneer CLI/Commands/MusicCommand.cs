@@ -1,5 +1,5 @@
 ﻿using ConsoleTables;
-using Pioneer_CLI.Devices;
+using ProLinkLib.Devices;
 using ProLinkLib;
 using System;
 using System.Collections.Generic;

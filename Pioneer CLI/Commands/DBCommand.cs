@@ -1,7 +1,6 @@
 ﻿using ConsoleTables;
 using Pioneer_CLI.DBManager;
-using Pioneer_CLI.Devices;
-using ProLinkLib;
+using ProLinkLib.Devices;
 using System;
 using System.IO;
 using System.Linq;
@@ -59,7 +58,9 @@ namespace Pioneer_CLI.Commands
                     cli.PromptShell(null);
                     break;
                 default:
-                    Console.WriteLine("Usage db <connect|import|tracks|artists>");
+                    Console.WriteLine("Usage: ");
+                    Console.WriteLine(" - db connect <device id> : Connect to a CDJ via Device ID");
+                    Console.WriteLine(" - db offline : Load DB CLI without connecting to a CDJ (You must specify local database)");
                     break;
             }
         }
