@@ -102,86 +102,89 @@ namespace ProLinkLib.NFS
 
         public IObject GetItemProperties(string path, string item, bool isRekordbox)
         {
-            if(isRekordbox)
+            try
             {
-                RekordboxNFSLibrary.Protocols.Commons.NFSAttributes nfs_atr = rb_nfsclient.GetItemAttributes(rb_nfsclient.Combine(item, path));
-                if (nfs_atr != null)
+                if (isRekordbox)
                 {
-                    if (nfs_atr.NFSType == RekordboxNFSLibrary.Protocols.Commons.NFSItemTypes.NFDIR)
+                    RekordboxNFSLibrary.Protocols.Commons.NFSAttributes nfs_atr = rb_nfsclient.GetItemAttributes(rb_nfsclient.Combine(item, path));
+                    if (nfs_atr != null)
                     {
-                        Folder dir = new Folder();
-                        dir.FolderName = item;
-                        dir.Size = nfs_atr.Size;
-                        dir.CreationDate = nfs_atr.CreateDateTime.ToString();
+                        if (nfs_atr.NFSType == RekordboxNFSLibrary.Protocols.Commons.NFSItemTypes.NFDIR)
+                        {
+                            Folder dir = new Folder();
+                            dir.FolderName = item;
+                            dir.Size = nfs_atr.Size;
+                            dir.CreationDate = nfs_atr.CreateDateTime.ToString();
 
-                        return dir;
+                            return dir;
+                        }
+
+                        if (nfs_atr.NFSType == RekordboxNFSLibrary.Protocols.Commons.NFSItemTypes.NFREG)
+                        {
+                            File file = new File();
+                            file.FileName = item;
+                            file.Size = nfs_atr.Size;
+                            file.CreationDate = nfs_atr.CreateDateTime.ToString();
+                            file.ModifiedDate = nfs_atr.ModifiedDateTime.ToString();
+                            file.LastAccessed = nfs_atr.LastAccessedDateTime.ToString();
+
+                            return file;
+                        }
                     }
-
-                    if (nfs_atr.NFSType == RekordboxNFSLibrary.Protocols.Commons.NFSItemTypes.NFREG)
+                    else
                     {
                         File file = new File();
                         file.FileName = item;
-                        file.Size = nfs_atr.Size;
-                        file.CreationDate = nfs_atr.CreateDateTime.ToString();
-                        file.ModifiedDate = nfs_atr.ModifiedDateTime.ToString();
-                        file.LastAccessed = nfs_atr.LastAccessedDateTime.ToString();
+                        file.Size = 0;
+                        file.CreationDate = "1999-99-99 99:99:99";
+                        file.ModifiedDate = "1999-99-99 99:99:99";
+                        file.LastAccessed = "1999-99-99 99:99:99";
 
                         return file;
                     }
                 }
                 else
                 {
-                    File file = new File();
-                    file.FileName = item;
-                    file.Size = 0;
-                    file.CreationDate = "1999-99-99 99:99:99";
-                    file.ModifiedDate = "1999-99-99 99:99:99";
-                    file.LastAccessed = "1999-99-99 99:99:99";
-
-                    return file;
-                }
-            }
-            else
-            {
-                CDJNFSLibrary.Protocols.Commons.NFSAttributes nfs_atr = cdj_nfs_client.GetItemAttributes(cdj_nfs_client.Combine(path, item));
-                if (nfs_atr != null)
-                {
-                    if (nfs_atr.NFSType == CDJNFSLibrary.Protocols.Commons.NFSItemTypes.NFDIR)
+                    CDJNFSLibrary.Protocols.Commons.NFSAttributes nfs_atr = cdj_nfs_client.GetItemAttributes(cdj_nfs_client.Combine(path, item));
+                    if (nfs_atr != null)
                     {
-                        Folder dir = new Folder();
-                        dir.FolderName = item;
-                        dir.Size = nfs_atr.Size;
-                        dir.CreationDate = nfs_atr.CreateDateTime.ToString();
+                        if (nfs_atr.NFSType == CDJNFSLibrary.Protocols.Commons.NFSItemTypes.NFDIR)
+                        {
+                            Folder dir = new Folder();
+                            dir.FolderName = item;
+                            dir.Size = nfs_atr.Size;
+                            dir.CreationDate = nfs_atr.CreateDateTime.ToString();
 
-                        return dir;
+                            return dir;
+                        }
+
+                        if (nfs_atr.NFSType == CDJNFSLibrary.Protocols.Commons.NFSItemTypes.NFREG)
+                        {
+                            File file = new File();
+                            file.FileName = item;
+                            file.Size = nfs_atr.Size;
+                            file.CreationDate = nfs_atr.CreateDateTime.ToString();
+                            file.ModifiedDate = nfs_atr.ModifiedDateTime.ToString();
+                            file.LastAccessed = nfs_atr.LastAccessedDateTime.ToString();
+
+                            return file;
+                        }
                     }
-
-                    if (nfs_atr.NFSType == CDJNFSLibrary.Protocols.Commons.NFSItemTypes.NFREG)
+                    else
                     {
                         File file = new File();
                         file.FileName = item;
-                        file.Size = nfs_atr.Size;
-                        file.CreationDate = nfs_atr.CreateDateTime.ToString();
-                        file.ModifiedDate = nfs_atr.ModifiedDateTime.ToString();
-                        file.LastAccessed = nfs_atr.LastAccessedDateTime.ToString();
+                        file.Size = 0;
+                        file.CreationDate = "1999-99-99 99:99:99";
+                        file.ModifiedDate = "1999-99-99 99:99:99";
+                        file.LastAccessed = "1999-99-99 99:99:99";
 
                         return file;
                     }
-                }
-                else
-                {
-                    File file = new File();
-                    file.FileName = item;
-                    file.Size = 0;
-                    file.CreationDate = "1999-99-99 99:99:99";
-                    file.ModifiedDate = "1999-99-99 99:99:99";
-                    file.LastAccessed = "1999-99-99 99:99:99";
 
-                    return file;
                 }
-
-            }
-            return null;
+                return null;
+            }catch (Exception ex) { return null;  }
         }
 
         public void GetRekordboxDB()
