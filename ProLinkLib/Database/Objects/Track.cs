@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProLinkLib.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +14,16 @@ namespace ProLinkLib.Database.Objects
         public uint TrackNumber;
         public uint Tempo;
         public uint ArtistID;
+        public uint ArtworkID;
         public uint RekordboxID;
         public uint Year;
 
         public string TrackName;
         public string TrackPath;
         public string ArtWorkPath;
-        public string ArtWork;
         public uint TrackChannelID;
         public uint TrackPhysicallyLocated;
+        public CDJ cdj_location;
 
 
     }
