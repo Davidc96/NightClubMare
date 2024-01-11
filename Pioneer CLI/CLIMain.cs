@@ -21,12 +21,12 @@ namespace Pioneer_CLI
 
             // Let's create the directories used in logs
             Logger.InitLogTreeDirectory();
-            /*CommandLineController clc = new CommandLineController();
+            CommandLineController clc = new CommandLineController();
             NetworkManagementController nwc = new NetworkManagementController();
 
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());
-            clc.InitCLI();*/
+            clc.InitCLI();
 
             //MixModeController mix = new MixModeController();
             
