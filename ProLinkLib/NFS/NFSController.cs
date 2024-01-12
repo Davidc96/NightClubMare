@@ -203,7 +203,7 @@ namespace ProLinkLib.NFS
             cdj_nfs_client.Read(export_db_path, "db\\database.pdb");
         }
 
-        public void DownloadFile(string file_path)
+        public void DownloadFile(string file_path, string dstFolder = "db")
         {
             string[] path_splitted = file_path.Split('/');
             string file_name = path_splitted[path_splitted.Length - 1];
@@ -215,7 +215,7 @@ namespace ProLinkLib.NFS
                 export_db_path = cdj_nfs_client.Combine(path, export_db_path);
             }
 
-            cdj_nfs_client.Read(export_db_path, "db\\" + file_name);
+            cdj_nfs_client.Read(export_db_path, dstFolder + "\\" + file_name);
         }
 
         public string GetDirectoryName(string full_directory_name, bool is_rekordbox)

@@ -79,13 +79,10 @@
     <Compile Include="DBManager\DBCommands\DisconnectCommand.cs" />
     <Compile Include="DBManager\DBCommands\IDBCommand.cs" />
     <Compile Include="DBManager\DBCommands\ImportCommand.cs" />
-    <Compile Include="DBManager\DBCommands\ShowCommand.cs" />
+    <Compile Include="DBManager\DBCommands\SongManagerCommand.cs" />
     <Compile Include="DBManager\DBCommands\TrackCommand.cs" />
     <Compile Include="DBManager\DBManagerController.cs" />
     <Compile Include="DBManager\DBMCommandLine.cs" />
-    <Compile Include="Devices\CDJ.cs" />
-    <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="Devices\Mixer.cs" />
     <Compile Include="MixMode\MixModeController.cs" />
     <Compile Include="NetworkManagementController.cs" />
     <Compile Include="NFSMode\Commands\CDCommand.cs" />
@@ -110,6 +107,10 @@
     <ProjectReference Include="..\ProLinkLib\ProLinkLib.csproj">
       <Project>{b2f032bc-2060-484a-abac-8f0933156577}</Project>
       <Name>ProLinkLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SongManager\SongManager.csproj">
+      <Project>{21e0cfc9-d6c3-4648-ae0c-d9bccc92559b}</Project>
+      <Name>SongManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

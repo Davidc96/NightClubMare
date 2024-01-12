@@ -85,5 +85,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProLinkLib\ProLinkLib.csproj">
+      <Project>{B2F032BC-2060-484A-ABAC-8F0933156577}</Project>
+      <Name>ProLinkLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

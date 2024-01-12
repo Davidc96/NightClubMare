@@ -12,10 +12,16 @@ namespace SongManager
         /// Punto de entrada principal para la aplicación.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            if(!System.IO.File.Exists("rekordbox_track.db"))
+            {
+                MessageBox.Show("No database found! Exiting...");
+                return;
+            }
             Application.Run(new MainForm());
         }
     }

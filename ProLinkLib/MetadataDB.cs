@@ -194,7 +194,7 @@ namespace ProLinkLib
             return false;
         }
 
-        public void DownloadTrack(Track track)
+        public void DownloadTrack(Track track, string dstFolder)
         {
             // Check if is connected to the cdj via nfs, if not, connect it.
             // Moreover: check if we are not in the offline mode (cdj_location != null)
@@ -207,14 +207,14 @@ namespace ProLinkLib
             if (connected_device.UsbLocalStatus == 0x00)
             {
                 nfs.MountDevice("/C/", false);
-                nfs.DownloadFile(track.TrackPath);
+                nfs.DownloadFile(track.TrackPath, dstFolder);
                 return;
             }
 
             if (connected_device.SdLocalStatus == 0x00)
             {
                 nfs.MountDevice("/U/", false);
-                nfs.DownloadFile(track.TrackPath);
+                nfs.DownloadFile(track.TrackPath, dstFolder);
                 return;
             }
         }
