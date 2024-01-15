@@ -1,4 +1,5 @@
 ﻿using ProLinkLib.Database.Objects;
+using ProLinkLib.Devices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,8 +25,9 @@ namespace ProLinkLib.Database
 
         }
 
-        public void InitDBFromFile(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated)
+        public void InitDBFromFile(string file_db, byte TrackChannelID, byte TrackPhysicallyLocated, CDJ cdj_location)
         {
+            Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.INFO, "RekordboxDB::InitDBFromFile Reading Rekordbox DB File: " + file_db + "\nChannelID: " + TrackChannelID + "\nTrackPhysicallyLocated: " + TrackPhysicallyLocated);
             // Create empty value as first element
             trackTable.Add(new Track());
             artistTable.Add(0, new Artist());
@@ -83,6 +85,10 @@ namespace ProLinkLib.Database
                                 track.TrackPath = track.TrackPath.Replace("-1", ""); // TO BE OBSERVED
                                 track.TrackChannelID = TrackChannelID;
                                 track.TrackPhysicallyLocated = TrackPhysicallyLocated;
+                                track.ArtworkID = track_info.ArtworkId;
+
+                                track.ArtWorkPath = GetArtworkPath(track.ArtworkID);
+                                track.cdj_location = cdj_location;
 
                                 trackTable.Add(track);
                             }
@@ -95,6 +101,7 @@ namespace ProLinkLib.Database
             catch(EndOfStreamException)
             {
                 Console.WriteLine(trackTable.Count + " Tracks loaded!");
+                Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.INFO, trackTable.Count + " Tracks loaded!");
             }
 
             // Artists
@@ -145,6 +152,7 @@ namespace ProLinkLib.Database
             catch(EndOfStreamException)
             {
                 Console.WriteLine(artistTable.Count + " Artists loaded!");
+                Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.INFO, artistTable.Count + " Artists loaded!");
             }
             // Next table
 
@@ -164,6 +172,61 @@ namespace ProLinkLib.Database
         {
             trackTable.Clear();
             artistTable.Clear();
+        }
+
+        private string GetArtworkPath(uint artwork_id)
+        {
+            var artworkTable = rekordbox.Tables[Constants.ARTWORK];
+            var firstElement = artworkTable.FirstPage.Body.NextPage.Body;
+            var currentElement = firstElement;
+
+            if (artwork_id == 0)
+            {
+                Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.WARNING, "No Artwork found... skipping....");
+                return "";
+            }
+
+            try
+            {
+                while(currentElement != null)
+                {
+                    foreach (var row_group in currentElement.RowGroups)
+                    {
+                        foreach (var row in row_group.Rows)
+                        {
+                            var artwork = (ArtworkRow)row.Body;
+
+                            if(artwork.Id == artwork_id)
+                            {
+                                if (artwork.Path.Body is DeviceSqlLongAscii)
+                                {
+                                    return ((DeviceSqlLongAscii)artwork.Path.Body).Text;
+                                }
+                                else if (artwork.Path.Body is DeviceSqlLongUtf16le)
+                                {
+                                    return ((DeviceSqlLongUtf16le)artwork.Path.Body).Text;
+                                }
+                                else if (artwork.Path.Body is DeviceSqlShortAscii)
+                                {
+                                    return ((DeviceSqlShortAscii)artwork.Path.Body).Text;
+                                }
+                                else if (artwork.Path.Body is DeviceSqlString)
+                                {
+                                    return ((DeviceSqlShortAscii)((DeviceSqlString)artwork.Path.Body).Body).Text;
+                                }
+                                //return (artwork.Path.Body).ToString();
+                            }
+                        }
+                    }
+                    currentElement = currentElement.NextPage.Body;
+                }
+            }
+            catch (EndOfStreamException)
+            {
+                Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.WARNING, "No Artwork found... skipping....");
+            }
+
+            return "";
         }
 
     }

@@ -156,11 +156,11 @@ namespace Pioneer_CLI.Commands
                     break;
                 case "send":
                     // Send all the settings packet to all the CDJ
-                    foreach(Devices.IDevice device in plc.GetDevices().Values) // Mixer no puede ser un CDJ, corregir!!
+                    foreach(ProLinkLib.Devices.IDevice device in plc.GetDevices().Values) // Mixer no puede ser un CDJ, corregir!!
                     {
-                        if (device is Devices.CDJ)
+                        if (device is ProLinkLib.Devices.CDJ)
                         {
-                            var cdj = (Devices.CDJ)device;
+                            var cdj = (ProLinkLib.Devices.CDJ)device;
                             // CDJ goes from 1 to 6; 
                             if (cdj.ChannelID < 6)
                             {

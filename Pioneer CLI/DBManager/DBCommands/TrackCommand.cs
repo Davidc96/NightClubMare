@@ -1,7 +1,7 @@
 ﻿using ConsoleTables;
-using Pioneer_CLI.Devices;
 using ProLinkLib;
 using ProLinkLib.Commands.StatusCommands;
+using ProLinkLib.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +73,7 @@ namespace Pioneer_CLI.DBManager.DBCommands
                 var track = db.GetMetadataDB().GetTrackById(track_id);
                 if(track != null)
                 {
-                    db.DownloadTrack(track.TrackPath);
+                    db.GetMetadataDB().DownloadTrack(track);
                 }
                 else
                 {

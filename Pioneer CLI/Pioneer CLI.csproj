@@ -39,6 +39,15 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="RLNET, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RLNET.1.0.6\lib\RLNET.dll</HintPath>
+    </Reference>
+    <Reference Include="RogueSharp, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RogueSharp.4.2.0\lib\net40\RogueSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -70,13 +79,11 @@
     <Compile Include="DBManager\DBCommands\DisconnectCommand.cs" />
     <Compile Include="DBManager\DBCommands\IDBCommand.cs" />
     <Compile Include="DBManager\DBCommands\ImportCommand.cs" />
-    <Compile Include="DBManager\DBCommands\ShowCommand.cs" />
+    <Compile Include="DBManager\DBCommands\SongManagerCommand.cs" />
     <Compile Include="DBManager\DBCommands\TrackCommand.cs" />
     <Compile Include="DBManager\DBManagerController.cs" />
     <Compile Include="DBManager\DBMCommandLine.cs" />
-    <Compile Include="Devices\CDJ.cs" />
-    <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="Devices\Mixer.cs" />
+    <Compile Include="MixMode\MixModeController.cs" />
     <Compile Include="NetworkManagementController.cs" />
     <Compile Include="NFSMode\Commands\CDCommand.cs" />
     <Compile Include="NFSMode\Commands\GETCommand.cs" />
@@ -101,7 +108,13 @@
       <Project>{b2f032bc-2060-484a-abac-8f0933156577}</Project>
       <Name>ProLinkLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SongManager\SongManager.csproj">
+      <Project>{21e0cfc9-d6c3-4648-ae0c-d9bccc92559b}</Project>
+      <Name>SongManager</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="terminal8x8.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

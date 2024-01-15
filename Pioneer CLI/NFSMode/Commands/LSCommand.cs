@@ -28,15 +28,18 @@ namespace Pioneer_CLI.NFSMode.Commands
                 foreach (string item in items)
                 {
                     IObject obj = nfs.GetItemProperties(currentDir, item, isRekordbox);
-                    if (obj is File)
+                    if (obj != null)
                     {
-                        File file = (File)obj;
-                        Console.WriteLine("-r--r--r-- X root root    " + file.Size + " " + file.CreationDate + "    " + item);
-                    }
-                    if (obj is Folder)
-                    {
-                        Folder folder = (Folder)obj;
-                        Console.WriteLine("dr--r--r-- X root root    " + folder.Size + " " + folder.CreationDate + "     " + item);
+                        if (obj is File)
+                        {
+                            File file = (File)obj;
+                            Console.WriteLine("-r--r--r-- X root root    " + file.Size + " " + file.CreationDate + "    " + item);
+                        }
+                        if (obj is Folder)
+                        {
+                            Folder folder = (Folder)obj;
+                            Console.WriteLine("dr--r--r-- X root root    " + folder.Size + " " + folder.CreationDate + "     " + item);
+                        }
                     }
                 }
                 

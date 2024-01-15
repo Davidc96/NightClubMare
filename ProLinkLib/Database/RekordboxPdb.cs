@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 // This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
-using System.Collections.Generic;
-
 namespace ProLinkLib.Database
 {
 

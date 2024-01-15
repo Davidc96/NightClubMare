@@ -1,11 +1,10 @@
-﻿using ProLinkLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pioneer_CLI.Devices
+namespace ProLinkLib.Devices
 {
     public class Mixer : IDevice
     {
@@ -41,17 +40,17 @@ namespace Pioneer_CLI.Devices
             public bool Play { get => play; set => play = value; }
         }
 
-        /*
-         * 
- ------------------------
-|    .    .    .    .    |  DeviceName: DEVICENAME    DeviceID: 33
-|    .    .    .    .    |  Beat: |////|====|====|====|
-|    .    .    .    .    |  BPM: 128.10 
-|    .    .    .    .    |  Status Flags: M: 1 BPM: 1 Sync: 1
-|    |    |    |    |    |                OAir: 1     Play: 1
-|        ---|---         |   
- ------------------------   IPAddress: 255.255.255.255 MAC: 00:01:02:03:04:05
-         */
+                /*
+                 * 
+         ------------------------
+        |    .    .    .    .    |  DeviceName: DEVICENAME    DeviceID: 33
+        |    .    .    .    .    |  Beat: |////|====|====|====|
+        |    .    .    .    .    |  BPM: 128.10 
+        |    .    .    .    .    |  Status Flags: M: 1 BPM: 1 Sync: 1
+        |    |    |    |    |    |                OAir: 1     Play: 1
+        |        ---|---         |   
+         ------------------------   IPAddress: 255.255.255.255 MAC: 00:01:02:03:04:05
+                 */
         public void PrintDeviceInfo()
         {
             Console.WriteLine("  ------------------------");
@@ -85,6 +84,7 @@ namespace Pioneer_CLI.Devices
             device_info += "|        ---|---         |\n";
             device_info += " ------------------------ \n";
             device_info += "      BPM: " + bpm + "    \n";
+
             return device_info;
         }
 
@@ -111,7 +111,7 @@ namespace Pioneer_CLI.Devices
         private void PrintBeat()
         {
             string beat_form = "|====|====|====|====|";
-            switch(beat)
+            switch (beat)
             {
                 case 1:
                     beat_form = "|////|====|====|====|";

@@ -1,13 +1,10 @@
-﻿using ProLinkLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pioneer_CLI.Devices
+namespace ProLinkLib.Devices
 {
     public class CDJ : IDevice
     {
@@ -52,7 +49,7 @@ namespace Pioneer_CLI.Devices
         public byte UsbLocalStatus { get => usbLocalStatus; set => usbLocalStatus = value; }
         public byte SdLocalStatus { get => sdLocalStatus; set => sdLocalStatus = value; }
         public byte PlayerStatus { get => playerStatus; set => playerStatus = value; }
-        public float TrackBPM{ get => bpmTrack; set => bpmTrack = value; }
+        public float TrackBPM { get => bpmTrack; set => bpmTrack = value; }
         public byte TrackDeviceLocatedID { get => trackDeviceLocatedID; set => trackDeviceLocatedID = value; }
         public byte TrackPhysicallyLocated { get => trackPhysicallyLocated; set => trackPhysicallyLocated = value; }
         public byte TrackType { get => trackType; set => trackType = value; }
@@ -120,13 +117,13 @@ namespace Pioneer_CLI.Devices
             device_info += " | " + ((FlagStatus.Play == true) ? "PLAY" : "STOP") + "  " + ((FlagStatus.SyncMode == true) ? "SYNC" : "    ") + " |\n";
             device_info += "  ------------ \n";
             device_info += ((trackName == "") ? "No Track" : trackName) + "\n";
-            
+
             return device_info;
         }
 
         private void PrintOnAirChannelUI()
         {
-            if(onAirChannel == true)
+            if (onAirChannel == true)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("       |ON AIR|");

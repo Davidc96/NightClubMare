@@ -1,8 +1,8 @@
 ﻿using ConsoleTables;
 using Pioneer_CLI.Commands;
-using Pioneer_CLI.Devices;
 using ProLinkLib;
 using ProLinkLib.Database;
+using ProLinkLib.Devices;
 using ProLinkLib.NFS;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace Pioneer_CLI
             commands.Add("settings", new SettingsCommand());
             commands.Add("packetbuilder", new PacketBuilderCommand());
             commands.Add("pb", new PacketBuilderCommand());
-            commands.Add("music", new MusicCommand());
+            commands.Add("music", new MusicCommand()); // OBSOLETE
             commands.Add("nfs", new NFSCommand());
             commands.Add("auth", new AuthCommand());
             commands.Add("db", new DBCommand());

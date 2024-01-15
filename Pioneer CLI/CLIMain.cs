@@ -1,4 +1,5 @@
-﻿using ProLinkLib;
+﻿using Pioneer_CLI.MixMode;
+using ProLinkLib;
 using ProLinkLib.Commands.DiscoverCommands;
 using ProLinkLib.Commands.StatusCommands;
 using ProLinkLib.Database;
@@ -26,6 +27,9 @@ namespace Pioneer_CLI
             Console.WriteLine();
             nwc.InitCLI(clc.GetPLC());
             clc.InitCLI();
+
+            //MixModeController mix = new MixModeController();
+            
             Console.ReadLine();
         }
 
