@@ -10,6 +10,7 @@ namespace ProLinkLib.Devices
     {
         private string deviceName;
         private string ipAddress;
+        private string broadcastAddress;
         private string macAddress;
         private int channelID;
         private byte[] rekordboxTrackID = new byte[0x4];
@@ -43,6 +44,7 @@ namespace ProLinkLib.Devices
 
         public string DeviceName { get => deviceName; set => deviceName = value; }
         public string IpAddress { get => ipAddress; set => ipAddress = value; }
+        public string BroadcastAddress { get => broadcastAddress; set => broadcastAddress = value; }
         public string MacAddress { get => macAddress; set => macAddress = value; }
         public int ChannelID { get => channelID; set => channelID = value; }
         public byte[] RekordboxTrackID { get => rekordboxTrackID; set => rekordboxTrackID = value; }

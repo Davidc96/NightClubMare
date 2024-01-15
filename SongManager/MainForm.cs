@@ -124,8 +124,7 @@ namespace SongManager
         {
             if (selectedTrack != null)
             {
-                metadataDB.DownloadTrack(selectedTrack, "music");
-                MessageBox.Show("Track downloaded successfully!");
+                // TODO: Add Load button
             }
             else
             {
