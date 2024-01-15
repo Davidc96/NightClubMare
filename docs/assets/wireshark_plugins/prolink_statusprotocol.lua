@@ -107,7 +107,9 @@ Pitch1 = ProtoField.bytes("ProLink.Pitch1", "Pitch1", base.SPACE)
 MasterBPMAcceptedValue = ProtoField.uint16("ProLink.MasterBPMAcceptedValue", "Master BPM Accepted Value", base.HEX)
 UnknownBytes10 = ProtoField.bytes("ProLink.UnknownBytes10", "Unknown Bytes 10", base.SPACE)
 Pitch2 = ProtoField.bytes("ProLink.Pitch2", "Pitch2", base.SPACE)
-UnknownBytes11 = ProtoField.uint8("ProLink.UnkownBytes11", "Unknown Bytes 11", base.HEX)
+UnknownByte5 = ProtoField.uint8("ProLink.UnkownByte5", "Unknown Byte 5", base.HEX)
+PlayerCurrentPlayMode = ProtoField.string("ProLink.PlayerCurrentPlayMode", "Player Current Play Mode", base.ASCII)
+MasterDescription = ProtoField.string("ProLink.MasterDescription", "Master Description", base.ASCII)
 
 
 
@@ -303,6 +305,8 @@ function pioneer_status.dissector(buffer, pinfo, tree)
         payload:add(StatusFlag_Sync, buffer(0x89, 1), buffer(0x89, 1):uint())
         payload:add(StatusFlag_OnAir, buffer(0x89, 1), buffer(0x89, 1):uint())
         payload:add(StatusFlag_BPM, buffer(0x89, 1), buffer(0x89, 1):uint())
+
+
     end
 
 end
@@ -757,6 +761,24 @@ function get_trackplayerstatus(status)
     return "Unknown"
 end
 
+function get_playercurrentplaymode(current_playmode)
+    if current_playmode == 0x00 then
+        return "No track Loaded (0x00)"
+    end
 
+    if current_playmode == 0x01 then
+        return "Player is paused or playing in Reverse Mode (0x01)"
+    end
+
+    if current_playmode == 0x09 then
+        return "Player is playing in Forward mode with Jog mode set to Vinyl (0x09)"
+    end
+
+    if current_playmode == 0x0d then
+        return "Player is playing in Forward Mode with Jog mode set to CDJ  (0x0D)"
+    end
+
+    return "Unknown"
+end
 
 udp_protocol = DissectorTable.get("udp.port"):add(50002, pioneer_status)
