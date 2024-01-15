@@ -73,7 +73,7 @@ namespace Pioneer_CLI.DBManager.DBCommands
                 var track = db.GetMetadataDB().GetTrackById(track_id);
                 if(track != null)
                 {
-                    db.GetMetadataDB().DownloadTrack(track);
+                    db.GetMetadataDB().DownloadTrack(track, "music");
                 }
                 else
                 {

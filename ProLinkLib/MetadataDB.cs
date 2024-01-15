@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ProLinkLib.Database.Objects;
 using ProLinkLib.Devices;
+using ProLinkLib.NFS;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,7 @@ namespace ProLinkLib
             tracks = new List<Track>();
             artists = new Dictionary<uint, Artist>();
             device_metadata_location = 0;
+            nfs = new NFSController();
 
             trackMetadata = new TrackMetadata();
             rekordboxDB = new Database.RekordboxDB();
@@ -168,15 +170,19 @@ namespace ProLinkLib
         #endregion
 
         #region NFS Connection and Downloads
-        public bool ConnectDB(CDJ connected_device)
+        public bool ConnectDB(CDJ connected_device, bool downloadDBLocally = true)
         {
             nfs.Connect(connected_device.IpAddress, false);
 
             if (connected_device.UsbLocalStatus == 0x00)
             {
                 nfs.MountDevice("/C/", false);
-                nfs.GetRekordboxDB();
-                GetElementsFromRekordboxDB("db\\database.pdb", (byte)connected_device.ChannelID, (byte)0x03, connected_device);
+                if (downloadDBLocally)
+                {
+                    nfs.GetRekordboxDB();
+                    GetElementsFromRekordboxDB("db\\database.pdb", (byte)connected_device.ChannelID, (byte)0x03, connected_device);
+                }
+                
                 this.connected_device = connected_device;
                 return true;
 
@@ -194,14 +200,14 @@ namespace ProLinkLib
             return false;
         }
 
-        public void DownloadTrack(Track track, string dstFolder)
+        public void DownloadTrack(Track track, string dstFolder, bool downloadDBLocally = true)
         {
             // Check if is connected to the cdj via nfs, if not, connect it.
             // Moreover: check if we are not in the offline mode (cdj_location != null)
             if(connected_device == null && track.cdj_location != null)
             {
                 connected_device = track.cdj_location;
-                ConnectDB(connected_device);
+                ConnectDB(connected_device, downloadDBLocally);
             }
 
             if (connected_device.UsbLocalStatus == 0x00)

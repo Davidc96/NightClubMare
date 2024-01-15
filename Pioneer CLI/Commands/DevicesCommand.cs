@@ -16,8 +16,9 @@ namespace Pioneer_CLI.Commands
         }
 
         public void Run(ProLinkController plc, CommandLineController clc, string args)
-        {
-            var table = new ConsoleTable("ID", "DeviceType", "DeviceName", "IPAddress", "MACAddress");
+        { 
+            // TODO: Add If there is a database connected or not
+            var table = new ConsoleTable("ID", "DeviceType", "DeviceName", "IPAddress", "MACAddress", "DatabaseAvailable?");
 
             foreach(var key in plc.GetDevices().Keys)
             {

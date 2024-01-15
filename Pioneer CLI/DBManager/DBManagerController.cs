@@ -48,8 +48,14 @@ namespace Pioneer_CLI.DBManager
         }
 
         public bool ConnectDB(CDJ connected_device)
-        {
-            return metadata.ConnectDB(connected_device);
+        { 
+            var result = metadata.ConnectDB(connected_device);
+            if(result == true)
+            {
+                this.connected_device = connected_device;
+            }
+
+            return result;
         }
 
         public void LoadDatabaseLocally(string db_location)

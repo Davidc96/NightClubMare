@@ -111,7 +111,7 @@ namespace SongManager
         {
             if (selectedTrack != null)
             {
-                metadataDB.DownloadTrack(selectedTrack, "music");
+                metadataDB.DownloadTrack(selectedTrack, "music", false);
                 MessageBox.Show("Track downloaded successfully!");
             }
             else

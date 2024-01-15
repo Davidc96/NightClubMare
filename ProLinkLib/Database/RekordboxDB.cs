@@ -34,6 +34,8 @@ namespace ProLinkLib.Database
             
             // Retrieve all tracks
             rekordbox = RekordboxPdb.FromFile(file_db);
+            // TODO: Close file
+
             var tracksTable = rekordbox.Tables[Constants.TRACKS];
             var firstElement = tracksTable.FirstPage.Body.NextPage.Body; // Always the very first element is empty
             var currentElement = firstElement;

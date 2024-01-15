@@ -46,6 +46,7 @@ namespace Pioneer_CLI.DBManager
                 if(db.ConnectDB(device_to_connect))
                 {
                     db_imported = true;
+                    offline_mode = true;
                 }
                 else
                 {
@@ -58,10 +59,11 @@ namespace Pioneer_CLI.DBManager
             while (!exit)
             {
                 Console.WriteLine();
-                if (offline_mode != true)
+                if (offline_mode != false)
                 {
                     Console.Write("===:ID: " + device_to_connect.ChannelID + "@RekordboxDB > ");
                 }
+                //TODO: Fix while db is connected show that is not offline mode
                 else if (db.IsLoaded() == false)
                 {
                     Console.Write("===:NO DB IMPORTED> ");
