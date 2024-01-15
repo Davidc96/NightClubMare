@@ -15,6 +15,11 @@ namespace Pioneer_CLI.DBManager.DBCommands
     {
         public void Execute(DBManagerController db_manager, string args)
         {
+            if(db_manager.GetMetadataDB().GetTracks().Count == 0)
+            {
+                Console.WriteLine("No database is loaded, use \"connect <cdj_id>\" or \"import <path to rb_db\" to use this command");
+                return;
+            }
             var db_list = Convert.ToBase64String(Encoding.UTF8.GetBytes(db_manager.GetMetadataDB().GetTrackListJSON()));
             File.WriteAllText("rekordbox_track.db", db_list);
 
