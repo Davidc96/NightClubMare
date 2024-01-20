@@ -24,5 +24,10 @@ namespace Pioneer_CLI.Commands
                 System.Environment.Exit(0);
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("exit - Close the program");
+        }
     }
 }

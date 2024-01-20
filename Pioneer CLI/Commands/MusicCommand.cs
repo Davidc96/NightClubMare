@@ -103,5 +103,10 @@ namespace Pioneer_CLI.Commands
                 }
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("music - OBSOLETE use db command instead");
+        }
     }
 }

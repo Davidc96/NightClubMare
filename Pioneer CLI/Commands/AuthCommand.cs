@@ -16,6 +16,12 @@ namespace Pioneer_CLI.Commands
             throw new NotImplementedException();
         }
 
+        public void HelpCommand()
+        {
+            //
+            //throw new NotImplementedException();
+        }
+
         public void Run(ProLinkController plc, CommandLineController clc, string args)
         {
             var devices = plc.GetDevices();

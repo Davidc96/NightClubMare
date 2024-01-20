@@ -37,12 +37,10 @@ namespace Pioneer_CLI
             commands.Add("pause", new PauseCommand());
             commands.Add("stop", new PauseCommand());
             commands.Add("sync", new SyncCommand());
-            commands.Add("load", new LoadTrackCommand());
             commands.Add("debug", new DebugModeCommand());
             commands.Add("settings", new SettingsCommand());
             commands.Add("packetbuilder", new PacketBuilderCommand());
             commands.Add("pb", new PacketBuilderCommand());
-            commands.Add("music", new MusicCommand()); // OBSOLETE
             commands.Add("nfs", new NFSCommand());
             commands.Add("auth", new AuthCommand());
             commands.Add("db", new DBCommand());
@@ -103,7 +101,7 @@ namespace Pioneer_CLI
                 {
                     foreach (string cmd in commands.Keys)
                     {
-                        Console.WriteLine(cmd);
+                        commands[cmd].HelpCommand();
                     }
                 }
                 else if(commands.ContainsKey(command))

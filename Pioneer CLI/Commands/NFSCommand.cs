@@ -51,5 +51,10 @@ namespace Pioneer_CLI.Commands
                 Console.WriteLine(e);
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("nfs - Connects to a CDJ Network File System (needs a CDJ which contains an USB or SD Card)");
+        }
     }
 }

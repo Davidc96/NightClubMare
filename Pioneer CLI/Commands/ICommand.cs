@@ -11,6 +11,8 @@ namespace Pioneer_CLI.Commands
        void Run(ProLinkController plc, CommandLineController clc, string args);
 
         void BuildCustom(ProLinkController plc, CommandLineController clc, string args);
+
+        void HelpCommand();
     
     }
 }

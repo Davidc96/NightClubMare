@@ -161,5 +161,10 @@ namespace Pioneer_CLI.Commands
             Console.WriteLine("Packet sent!");
             f.Close();
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("packetbuilder or pb - Import or export binary network packets");
+        }
     }
 }

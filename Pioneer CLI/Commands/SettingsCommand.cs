@@ -256,5 +256,10 @@ namespace Pioneer_CLI.Commands
             table.Write();
 
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("settings - Set the settings on a CDJ (needs a CDJ selected and the music stopped)");
+        }
     }
 }

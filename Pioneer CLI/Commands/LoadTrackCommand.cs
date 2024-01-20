@@ -25,7 +25,7 @@ namespace Pioneer_CLI.Commands
             byte tl_id = Convert.ToByte(Console.ReadLine());
             Console.Write("CDJ where the USB/SD/CD/Laptop is mounted: ");
             byte id_cdj = Convert.ToByte(Console.ReadLine());
-            Console.Write("Rekordbox TrackID: ");
+            Console.Write("Rekordbox TrackID (Hex): ");
             uint trackID = UInt32.Parse(Console.ReadLine(), NumberStyles.HexNumber);
             Console.Write("CDJ ID you want to load the track: ");
             byte id_tocdj = Convert.ToByte(Console.ReadLine());
@@ -51,61 +51,18 @@ namespace Pioneer_CLI.Commands
         {
             try
             {
-                if (clc.GetSelectedDevice() != null && clc.GetSelectedDevice() is CDJ)
-                {
-                    ProLinkLib.Commands.StatusCommands.LoadTrackCommand ld_command = new ProLinkLib.Commands.StatusCommands.LoadTrackCommand();
-                    var cdj = (CDJ)clc.GetSelectedDevice();
-                    int trackID = Int32.Parse(args);
-                    var track_metadata = clc.GetMetadataDB().GetTrackById(trackID);
-                    byte trackChannelID = 0x00;
-                    byte trackPhysicallyLocated = 0x00;
-                    byte RekordboxID = 0x00;
-                    string trackName = "";
-                    if(track_metadata != null)
-                    {
-                        trackChannelID = (byte)track_metadata.TrackChannelID;
-                        trackPhysicallyLocated = (byte)track_metadata.TrackPhysicallyLocated;
-                        RekordboxID = (byte)track_metadata.RekordboxID;
-                        trackName = track_metadata.TrackName;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Song was not found, please use \"music\" command or \"db connect <device id>\" command to retrieve music from CDJ or Rekordbox");
-                        return;
-                    }
-
-                    ld_command.ChannelID = plc.GetVirtualCDJ().ChannelID;
-                    ld_command.ChannelID2 = plc.GetVirtualCDJ().ChannelID;
-                    ld_command.DeviceName = Utils.NameToBytes(plc.GetVirtualCDJ().DeviceName, 0x14);
-                    ld_command.DeviceToLoad = Convert.ToByte(cdj.ChannelID);
-                    ld_command.DeviceTrackListLocatedID = trackChannelID;
-                    ld_command.DeviceTracklistLocation = trackPhysicallyLocated;
-                    ld_command.TrackType = cdj.TrackType;
-                    ld_command.TrackID = Utils.SwapEndianesss(BitConverter.GetBytes(RekordboxID));
-                    ld_command.Length = 0x34;
-
-                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.INFO, $"User load {trackName}(0x{RekordboxID}) to DeviceID: {cdj.ChannelID}");
-                    Logger.WriteLogFile("app_client", Logger.LOG_TYPE.DEBUG, "User sent LOAD_TRACKCOMMAND with this properties:\n" +
-                                        $"TrackID: 0x{RekordboxID:X}\n" +
-                                        $"DeviceToLoad: {ld_command.DeviceToLoad}\n" +
-                                        $"DeviceTrackListLocatedID: {ld_command.DeviceTrackListLocatedID}\n" +
-                                        $"DeviceTrackListLocation: {ld_command.DeviceTracklistLocation}\n");
-                    plc.GetVirtualCDJ().GetStatusServer().SendPacketToClient(cdj.IpAddress, ld_command);
-
-
-                    Console.WriteLine($"Track {trackName} loaded!");
-
-                }
-                else
-                {
-                    Console.WriteLine("No device was selected! First select a CDJ device");
-                }
+                BuildCustom(plc, clc, args);
             }
             catch(Exception ex)
             {
-                Console.WriteLine("ID does not exist or tracklist is empty, use \"music\" or \"db connect <device_id>\" command to retrieve tracks from the network");
+                Console.WriteLine("Something goes wrong! check app_client logs for further information");
                 Logger.WriteLogFile("app_client", Logger.LOG_TYPE.ERROR, "Exception while loading a track:\n" + ex.Message);
             }
+        }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("load - Load any song to an specific CDJ (Easy setup)");
         }
     }
 }

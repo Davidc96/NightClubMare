@@ -84,6 +84,11 @@ namespace Pioneer_CLI.Commands
             {
                 Console.WriteLine("Cannot connect to the CDJ please check if the CDJ is connected");
             }        
-        }      
+        }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("db - Connects to a CDJ Database (needs a CDJ which contains an USB or SD Card)");
+        }
     }
 }

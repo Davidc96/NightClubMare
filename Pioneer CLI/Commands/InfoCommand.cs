@@ -25,5 +25,10 @@ namespace Pioneer_CLI.Commands
                 Console.WriteLine("No device was selected! First select a device");
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("info - Shows the info from a Device (you need to first select a Device using the \"select\" command");
+        }
     }
 }

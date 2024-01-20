@@ -136,5 +136,10 @@ namespace Pioneer_CLI.Commands
             }
 
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("play - Plays the music (needs a CDJ selected)");
+        }
     }
 }

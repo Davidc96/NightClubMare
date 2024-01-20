@@ -137,5 +137,10 @@ namespace Pioneer_CLI.Commands
             }
 
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("pause - Stops the music (needs a CDJ selected)");
+        }
     }
 }

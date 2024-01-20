@@ -41,5 +41,10 @@ namespace Pioneer_CLI.Commands
                 Console.WriteLine("Error while processing command. Usage select <id>");
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("select - Selects a device connected to the network");
+        }
     }
 }

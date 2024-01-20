@@ -18,5 +18,10 @@ namespace Pioneer_CLI.Commands
         {
             Logger.PRINT_DEBUG = true;
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("debug - Adds more verbosity into logs");
+        }
     }
 }

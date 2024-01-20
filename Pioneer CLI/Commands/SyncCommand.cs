@@ -152,5 +152,10 @@ namespace Pioneer_CLI.Commands
                 Console.WriteLine("No device or mixer was selected! First select a CDJ device");
             }
         }
+
+        public void HelpCommand()
+        {
+            Console.WriteLine("sync - Enables or disables the SYNC mode (needs a CDJ selected)");
+        }
     }
 }
