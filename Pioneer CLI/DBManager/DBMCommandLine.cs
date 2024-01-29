@@ -108,6 +108,7 @@ namespace Pioneer_CLI.DBManager
                     if(command.Contains("songmanager"))
                     {
                         db.DisconnectDB();
+                        exit = true;
                         Console.WriteLine("CLI is disconnected from DB, please reconnect it if you want to use the command line.");
                     }
 
