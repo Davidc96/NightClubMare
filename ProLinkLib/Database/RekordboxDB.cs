@@ -197,33 +197,35 @@ namespace ProLinkLib.Database
                         foreach (var row in row_group.Rows)
                         {
                             var artwork = (ArtworkRow)row.Body;
-
-                            if(artwork.Id == artwork_id)
+                            if (artwork != null)
                             {
-                                if (artwork.Path.Body is DeviceSqlLongAscii)
+                                if (artwork.Id == artwork_id)
                                 {
-                                    return ((DeviceSqlLongAscii)artwork.Path.Body).Text;
+                                    if (artwork.Path.Body is DeviceSqlLongAscii)
+                                    {
+                                        return ((DeviceSqlLongAscii)artwork.Path.Body).Text;
+                                    }
+                                    else if (artwork.Path.Body is DeviceSqlLongUtf16le)
+                                    {
+                                        return ((DeviceSqlLongUtf16le)artwork.Path.Body).Text;
+                                    }
+                                    else if (artwork.Path.Body is DeviceSqlShortAscii)
+                                    {
+                                        return ((DeviceSqlShortAscii)artwork.Path.Body).Text;
+                                    }
+                                    else if (artwork.Path.Body is DeviceSqlString)
+                                    {
+                                        return ((DeviceSqlShortAscii)((DeviceSqlString)artwork.Path.Body).Body).Text;
+                                    }
+                                    //return (artwork.Path.Body).ToString();
                                 }
-                                else if (artwork.Path.Body is DeviceSqlLongUtf16le)
-                                {
-                                    return ((DeviceSqlLongUtf16le)artwork.Path.Body).Text;
-                                }
-                                else if (artwork.Path.Body is DeviceSqlShortAscii)
-                                {
-                                    return ((DeviceSqlShortAscii)artwork.Path.Body).Text;
-                                }
-                                else if (artwork.Path.Body is DeviceSqlString)
-                                {
-                                    return ((DeviceSqlShortAscii)((DeviceSqlString)artwork.Path.Body).Body).Text;
-                                }
-                                //return (artwork.Path.Body).ToString();
                             }
                         }
                     }
                     currentElement = currentElement.NextPage.Body;
                 }
             }
-            catch (EndOfStreamException)
+            catch (Exception)
             {
                 Logger.WriteLogFile("DB File - Logs", Logger.LOG_TYPE.WARNING, "No Artwork found... skipping....");
             }
