@@ -141,7 +141,7 @@ namespace ProLinkLib
                 return null;
             }
         }
-        public Track GetTrackByRBId(uint rb_id)
+        public Track GetTrackByRBId(int rb_id)
         {
             foreach (var track in tracks)
             {

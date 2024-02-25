@@ -71,7 +71,7 @@ namespace SongManager
 
         private void dgv_tracklist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var track = metadataDB.GetTrackByRBId((uint)dgv_tracklist.Rows[e.RowIndex].Cells[0].Value);
+            var track = metadataDB.GetTrackByRBId((int)(uint)dgv_tracklist.Rows[e.RowIndex].Cells[0].Value);
             if (track != null)
             {
                 selectedTrack = track;

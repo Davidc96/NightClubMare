@@ -40,10 +40,10 @@ namespace ProLinkLib
 
         public static void WriteMessage(byte[] message, LOG_TYPE log_type = LOG_TYPE.INFO, PRINT_MODE print_mode = PRINT_MODE.STRING)
         {
-            udpClient = new UdpClient();
-            udpClient.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), PORT));
-            udpClient.Send(Encoding.UTF8.GetBytes(log_type + "|" + print_mode + "|").Concat(message).ToArray(), Encoding.UTF8.GetBytes(log_type + "|" + print_mode + "|").Concat(message).ToArray().Length);
-            udpClient.Close();
+            //udpClient = new UdpClient();
+            //udpClient.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), PORT));
+           // udpClient.Send(Encoding.UTF8.GetBytes(log_type + "|" + print_mode + "|").Concat(message).ToArray(), Encoding.UTF8.GetBytes(log_type + "|" + print_mode + "|").Concat(message).ToArray().Length);
+            //udpClient.Close();
         }
 
         public static void WriteLogFile(string log_name, LOG_TYPE log_type, string content)

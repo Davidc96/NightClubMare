@@ -46,13 +46,13 @@ namespace Pioneer_CLI.DBManager.DBCommands
             catch (Exception ex)
             {
                 Logger.WriteLogFile("app_client.txt", Logger.LOG_TYPE.ERROR, ex.ToString());
-                Console.WriteLine("Usage track <id> <info|download>");
+                Console.WriteLine("Usage track <id> <info|download|load>");
             }
         }
 
         public void PrintTrackInfo(DBManagerController db, int track_id)
         {
-            var track = db.GetMetadataDB().GetTrackById(track_id);
+            var track = db.GetMetadataDB().GetTrackByRBId(track_id);
             if(track != null)
             {
                 Console.WriteLine("Track Name: " + track.TrackName);
@@ -70,7 +70,7 @@ namespace Pioneer_CLI.DBManager.DBCommands
         {
             if(db.GetConnectedDevice() != null)
             {
-                var track = db.GetMetadataDB().GetTrackById(track_id);
+                var track = db.GetMetadataDB().GetTrackByRBId(track_id);
                 if(track != null)
                 {
                     db.GetMetadataDB().DownloadTrack(track, "music");
@@ -91,7 +91,7 @@ namespace Pioneer_CLI.DBManager.DBCommands
         {
             LoadTrackCommand ld_command = new LoadTrackCommand();
             var vcdj = db.GetProLinkController().GetVirtualCDJ();
-            var track = db.GetMetadataDB().GetTrackById(track_id);
+            var track = db.GetMetadataDB().GetTrackByRBId(track_id);
             CDJ device = (CDJ)db.GetProLinkController().GetDeviceById(device_to_load);
 
             if(track == null)

@@ -192,7 +192,7 @@ namespace ProLinkLib.NFS
             // Delete old database
             if (System.IO.File.Exists("db\\database.pdb"))
             {
-                System.IO.File.Delete("db\\database.pdb");
+                //System.IO.File.Delete("db\\database.pdb");
             }
             var export_db_path = ".";
             export_db_path = cdj_nfs_client.Combine("PIONEER", export_db_path);
