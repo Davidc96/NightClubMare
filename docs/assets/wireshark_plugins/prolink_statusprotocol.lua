@@ -109,10 +109,8 @@ MasterBPMAcceptedValue = ProtoField.uint16("ProLink.MasterBPMAcceptedValue", "Ma
 UnknownBytes10 = ProtoField.bytes("ProLink.UnknownBytes10", "Unknown Bytes 10", base.SPACE)
 Pitch2 = ProtoField.bytes("ProLink.Pitch2", "Pitch2", base.SPACE)
 UnknownByte5 = ProtoField.uint8("ProLink.UnkownByte5", "Unknown Byte 5", base.HEX)
-<<<<<<< HEAD
 PlayerCurrentPlayMode = ProtoField.string("ProLink.PlayerCurrentPlayMode", "Player Current Play Mode", base.ASCII)
 MasterDescription = ProtoField.string("ProLink.MasterDescription", "Master Description", base.ASCII)
-=======
 PlayModeInfo = ProtoField.string("ProLink.PlayModeInfo", "Play Mode Info", base.ASCII)
 MasterMeaning = ProtoField.uint8("ProLink.MasterMeaning", "Master Meaningful", base.HEX)
 -- Master Handoff
@@ -132,7 +130,6 @@ CDJType = ProtoField.string("ProLink.CDJType", "CDJ Type", base.ASCII)
 TouchAudio = ProtoField.uint8("ProLink.TouchAudio", "Touch Audio Support", base.HEX)
 -- TODO: IMPLEMENT CDJ3000
 
->>>>>>> c60f575bf638b80917265d446429e3ee3e993cd0
 
 
 
