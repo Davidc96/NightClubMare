@@ -1,5 +1,6 @@
 # NightClubMare
 CLI to control Pioneer CDJ devices
+![nightclubmare_logo](https://github.com/Davidc96/NightClubMare/assets/4979202/2a582bbe-09f1-4ed5-85e8-bcae9f664892)
 
 # Description
 Pioneer CLI is a command line interface tool which allows you to control Pioneer devices using a computer. This project was born with the idea of hacking this devices to make cool stuff and understand what is going on.
