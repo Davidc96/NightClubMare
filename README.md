@@ -18,7 +18,7 @@ Actually is tested with CDJ-3000 models and most of the features are NOT working
 # Project information
 This project is divided by 3 repositories:
 - **ProLinkLib** is a custom C# library developed from scratch which can interact with the Pioneer devices, sending commands an retrieve information about them.
-- **Song Manager** GUI interface to 
+- **Song Manager** GUI interface to manage songs which comes from CDJ
 - **Pioneer CLI** is a command-line tool which the user can interact with the Pioneer devices
 
 # Credits and Thanksgiving
