@@ -1,8 +1,11 @@
 # NightClubMare
-CLI to control Pioneer CDJ devices
 
-
-![nightclubmare_logo](https://github.com/Davidc96/NightClubMare/assets/4979202/2a582bbe-09f1-4ed5-85e8-bcae9f664892)
+<p align="center">
+  <b> CLI To Control Pioneer Devices </b>
+  <br>
+  <br>
+  <img src="https://github.com/Davidc96/NightClubMare/assets/4979202/2a582bbe-09f1-4ed5-85e8-bcae9f664892?style=center">
+</p>
 
 # Description
 Pioneer CLI is a command line interface tool which allows you to control Pioneer devices using a computer. This project was born with the idea of hacking this devices to make cool stuff and understand what is going on.
@@ -15,7 +18,7 @@ Actually is tested with CDJ-3000 models and most of the features are NOT working
 # Project information
 This project is divided by 3 repositories:
 - **ProLinkLib** is a custom C# library developed from scratch which can interact with the Pioneer devices, sending commands an retrieve information about them.
-- **PCLILogger** is a Log server which logs all the packets sent and received by ProLinkLib
+- **Song Manager** GUI interface to 
 - **Pioneer CLI** is a command-line tool which the user can interact with the Pioneer devices
 
 # Credits and Thanksgiving
