@@ -25,3 +25,8 @@ This project is divided by 3 repositories:
 [@Deep-Symmetry Team](https://github.com/Deep-Symmetry) to create the documentation about how the protocol works.</br>
 **Espinado**: A closest friend which helps figure out how the Pioneer device works and give me moral support XD.</br>
 [@Plastic Shop](https://plastic.es/) which rents me these expensive devices to do tests and develop the software.</br>
+
+# Support
+
+<a href="https://www.buymeacoffee.com/davidc96" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
