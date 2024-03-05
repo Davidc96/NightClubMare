@@ -1,5 +1,7 @@
 # NightClubMare
 CLI to control Pioneer CDJ devices
+
+
 ![nightclubmare_logo](https://github.com/Davidc96/NightClubMare/assets/4979202/2a582bbe-09f1-4ed5-85e8-bcae9f664892)
 
 # Description
