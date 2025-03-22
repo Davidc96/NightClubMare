@@ -125,11 +125,18 @@ namespace SongManager
             if (selectedTrack != null)
             {
                 // TODO: Add Load button
+                LoadTrackForm track_form = new LoadTrackForm(selectedTrack);
+                track_form.ShowDialog();
             }
             else
             {
                 btn_load.Enabled = false;
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
