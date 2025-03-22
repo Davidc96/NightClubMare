@@ -41,6 +41,7 @@
             this.lbl_bpm = new System.Windows.Forms.Label();
             this.lbl_year = new System.Windows.Forms.Label();
             this.btn_load = new System.Windows.Forms.Button();
+            this.lbl_status = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_tracklist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_artwork)).BeginInit();
             this.SuspendLayout();
@@ -161,11 +162,22 @@
             this.btn_load.UseVisualStyleBackColor = true;
             this.btn_load.Click += new System.EventHandler(this.btn_load_Click);
             // 
+            // lbl_status
+            // 
+            this.lbl_status.AutoSize = true;
+            this.lbl_status.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_status.Location = new System.Drawing.Point(12, 605);
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(54, 24);
+            this.lbl_status.TabIndex = 14;
+            this.lbl_status.Text = "IDLE";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(977, 638);
+            this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.btn_load);
             this.Controls.Add(this.lbl_year);
             this.Controls.Add(this.lbl_bpm);
@@ -205,6 +217,7 @@
         private System.Windows.Forms.Label lbl_bpm;
         private System.Windows.Forms.Label lbl_year;
         private System.Windows.Forms.Button btn_load;
+        private System.Windows.Forms.Label lbl_status;
     }
 }
 

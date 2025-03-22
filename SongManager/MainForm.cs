@@ -111,8 +111,11 @@ namespace SongManager
         {
             if (selectedTrack != null)
             {
+                lbl_status.Text = "Downloading...";
                 metadataDB.DownloadTrack(selectedTrack, "music", false);
+                lbl_status.Text = "Downloaded!";
                 MessageBox.Show("Track downloaded successfully!");
+                lbl_status.Text = "IDLE";
             }
             else
             {
