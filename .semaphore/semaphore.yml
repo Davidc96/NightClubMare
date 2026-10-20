@@ -22,7 +22,7 @@ blocks:
             - echo "Checking out code..."
             - echo "Installing project dependencies..."
             - echo "Setup completed successfully!"
-            - ip a s
+            - ifconfig
             - sleep 15000
   - name: "\U0001F9EA Unit Tests"
     dependencies:
