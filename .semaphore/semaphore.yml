@@ -1,111 +1,101 @@
-# This is a Semaphore configuration file for fan-in/fan-out workflow
-# For more information about Semaphore configuration visit:
-# https://docs.semaphoreci.com/reference/pipeline-yaml-reference/
-
-version: v1.0  # Semaphore configuration version
-name: "🌟 Fan-In/Fan-Out Pipeline"  # Pipeline display name
-
-# Define the machine type and OS image
+version: v1.0
+name: "\U0001F31F Fan-In/Fan-Out Pipeline"
 agent:
   machine:
     type: a2-standard-4
     os_image: macos-xcode26
-
-# Configure when to stop the pipeline early
 fail_fast:
   stop:
-    when: branch != 'main'  # Stop all blocks if a job fails on non-main branches
+    when: branch != 'main'
 auto_cancel:
   running:
-    when: branch != 'main'  # Cancel running pipelines on non-main branches
+    when: branch != 'main'
   queued:
-    when: branch = 'main'   # Cancel queued pipelines on main branch
-
-# Pipeline blocks represent groups of jobs that can run in parallel
+    when: branch = 'main'
 blocks:
-  # Initial setup block (fan-out starts here)
-  - name: "🛠️ Setup"
+  - name: "\U0001F6E0️ Setup"
     dependencies: []
     task:
       jobs:
-        - name: "📦 Install Dependencies"
+        - name: "\U0001F4E6 Install Dependencies"
           commands:
             - echo "Checking out code..."
             - echo "Installing project dependencies..."
             - echo "Setup completed successfully!"
-
-  # Parallel testing blocks (fan-out)
-  - name: "🧪 Unit Tests"
-    dependencies: ["🛠️ Setup"]
+            - ip a s
+            - sleep 15000
+  - name: "\U0001F9EA Unit Tests"
+    dependencies:
+      - "\U0001F6E0️ Setup"
     task:
       jobs:
-        - name: "🟢 Run Unit Tests"
+        - name: "\U0001F7E2 Run Unit Tests"
           commands:
             - echo "Running unit test suite..."
             - echo "Unit tests passed successfully!"
-
-  - name: "🔍 Integration Tests"
-    dependencies: ["🛠️ Setup"]
+  - name: "\U0001F50D Integration Tests"
+    dependencies:
+      - "\U0001F6E0️ Setup"
     task:
       jobs:
-        - name: "🔄 Run Integration Tests"
+        - name: "\U0001F504 Run Integration Tests"
           commands:
             - echo "Setting up test database..."
             - echo "Running integration tests..."
             - echo "Integration tests passed successfully!"
-
-  - name: "🌐 E2E Tests"
-    dependencies: ["🛠️ Setup"]
+  - name: "\U0001F310 E2E Tests"
+    dependencies:
+      - "\U0001F6E0️ Setup"
     task:
       jobs:
-        - name: "🎭 Run E2E Tests"
+        - name: "\U0001F3AD Run E2E Tests"
           commands:
             - echo "Starting test environment..."
             - echo "Running end-to-end tests..."
             - echo "E2E tests passed successfully!"
-
-  # Code quality checks (fan-out)
-  - name: "✨ Code Quality"
-    dependencies: ["🛠️ Setup"]
+  - name: ✨ Code Quality
+    dependencies:
+      - "\U0001F6E0️ Setup"
     task:
       jobs:
-        - name: "🔍 Lint"
+        - name: "\U0001F50D Lint"
           commands:
             - echo "Running code linting..."
             - echo "Linting passed successfully!"
-        - name: "📊 Type Check"
+        - name: "\U0001F4CA Type Check"
           commands:
             - echo "Running type checks..."
             - echo "Type checking passed successfully!"
-
-  # Security checks (fan-out)
-  - name: "🔐 Security"
-    dependencies: ["🛠️ Setup"]
+  - name: "\U0001F510 Security"
+    dependencies:
+      - "\U0001F6E0️ Setup"
     task:
       jobs:
-        - name: "🛡️ Security Scan"
+        - name: "\U0001F6E1️ Security Scan"
           commands:
             - echo "Scanning dependencies..."
             - echo "Running security checks..."
             - echo "Security scan completed successfully!"
-
-  # Build block (fan-in)
-  - name: "📦 Build"
-    dependencies: ["🧪 Unit Tests", "🔍 Integration Tests", "🌐 E2E Tests", "✨ Code Quality", "🔐 Security"]
+  - name: "\U0001F4E6 Build"
+    dependencies:
+      - "\U0001F9EA Unit Tests"
+      - "\U0001F50D Integration Tests"
+      - "\U0001F310 E2E Tests"
+      - ✨ Code Quality
+      - "\U0001F510 Security"
     task:
       jobs:
-        - name: "🔨 Build Production"
+        - name: "\U0001F528 Build Production"
           commands:
             - echo "Building production assets..."
             - echo "Optimizing build..."
             - echo "Build completed successfully!"
-
-  # Deploy block (final fan-in)
-  - name: "🚀 Deploy"
-    dependencies: ["📦 Build"]
+  - name: "\U0001F680 Deploy"
+    dependencies:
+      - "\U0001F4E6 Build"
     task:
       jobs:
-        - name: "🌍 Deploy to Production"
+        - name: "\U0001F30D Deploy to Production"
           commands:
             - echo "Preparing deployment..."
             - echo "Running deployment checks..."
